@@ -1,0 +1,391 @@
+object Form2: TForm2
+  Left = 352
+  Height = 749
+  Top = 32
+  Width = 871
+  BorderIcons = []
+  BorderStyle = bsSingle
+  Caption = 'Form2'
+  ClientHeight = 749
+  ClientWidth = 871
+  DesignTimePPI = 120
+  Font.CharSet = ANSI_CHARSET
+  Font.Height = -14
+  Font.Pitch = fpVariable
+  Font.Quality = fqDraft
+  LCLVersion = '4.0.0.3'
+  OnCreate = FormCreate
+  OnShow = FormShow
+  object Button1: TButton
+    Left = 174
+    Height = 49
+    Top = 688
+    Width = 112
+    Caption = 'ACEPTAR'
+    TabOrder = 4
+    OnClick = Button1Click
+  end
+  object Button2: TButton
+    Left = 365
+    Height = 49
+    Top = 688
+    Width = 112
+    Caption = 'CANCELAR'
+    TabOrder = 5
+    OnClick = Button2Click
+  end
+  object Button3: TButton
+    Left = 588
+    Height = 49
+    Hint = 'Borrar el juego!'
+    Top = 688
+    Width = 112
+    Caption = 'BORRAR'
+    TabOrder = 6
+    OnClick = Button3Click
+  end
+  object GroupBox1: TGroupBox
+    Left = 16
+    Height = 186
+    Top = 22
+    Width = 815
+    Caption = 'Juego'
+    ClientHeight = 162
+    ClientWidth = 811
+    TabOrder = 0
+    object Image1: TImage
+      Left = 565
+      Height = 129
+      Top = 8
+      Width = 228
+      Stretch = True
+    end
+    object LabeledEdit1: TLabeledEdit
+      Left = 26
+      Height = 27
+      Top = 20
+      Width = 359
+      EditLabel.Height = 19
+      EditLabel.Width = 359
+      EditLabel.Caption = 'LabeledEdit1'
+      TabOrder = 0
+    end
+    object LabeledEdit2: TLabeledEdit
+      Left = 24
+      Height = 27
+      Top = 80
+      Width = 112
+      EditLabel.Height = 19
+      EditLabel.Width = 112
+      EditLabel.Caption = 'LabeledEdit2'
+      TabOrder = 1
+    end
+    object LabeledEdit3: TLabeledEdit
+      Left = 176
+      Height = 27
+      Top = 80
+      Width = 174
+      EditLabel.Height = 19
+      EditLabel.Width = 174
+      EditLabel.Caption = 'LabeledEdit3'
+      TabOrder = 2
+    end
+    object LabeledEdit4: TLabeledEdit
+      Left = 398
+      Height = 27
+      Top = 20
+      Width = 154
+      EditLabel.Height = 19
+      EditLabel.Width = 154
+      EditLabel.Caption = 'LabeledEdit4'
+      TabOrder = 3
+      OnKeyUp = LabeledEdit4KeyUp
+    end
+    object CheckBox2: TCheckBox
+      Left = 296
+      Height = 23
+      Top = 120
+      Width = 88
+      Caption = 'CheckBox2'
+      TabOrder = 5
+    end
+    object CheckBox3: TCheckBox
+      Left = 31
+      Height = 23
+      Top = 125
+      Width = 88
+      Caption = 'CheckBox3'
+      TabOrder = 4
+      OnClick = CheckBox3Click
+    end
+  end
+  object GroupBox3: TGroupBox
+    Left = 16
+    Height = 136
+    Top = 208
+    Width = 811
+    Caption = 'GroupBox3'
+    ClientHeight = 112
+    ClientWidth = 807
+    TabOrder = 1
+    object LabeledEdit5: TLabeledEdit
+      Left = 176
+      Height = 27
+      Top = 16
+      Width = 182
+      EditLabel.Height = 19
+      EditLabel.Width = 182
+      EditLabel.Caption = 'LabeledEdit5'
+      TabOrder = 1
+      Text = 'LabeledEdit5'
+      OnKeyUp = LabeledEdit5KeyUp
+    end
+    object LabeledEdit6: TLabeledEdit
+      Left = 360
+      Height = 27
+      Top = 16
+      Width = 192
+      EditLabel.Height = 19
+      EditLabel.Width = 192
+      EditLabel.Caption = 'LabeledEdit6'
+      TabOrder = 2
+      Text = 'LabeledEdit6'
+    end
+    object LabeledEdit7: TLabeledEdit
+      Left = 21
+      Height = 27
+      Top = 72
+      Width = 162
+      EditLabel.Height = 19
+      EditLabel.Width = 162
+      EditLabel.Caption = 'LabeledEdit7'
+      TabOrder = 4
+      Text = 'LabeledEdit7'
+    end
+    object LabeledEdit8: TLabeledEdit
+      Left = 208
+      Height = 27
+      Top = 72
+      Width = 158
+      EditLabel.Height = 19
+      EditLabel.Width = 158
+      EditLabel.Caption = 'LabeledEdit8'
+      TabOrder = 5
+      Text = 'LabeledEdit8'
+    end
+    object LabeledEdit9: TLabeledEdit
+      Left = 21
+      Height = 27
+      Top = 16
+      Width = 154
+      EditLabel.Height = 19
+      EditLabel.Width = 154
+      EditLabel.Caption = 'LabeledEdit9'
+      TabOrder = 0
+      Text = 'LabeledEdit9'
+    end
+    object LabeledEdit10: TLabeledEdit
+      Left = 592
+      Height = 27
+      Top = 16
+      Width = 200
+      EditLabel.Height = 19
+      EditLabel.Width = 200
+      EditLabel.Caption = 'LabeledEdit10'
+      TabOrder = 3
+      Text = 'LabeledEdit10'
+    end
+    object LabeledEdit19: TLabeledEdit
+      Left = 600
+      Height = 27
+      Top = 72
+      Width = 192
+      EditLabel.Height = 19
+      EditLabel.Width = 192
+      EditLabel.Caption = 'CD-ROM'
+      TabOrder = 7
+    end
+    object LabeledEdit20: TLabeledEdit
+      Left = 384
+      Height = 27
+      Top = 72
+      Width = 184
+      EditLabel.Height = 19
+      EditLabel.Width = 184
+      EditLabel.Caption = 'LabeledEdit20'
+      TabOrder = 6
+    end
+  end
+  object GroupBox10: TGroupBox
+    Left = 16
+    Height = 152
+    Top = 352
+    Width = 811
+    Caption = 'DOSBOX'
+    ClientHeight = 128
+    ClientWidth = 807
+    TabOrder = 2
+    object LabeledEdit11: TLabeledEdit
+      Left = 21
+      Height = 27
+      Top = 16
+      Width = 99
+      EditLabel.Height = 19
+      EditLabel.Width = 99
+      EditLabel.Caption = 'LabeledEdit11'
+      NumbersOnly = True
+      TabOrder = 0
+      Text = 'LabeledEdit11'
+    end
+    object LabeledEdit12: TLabeledEdit
+      Left = 288
+      Height = 27
+      Top = 16
+      Width = 96
+      EditLabel.Height = 19
+      EditLabel.Width = 96
+      EditLabel.Caption = 'LabeledEdit12'
+      NumbersOnly = True
+      TabOrder = 2
+      Text = 'LabeledEdit12'
+    end
+    object LabeledEdit13: TLabeledEdit
+      Left = 608
+      Height = 27
+      Top = 16
+      Width = 184
+      EditLabel.Height = 19
+      EditLabel.Width = 184
+      EditLabel.Caption = 'LabeledEdit13'
+      TabOrder = 4
+      Text = 'LabeledEdit13'
+    end
+    object LabeledEdit14: TLabeledEdit
+      Left = 408
+      Height = 27
+      Top = 80
+      Width = 384
+      EditLabel.Height = 19
+      EditLabel.Width = 384
+      EditLabel.Caption = 'LabeledEdit14'
+      TabOrder = 6
+    end
+    object LabeledEdit15: TLabeledEdit
+      Left = 16
+      Height = 27
+      Top = 80
+      Width = 368
+      EditLabel.Height = 19
+      EditLabel.Width = 368
+      EditLabel.Caption = 'LabeledEdit15'
+      TabOrder = 5
+      Text = 'LabeledEdit15'
+    end
+    object CheckBox1: TCheckBox
+      Left = 400
+      Height = 23
+      Top = 16
+      Width = 88
+      Caption = 'CheckBox1'
+      TabOrder = 3
+    end
+    object ComboBox1: TComboBox
+      Left = 136
+      Height = 27
+      Top = 16
+      Width = 142
+      ItemHeight = 19
+      TabOrder = 1
+      Text = 'ComboBox1'
+    end
+    object StaticText1: TStaticText
+      Left = 136
+      Height = 22
+      Top = -8
+      Width = 118
+      Caption = 'StaticText1'
+      TabOrder = 7
+    end
+  end
+  object GroupBox12: TGroupBox
+    Left = 16
+    Height = 152
+    Top = 520
+    Width = 811
+    Caption = 'GroupBox12'
+    ClientHeight = 128
+    ClientWidth = 807
+    TabOrder = 3
+    object ComboBox4: TComboBox
+      Left = 408
+      Height = 27
+      Top = 72
+      Width = 141
+      ItemHeight = 19
+      TabOrder = 4
+      Text = 'ComboBox4'
+    end
+    object ComboBox5: TComboBox
+      Left = 592
+      Height = 27
+      Top = 72
+      Width = 152
+      ItemHeight = 19
+      TabOrder = 5
+      Text = 'ComboBox5'
+    end
+    object LabeledEdit16: TLabeledEdit
+      Left = 16
+      Height = 27
+      Top = 16
+      Width = 368
+      EditLabel.Height = 19
+      EditLabel.Width = 368
+      EditLabel.Caption = 'LabeledEdit16'
+      TabOrder = 0
+    end
+    object LabeledEdit17: TLabeledEdit
+      Left = 408
+      Height = 27
+      Top = 16
+      Width = 384
+      EditLabel.Height = 19
+      EditLabel.Width = 384
+      EditLabel.Caption = 'LabeledEdit17'
+      TabOrder = 1
+    end
+    object LabeledEdit18: TLabeledEdit
+      Left = 16
+      Height = 27
+      Top = 72
+      Width = 368
+      EditLabel.Height = 19
+      EditLabel.Width = 368
+      EditLabel.Caption = 'LabeledEdit18'
+      TabOrder = 2
+    end
+    object StaticText2: TStaticText
+      Left = 408
+      Height = 24
+      Top = 48
+      Width = 138
+      Caption = 'StaticText2'
+      TabOrder = 3
+    end
+    object StaticText3: TStaticText
+      Left = 592
+      Height = 22
+      Top = 48
+      Width = 131
+      Caption = 'StaticText3'
+      TabOrder = 6
+    end
+  end
+  object Timer1: TTimer
+    Enabled = False
+    Interval = 2000
+    OnTimer = Timer1Timer
+    Left = 64
+    Top = 703
+  end
+end
