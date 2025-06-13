@@ -103,7 +103,7 @@ object Form2: TForm2
     end
     object CheckBox2: TCheckBox
       Left = 230
-      Top = 120
+      Top = 109
       Width = 185
       Height = 25
       Hint = 'Este Juego se puede ejecutar tambien con ScummVM'
@@ -111,6 +111,18 @@ object Form2: TForm2
       ParentShowHint = False
       ShowHint = True
       TabOrder = 5
+    end
+    object CheckBox4: TCheckBox
+      Left = 230
+      Top = 129
+      Width = 251
+      Height = 25
+      Hint = 'Este Juego se puede ejecutar tambien con ScummVM'
+      Caption = 'S'#243'lo funciona con ScummVM'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 6
+      OnClick = CheckBox4Click
     end
   end
   object GroupBox3: TGroupBox
@@ -123,7 +135,7 @@ object Form2: TForm2
     ShowHint = True
     TabOrder = 1
     object LabeledEdit5: TLabeledEdit
-      Left = 135
+      Left = 138
       Top = 32
       Width = 145
       Height = 23
@@ -136,7 +148,7 @@ object Form2: TForm2
       OnKeyUp = LabeledEdit5KeyUp
     end
     object LabeledEdit6: TLabeledEdit
-      Left = 278
+      Left = 284
       Top = 32
       Width = 106
       Height = 23

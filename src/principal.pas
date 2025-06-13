@@ -323,6 +323,7 @@ begin
   label3.Caption:=games_final[ngame].company;
   label4.Caption:=games_final[ngame].year;
   button2.Enabled:=not(games_final[ngame].interno) or main_config.leer_fijos;
+  bitbtn4.Enabled:=not(games_final[ngame].mal);
 end;
 
 procedure TForm1.StringGrid1DblClick(Sender: TObject);
@@ -335,6 +336,7 @@ const
   SelectedColor=$ffffe8;
   AddedColor=$e8ffff;
   BadColor=$e8e8e8;
+  ScummColor=$ffe8e8;
 var
   ngame:integer;
 begin
@@ -343,8 +345,9 @@ begin
   if (state=[gdSelected,gdFocused]) then
     with TStringGrid(Sender),Canvas do begin
       if games_final[ngame].mal then Brush.Color:=BadColor
-        else if games_final[ngame].interno then Brush.Color:=SelectedColor
-          else Brush.Color:=AddedColor;
+        else if games_final[ngame].solo_scumm then Brush.Color:=ScummColor
+          else if games_final[ngame].interno then Brush.Color:=SelectedColor
+            else Brush.Color:=AddedColor;
       FillRect(Rect);
       TextRect(Rect,Rect.Left+2,Rect.Top+2,Cells[aCol,aRow]);
     end;

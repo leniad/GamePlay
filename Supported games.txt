@@ -49,7 +49,7 @@ Secret of Monkey Island, the (ES)
 Secret of Monkey Island, the (EN)
 King's Quest IV - The Perils of Rosella
 Leisure Suit Larry 6 - Shape Up (ES)
-Secret of Monkey Island, the (ES) (EGA)
+Secret of Monkey Island, the (ES/EGA)
 Poli Diaz - El Potro de Vallecas
 King's Quest - Quest for the Crown (CGA-PCBooter)
 Archon - The Light and the Dark
@@ -66,7 +66,7 @@ Caveman Ninja
 Uridium
 Conquests of Camelot - King Arthur the Search for the Grail
 Day of the Tentacle (ES)
-King's Quest V: Absence Makes the Heart go Yonder (ES)
+King's Quest V: Absence Makes the Heart go Yonder (ES/VGA)
 King's Quest VI: Heir Today Gone Tomorrow (ES)
 Monkey Island 2 - LeChuck's Revenge (ES)
 Robocop
@@ -74,8 +74,8 @@ Robocop 3
 Legend of Kyrandia, the (ES)
 Legend of Kyrandia - The Hand of Fate, the (ES)
 Space Quest Chapter I - The Sarien Encounter
-Space Quest Chapter I - The Sarien Encounter VGA (ES)
-Space Quest Chapter I - The Sarien Encounter EGA (EN)
+Space Quest Chapter I - The Sarien Encounter (ES/VGA)
+Space Quest Chapter I - The Sarien Encounter (EN/EGA)
 Space Quest Chapter II - Vohaul's Revenge
 Space Quest Chapter III - The Pirates of Pestulon
 Viking Child, the
@@ -150,8 +150,8 @@ Abuse
 Alf
 Alkatraz
 King's Quest IV - The Perils of Rosella (AGI)
-EcoQuest 1 - The Search for Cetus
-EcoQuest 2 - El Secreto Perdido de la Selva Amazonica
+EcoQuest 1 - The Search for Cetus (ES)
+EcoQuest 2 - El Secreto Perdido de la Selva Amazonica (ES)
 Golden Axe
 Megaphoenix
 Satan
@@ -197,7 +197,7 @@ Luigi en Circusland
 Black Cauldron, the (PC-Booter)
 Mortal Kombat 3
 Dune II - La Batalla por Arrakis
-Indiana Jones y la  ltima Cruzada
+Indiana Jones y la  ltima Cruzada (ES)
 Heimdall
 Tyrian
 Escape from the Planet of the Robot Monsters
@@ -215,8 +215,8 @@ Crazy Cars II
 F40 Pursuit Simulator
 F40 Pursuit Simulator (CGA)
 Crazy Cars III
-Leisure Suir Larry 1 in the Land of the Lounge Lizards (EN)
-Leisure Suir Larry 1 in the Land of the Lounge Lizards (ES)
+Leisure Suir Larry 1 in the Land of the Lounge Lizards (EN/VGA)
+Leisure Suir Larry 1 in the Land of the Lounge Lizards (ES/VGA)
 F29 Retaliator
 Bad Dudes
 Karateka
@@ -297,7 +297,10 @@ Blues Brothers: Jukebox Adventure, the
 After Burner II
 Altered Beast
 Quest for Glory I - So you want to be a Hero (VGA)
-Discworld/Mundodisco
+Discworld/Mundodisco (MULT)
 Maniac Mansion (ES)
 Maniac Mansion (EN)
-Maniac Mansion (OLD EN)
+Maniac Mansion (EN/OLD)
+Arthur's Teacher Trouble
+Ultimate Doom, the
+Tortoise and the Hare, the

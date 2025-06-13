@@ -13,7 +13,6 @@ object Form2: TForm2
   Font.Height = -14
   Font.Pitch = fpVariable
   Font.Quality = fqDraft
-  LCLVersion = '4.0.0.3'
   OnCreate = FormCreate
   OnShow = FormShow
   object Button1: TButton
@@ -104,7 +103,7 @@ object Form2: TForm2
     object CheckBox2: TCheckBox
       Left = 296
       Height = 23
-      Top = 120
+      Top = 110
       Width = 88
       Caption = 'CheckBox2'
       TabOrder = 5
@@ -117,6 +116,15 @@ object Form2: TForm2
       Caption = 'CheckBox3'
       TabOrder = 4
       OnClick = CheckBox3Click
+    end
+    object CheckBox4: TCheckBox
+      Left = 296
+      Height = 23
+      Top = 136
+      Width = 88
+      Caption = 'CheckBox4'
+      TabOrder = 6
+      OnClick = CheckBox4Click
     end
   end
   object GroupBox3: TGroupBox

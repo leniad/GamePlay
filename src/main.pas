@@ -1,5 +1,4 @@
 ﻿unit main;
-
 //{$DEFINE IS_DEBUG}
 interface
 
@@ -11,12 +10,15 @@ procedure ordena_juegos;
 procedure mostrar_juegos;
 function numero_juego:integer;
 procedure abrir_ficheros_separados(nombre_ficheros,ruta_ficheros:string);
-function comprobar_si_existe_fichero(directorio:string;var nombre:string;es_zip:boolean):boolean;
 function save_game_accept:boolean;
 procedure save_game_show;
 procedure config_show;
 function seleccionar_directorio(inicial:string):string;
+procedure guardar_juegos_anadidos;
+{$ifdef fpc}
 function cambiar_path(cadena:string):string;
+function comprobar_si_existe_fichero(directorio:string;var nombre:string;es_zip:boolean):boolean;
+{$endif}
 
 type
   tipo_final=record
@@ -48,6 +50,7 @@ type
     mensaje:string;
     interno:boolean;
     mal:boolean;
+    solo_scumm:boolean;
   end;
   tipo_config=record
      config_dosbox:string;
@@ -72,7 +75,7 @@ type
 const
   MAX_GAMES=1000;
   TEMP_DIR='TEMP';
-  VERSION='v0.20β';
+  VERSION='v0.21β';
 
 var
   orden_games:array[0..(MAX_GAMES-1)] of integer;
@@ -204,7 +207,7 @@ if main_config.mostrar_fallan then begin
   for f:=0 to (total_juegos-1) do begin
     if games_final[orden_games[f]].mal then begin
       if form1.RadioButton3.Checked then begin
-        if games_final[orden_games[f]].scumm then poner_juego_simple(f)
+        if (games_final[orden_games[f]].scumm or games_final[orden_games[f]].solo_scumm) then poner_juego_simple(f)
       end else poner_juego_simple(f);
     end;
   end;
@@ -212,34 +215,34 @@ end else if main_config.mostrar_anadidos then begin
             for f:=0 to (total_juegos-1) do begin
               if not(games_final[orden_games[f]].interno) then begin
                 if form1.RadioButton3.Checked then begin
-                  if games_final[orden_games[f]].scumm then poner_juego_simple(f);
+                  if (games_final[orden_games[f]].scumm or games_final[orden_games[f]].solo_scumm) then poner_juego_simple(f);
                 end else poner_juego_simple(f);
               end;
             end;
 end else begin
-  if form1.radiobutton3.Checked then begin
-    mascara:=-1;
-  end else begin
-    mascara:=AG*byte(form1.checkbox3.Checked)+ARCADE*byte(form1.checkbox16.Checked)+TRESD*byte(form1.checkbox6.Checked)+SIMULA*byte(form1.checkbox4.Checked)+SPORT*byte(form1.checkbox5.Checked)+PUZ*byte(form1.checkbox7.Checked)+RPG*byte(form1.checkbox8.Checked)+COCHES*byte(form1.checkbox17.Checked)+EXTRA*byte(form1.checkbox18.Checked);
-    //Si se quitan todos los filtros, los pongo todos...
-    if mascara=0 then mascara:=$ffffff;
-  end;
+  mascara:=AG*byte(form1.checkbox3.Checked)+ARCADE*byte(form1.checkbox16.Checked)+TRESD*byte(form1.checkbox6.Checked)+SIMULA*byte(form1.checkbox4.Checked)+SPORT*byte(form1.checkbox5.Checked)+PUZ*byte(form1.checkbox7.Checked)+RPG*byte(form1.checkbox8.Checked)+COCHES*byte(form1.checkbox17.Checked)+EXTRA*byte(form1.checkbox18.Checked);
+  //Si se quitan todos los filtros, los pongo todos...
+  if mascara=0 then mascara:=$ffffff;
   for f:=0 to (total_juegos-1) do begin
-      if mascara=-1 then begin
-        if ((games_final[orden_games[f]].idioma=0) and (games_final[orden_games[f]].scumm)) then poner_juego(f)
-          else if ((form1.CheckBox9.Checked) and (games_final[orden_games[f]].idioma=ESP) and (games_final[orden_games[f]].scumm)) then poner_juego(f)
-              else if ((form1.CheckBox12.Checked) and (games_final[orden_games[f]].idioma=ING) and (games_final[orden_games[f]].scumm)) then poner_juego(f)
-                else if ((form1.CheckBox10.Checked) and (games_final[orden_games[f]].idioma=ALE) and (games_final[orden_games[f]].scumm)) then poner_juego(f)
-                  else if ((form1.CheckBox11.Checked) and (games_final[orden_games[f]].idioma=FRA) and (games_final[orden_games[f]].scumm)) then poner_juego(f)
-                    else if ((form1.CheckBox13.Checked) and (games_final[orden_games[f]].idioma=ITA) and (games_final[orden_games[f]].scumm)) then poner_juego(f);
-      end else begin
-        if (games_final[orden_games[f]].tipo and mascara)<>0 then begin
-          if games_final[orden_games[f]].idioma=0 then poner_juego(f)
-            else if ((form1.CheckBox9.Checked) and (games_final[orden_games[f]].idioma=ESP)) then poner_juego(f)
-              else if ((form1.CheckBox12.Checked) and (games_final[orden_games[f]].idioma=ING)) then poner_juego(f)
-                else if ((form1.CheckBox10.Checked) and (games_final[orden_games[f]].idioma=ALE)) then poner_juego(f)
-                  else if ((form1.CheckBox11.Checked) and (games_final[orden_games[f]].idioma=FRA)) then poner_juego(f)
-                    else if ((form1.CheckBox13.Checked) and (games_final[orden_games[f]].idioma=ITA)) then poner_juego(f);
+      if form1.radiobutton3.Checked then begin //ScummVM
+        if (games_final[orden_games[f]].scumm or games_final[orden_games[f]].solo_scumm) then begin
+          if (games_final[orden_games[f]].idioma=0) then poner_juego(f)
+            else if (form1.CheckBox9.Checked and (games_final[orden_games[f]].idioma=ESP)) then poner_juego(f)
+              else if (form1.CheckBox12.Checked and (games_final[orden_games[f]].idioma=ING)) then poner_juego(f)
+                else if (form1.CheckBox10.Checked and (games_final[orden_games[f]].idioma=ALE)) then poner_juego(f)
+                  else if (form1.CheckBox11.Checked and (games_final[orden_games[f]].idioma=FRA)) then poner_juego(f)
+                    else if (form1.CheckBox13.Checked and (games_final[orden_games[f]].idioma=ITA)) then poner_juego(f);
+        end;
+      end else begin //Resto
+        if not(games_final[orden_games[f]].solo_scumm) then begin
+          if (games_final[orden_games[f]].tipo and mascara)<>0 then begin
+            if games_final[orden_games[f]].idioma=0 then poner_juego(f)
+              else if (form1.CheckBox9.Checked and (games_final[orden_games[f]].idioma=ESP)) then poner_juego(f)
+                else if (form1.CheckBox12.Checked and (games_final[orden_games[f]].idioma=ING)) then poner_juego(f)
+                  else if (form1.CheckBox10.Checked and (games_final[orden_games[f]].idioma=ALE)) then poner_juego(f)
+                    else if (form1.CheckBox11.Checked and (games_final[orden_games[f]].idioma=FRA)) then poner_juego(f)
+                      else if (form1.CheckBox13.Checked and (games_final[orden_games[f]].idioma=ITA)) then poner_juego(f);
+          end;
         end;
       end;
 end;
@@ -252,6 +255,7 @@ if contador=0 then begin
   form1.BitBtn1.Enabled:=false;
   form1.BitBtn2.Enabled:=false;
   form1.BitBtn3.Enabled:=false;
+  form1.bitbtn4.Enabled:=false;
 end else form1.stringgrid1.RowCount:=contador;
 form1.StringGrid1Click(nil);
 if form1.Visible then form1.StringGrid1.SetFocus;
@@ -302,10 +306,29 @@ function comprobar_si_existe_fichero(directorio:string;var nombre:string;es_zip:
 var
    search:TSearchRec;
    res:boolean;
+   temp_dir,temp_nom:string;
 {$endif}
 begin
 if es_zip then begin
-  comprobar_si_existe_fichero:=search_file_zip(directorio+'.zip',nombre);
+  if nombre='' then begin
+      {$ifdef windows}
+      comprobar_si_existe_fichero:=fileexists(directorio+'.zip');
+      {$else}
+      temp_dir:=ExtractFilePath(directorio+'.zip');
+      temp_nom:=ExtractFileName(directorio+'.zip');
+      res:=false;
+      if findfirst(includetrailingpathdelimiter(temp_dir)+'*',faAnyFile,search)=0 then begin
+      repeat
+        if AnsiCompareText(search.name,temp_nom)=0 then begin
+          res:=true;
+          break;
+        end;
+      until FindNext(search)<>0;
+      FindClose(search)
+      end;
+      comprobar_si_existe_fichero:=res;
+      {$endif}
+  end else comprobar_si_existe_fichero:=search_file_zip(directorio+'.zip',nombre);
 end else begin
   {$ifdef windows}
   comprobar_si_existe_fichero:=fileexists(directorio+'\'+nombre);
@@ -338,7 +361,10 @@ for f:=0 to (GAME_TOTAL-1) do begin
  if GAME_DATA[f].zip then temps:=main_config.dir_zip+GAME_DATA[f].dir
   else temps:=main_config.dir_base+GAME_DATA[f].dir;
  juego:=GAME_DATA[f].exec;
- games_final[f].mal:=not(comprobar_si_existe_fichero(temps,juego,GAME_DATA[f].zip));
+ if GAME_DATA[f].solo_scumm then begin
+  if GAME_DATA[f].zip then games_final[f].mal:=not(comprobar_si_existe_fichero(temps,juego,true))
+    else games_final[f].mal:=not(DirectoryExists(temps));
+ end else games_final[f].mal:=not(comprobar_si_existe_fichero(temps,juego,GAME_DATA[f].zip));
  games_final[f].nombre:=GAME_DATA[f].nombre;
  games_final[f].dir:=GAME_DATA[f].dir;
  games_final[f].exec:=GAME_DATA[f].exec;
@@ -356,6 +382,7 @@ for f:=0 to (GAME_TOTAL-1) do begin
  games_final[f].memoria:=GAME_DATA[f].memoria;
  games_final[f].setup:=GAME_DATA[f].setup;
  games_final[f].zip:=GAME_DATA[f].zip;
+ games_final[f].solo_scumm:=GAME_DATA[f].solo_scumm;
  games_final[f].year:=GAME_INFO[f].year;
  games_final[f].company:=GAME_INFO[f].company;
  games_final[f].manual:=GAME_INFO[f].manual;
@@ -399,14 +426,22 @@ if fileexists(main_config.dir_base+'extra_games.info') then begin
     games_final[total_juegos].memoria:=sacar_numero(sacar_datos(juego));
     games_final[total_juegos].setup:=sacar_datos(juego);
     games_final[total_juegos].zip:=sacar_numero(sacar_datos(juego))<>0;
+    games_final[total_juegos].solo_scumm:=sacar_numero(sacar_datos(juego))<>0;
     games_final[total_juegos].interno:=false;
     if games_final[total_juegos].zip then temps:=main_config.dir_zip+games_final[total_juegos].dir
       else temps:=main_config.dir_base+games_final[total_juegos].dir;
-    games_final[total_juegos].mal:=not(comprobar_si_existe_fichero(temps,games_final[total_juegos].exec,games_final[total_juegos].zip));
+    if games_final[total_juegos].solo_scumm then begin
+      if games_final[total_juegos].zip then games_final[total_juegos].mal:=not(comprobar_si_existe_fichero(temps,games_final[total_juegos].exec,true))
+        else games_final[total_juegos].mal:=not(DirectoryExists(temps))
+    end else games_final[total_juegos].mal:=not(comprobar_si_existe_fichero(temps,games_final[total_juegos].exec,games_final[total_juegos].zip));
     total_juegos:=total_juegos+1;
 end;
 closefile(games_file);
 end;
+{AssignFile(games_file,'d:\abandon\listado.txt');
+ReWrite(games_file);
+for f:=0 to (total_juegos-1) do writeLn(games_file,games_final[f].nombre);
+closefile(games_file);}
 {$I+}
 end;
 
@@ -426,6 +461,20 @@ for f:=0 to (total_juegos-2) do begin
 end;
 end;
 
+procedure cambiar_scumm_ini(identidad,valor:string);
+var
+  fich_ini:Tinifile;
+begin
+  {$I-}
+  if fileexists(main_config.config_scummvm) then begin
+    fich_ini:=Tinifile.Create(main_config.config_scummvm);
+    fich_ini.WriteString('scummvm',identidad,valor);
+    fich_ini.Free;
+  end;
+  {$I+}
+end;
+
+
 procedure form_principal_create;
 var
   f:integer;
@@ -439,7 +488,7 @@ begin
   //Montar main_config, el orden es importante!!!
   {$IFDEF IS_DEBUG}
   //main_config.dir_base:='/home/leniad/abandon/GamePlayVol1/';
-  main_config.dir_base:='d:\abandon\GamePlayVol1\';
+  main_config.dir_base:='d:\abandon\GamePlay Vol1\';
   {$ELSE}
   main_config.dir_base:=ExtractFilePath(application.ExeName);
   {$ENDIF}
@@ -546,15 +595,11 @@ begin
   AssignFile(dosbox_file,file_name);
   ReWrite(dosbox_file);
   WriteLn(dosbox_file,'[autoexec]');
-  WriteLn(dosbox_file,'mount c: '+main_config.dir_base);
+  WriteLn(dosbox_file,'mount c: "'+main_config.dir_base+'"');
   CloseFile(dosbox_file);
-  //Modifico el fichero de configuracion de scummvm
-  if fileexists(main_config.config_scummvm) then begin
-    fich_ini:=Tinifile.Create(main_config.config_scummvm);
-    fich_ini.WriteString('scummvm','extrapath',main_config.dir_mt32);
-    fich_ini.Free;
-  end;
   {$I+}
+  //Modifico el fichero de configuracion de scummvm
+  cambiar_scumm_ini('extrapath',main_config.dir_mt32);
   //Meto los juegos
   pillar_juegos;
   //Los ordeno...
@@ -613,7 +658,8 @@ if DirectoryExists(main_config.dir_base) then begin
       write(games_file,games_final[f].cdrom+';');
       write(games_file,inttostr(games_final[f].memoria)+';');
       write(games_file,games_final[f].setup+';');
-      writeln(games_file,inttostr(byte(games_final[f].zip)));
+      write(games_file,inttostr(byte(games_final[f].zip))+';');
+      writeln(games_file,inttostr(byte(games_final[f].solo_scumm)));
     end;
   end;
   CloseFile(games_file);
@@ -632,9 +678,9 @@ ShellExecute(form1.Handle,'open',pChar('cmd.exe'),pchar('/c rmdir '+nombre+' /s 
 {$else}
 process:=tprocess.create(nil);
 {$ifdef darwin}
-process.commandline:='/bin/rm -fr '+main_config.dir_base+nombre;
+process.commandline:='/bin/rm -fr "'+main_config.dir_base+nombre+'"';
 {$else}
-process.commandline:='/usr/bin/rm -fr '+main_config.dir_base+nombre;
+process.commandline:='/usr/bin/rm -fr "'+main_config.dir_base+nombre+'"';
 {$endif}
 process.execute;
 process.free;
@@ -754,6 +800,22 @@ if games_final[ngame].mal then begin
   MessageDlg(list_error[7],mtError,[mbOk],0);
   exit;
 end;
+//Esto no deberia pasar nunca...
+if (not(form1.radiobutton3.Checked) and games_final[ngame].solo_scumm) then begin
+  MessageDlg(list_error[8],mtError,[mbOk],0);
+  exit;
+end;
+//Mostrar mensaje de ayuda
+if form1.checkbox2.Checked then begin
+  if games_final[ngame].mensaje<>'' then begin
+      temp_str:=games_final[ngame].mensaje;
+      if form1.radiobutton1.Checked then temp_disco:='CONTROL+F4'
+        else {$ifdef windows}temp_disco:='F11+O';{$else}temp_disco:='F12+O';{$endif}
+      if ContainsText(temp_str,'[KEY_DISK]') then temp_str:=StringReplace(temp_str,'[KEY_DISK]',temp_disco,[]);
+      if ContainsText(temp_str,'[RET]') then temp_str:=StringReplace(temp_str,'[RET]',RETURN,[rfReplaceAll]);
+      MessageDlg(temp_str,mtInformation,[mbOK],0);
+  end;
+end;
 //Si es un ZIP lo descomprimo!
 if games_final[ngame].zip then begin
   delete_dir(TEMP_DIR+'\'+games_final[ngame].dir);
@@ -762,32 +824,26 @@ if games_final[ngame].zip then begin
   exec_dir:=cambiar_path(TEMP_DIR+'\'+games_final[ngame].dir);
 end else exec_dir:=games_final[ngame].dir;
 if not(form1.radiobutton3.Checked) then begin //DosBox
-  //Mostrar mensaje de ayuda
-  if form1.checkbox2.Checked then begin
-    if games_final[ngame].mensaje<>'' then begin
-      temp_str:=games_final[ngame].mensaje;
-      if form1.radiobutton1.Checked then temp_disco:='CONTROL+F4'
-        else {$ifdef windows}temp_disco:='F11+O';{$else}temp_disco:='F12+O';{$endif}
-      if ContainsText(temp_str,'[KEY_DISK]') then temp_str:=StringReplace(temp_str,'[KEY_DISK]',temp_disco,[]);
-      if ContainsText(temp_str,'[RET]') then temp_str:=StringReplace(temp_str,'[RET]',RETURN,[rfReplaceAll]);
-      MessageDlg(temp_str,mtInformation,[mbOK],0);
-    end;
-  end;
   //cantidad de memoria
   if games_final[ngame].memoria=0 then exec_memoria:='16'
     else exec_memoria:=inttostr(games_final[ngame].memoria);
   //Configurar directorio del ejecutable, el ejecutable, si hay fichero extra de config y los parametros indispensables, el mt32 y los ciclos
   if form1.radiobutton1.Checked then begin
     exec_string:=main_config.dosbox_exe;
-    exec_dosbox_extra_config:=' --conf '+main_config.config_dosbox+' -set windowresolution=800x600 -set glshader=none -set ne2000=false';
-    exec_parametros:='-set window_titlebar="program='''+games_final[ngame].nombre+''' dosbox=auto cycles=off mouse=short" -set waitonerror=false -set memsize='+exec_memoria+' -set automount=false -set startup_verbosity=quiet -set mididevice=mt32 -set ultradir=C:\extras\ULTRASND';
-    exec_roland:='-set romdir='+main_config.dir_mt32;
+    exec_dosbox_extra_config:=' --conf "'+main_config.config_dosbox+'" -set windowresolution=800x600 -set glshader=none -set ne2000=false';
+    {$ifdef windows}
+    temp_str:='['+games_final[ngame].nombre+']';
+    {$else}
+    temp_str:=''''+games_final[ngame].nombre+'''';
+    {$endif}
+    exec_parametros:='-set window_titlebar="program='+temp_str+' dosbox=auto cycles=off mouse=short" -set waitonerror=false -set memsize='+exec_memoria+' -set automount=false -set startup_verbosity=quiet -set mididevice=mt32 -set ultradir=C:\extras\ULTRASND';
+    exec_roland:='-set romdir="'+main_config.dir_mt32+'"';
     exec_ciclos:='-set cpu_cycles=';
   end else begin
     exec_string:=main_config.dosbox_x_exe;
-    exec_dosbox_extra_config:=' --conf '+main_config.config_dosbox_x+' -set output=direct3d -set windowresolution='{$IFDEF IS_DEBUG}+'original'{$ELSE}+'800x600'{$ENDIF};
+    exec_dosbox_extra_config:=' --conf "'+main_config.config_dosbox_x+'" -set output=direct3d -set windowresolution='{$IFDEF IS_DEBUG}+'original'{$ELSE}+'800x600'{$ENDIF};
     exec_parametros:='-set titlebar="'+games_final[ngame].nombre+'" -set showmenu=true -set "quit warning"=false -set autolock=true -set showbasic=false -set fastbioslogo=true -set "disable graphical splash"=true -set startbanner=false -set memsize='+exec_memoria+' -set mididevice=mt32 -set gustype=max -set ultradir=C:\extras\ULTRASND -set disney=true -set mouse_emulation=always';
-    exec_roland:='-set mt32.romdir='+main_config.dir_mt32;
+    exec_roland:='-set mt32.romdir="'+main_config.dir_mt32+'"';
     exec_ciclos:='-set cycles=';
   end;
   if games_final[ngame].ciclos=-1 then exec_ciclos:=exec_ciclos+'auto'
@@ -862,7 +918,7 @@ if not(form1.radiobutton3.Checked) then begin //DosBox
   if form1.checkbox1.Checked then exec_fullscreen:='-set fullscreen=true'
     else exec_fullscreen:='-set fullscreen=false';
   //Mirar si tiene mapper
-  if games_final[ngame].mapper<>'' then exec_mapper:='-set mapperfile='+main_config.dir_base+'extras\mappers\'+games_final[ngame].mapper
+  if games_final[ngame].mapper<>'' then exec_mapper:='-set mapperfile="'+main_config.dir_base+'extras\mappers\'+games_final[ngame].mapper +'"'
     else exec_mapper:='';
   //Comprobar si es un PC-Booter (tiene la extension .img) o un cartucho PCJR
   if (ContainsText(games_final[ngame].exec,'.img') or ContainsText(games_final[ngame].exec,'.jrc')) then begin
@@ -875,7 +931,7 @@ if not(form1.radiobutton3.Checked) then begin //DosBox
   //Tengo que quitar la barra del final o DosBox se marea...
   exec_base:=system.copy(main_config.dir_base,1,length(main_config.dir_base)-1);
   //Lo monto todo y ejecuto
-  param_string:=exec_base+cambiar_path(exec_dosbox_extra_config)+' --conf '+cambiar_path(main_config.dir_base+TEMP_DIR+'\gameplay.conf')+' --noprimaryconf '+exec_mapper+' '+exec_roland+' '+exec_video+' '+exec_extra+' '+exec_sound+' '+exec_gus+' '+exec_fullscreen+' '+exec_ciclos+' '+exec_c_param+' '+exec_parametros;
+  param_string:='"'+exec_base+'" '+cambiar_path(exec_dosbox_extra_config)+' --conf "'+cambiar_path(main_config.dir_base+TEMP_DIR+'\gameplay.conf"')+' --noprimaryconf '+exec_mapper+' '+exec_roland+' '+exec_video+' '+exec_extra+' '+exec_sound+' '+exec_gus+' '+exec_fullscreen+' '+exec_ciclos+' '+exec_c_param+' '+exec_parametros;
   {$IFDEF WINDOWS}
   ShellExecute(form1.Handle,'open',pchar(exec_string),pchar(param_string),nil,SW_SHOWNORMAL);
   {$ELSE}
@@ -887,15 +943,34 @@ if not(form1.radiobutton3.Checked) then begin //DosBox
 end else begin  //ScummVM
   if form1.checkbox1.Checked then exec_fullscreen:='--fullscreen'
     else exec_fullscreen:='';
-  if not(form1.checkbox14.Checked) then exec_sound:='--music-volume=0 --sfx-volume=0 --speech-volume=0'
-    else exec_sound:='';
+  if form1.checkbox14.Checked then exec_sound:='false'
+    else exec_sound:='true';
+  cambiar_scumm_ini('mute',exec_sound);
+  case games_final[ngame].idioma of
+    ESP:temp_str:='--language=es';
+    ING:temp_str:='--language=en';
+    ALE:temp_str:='--language=de';
+    FRA:temp_str:='--language=fr';
+    ITA:temp_str:='--language=it';
+      else case idioma_ind of
+            0:temp_str:='--language=es';
+            2:temp_str:='--language=de';
+            3:temp_str:='--language=fr';
+            4:temp_str:='--language=it';
+              else temp_str:='--language=en';
+      end;
+  end;
   {$ifdef windows}
-  param_string:='--no-console --config='+main_config.config_scummvm+' --path='+main_config.dir_base+exec_dir+' --auto-detect '+exec_fullscreen+' '+exec_sound;
+  exec_parametros:='--no-console ';
+  {$else}
+  exec_parametros:='';
+  {$endif}
+  param_string:=exec_parametros+'--config="'+main_config.config_scummvm+'" --path="'+main_config.dir_base+exec_dir+'" --auto-detect  --native-mt32 '+exec_fullscreen+' '+temp_str;
+  {$ifdef windows}
   ShellExecute(form1.Handle,'open',pchar(main_config.scumm_exe),pchar(param_string),nil,SW_SHOWNORMAL);
   {$else}
-  param_string:=' --config='+main_config.dir_base+TEMP_DIR+'\scummvm.ini --path='+main_config.dir_base+exec_dir+' --auto-detect '+exec_fullscreen+' '+exec_sound;
   process:=tprocess.create(nil);
-  process.commandline:=main_config.scumm_exe+cambiar_path(param_string);
+  process.commandline:='/bin/bash -c '''+main_config.scumm_exe+' '+cambiar_path(param_string)+'''';
   process.execute;
   process.free;
   {$ENDIF}
@@ -1011,9 +1086,26 @@ begin
     MessageDlg(list_error[4], mtError,[mbOk],0);
     exit;
   end;
-  if not(comprobar_si_existe_fichero(directorio_final,games_final[juego_editado].exec,form2.checkbox3.Checked)) then begin
-    MessageDlg(list_error[5], mtError,[mbOk],0);
-    exit;
+  //Solo ScummVM
+  if form2.CheckBox4.Checked then begin
+    if form2.checkbox3.Checked then begin
+      if not(comprobar_si_existe_fichero(directorio_final,games_final[juego_editado].exec,true)) then begin
+        MessageDlg(list_error[5], mtError,[mbOk],0);
+        exit;
+      end;
+    end else begin
+      if not(directoryexists(directorio_final)) then begin
+        MessageDlg(list_error[5], mtError,[mbOk],0);
+        exit;
+      end;
+    end;
+    games_final[juego_editado].solo_scumm:=form2.checkbox4.Checked;
+    games_final[juego_editado].exec:='';
+  end else begin //Resto
+    if not(comprobar_si_existe_fichero(directorio_final,games_final[juego_editado].exec,form2.checkbox3.Checked)) then begin
+      MessageDlg(list_error[5], mtError,[mbOk],0);
+      exit;
+    end;
   end;
   games_final[juego_editado].zip:=form2.checkbox3.Checked;
   games_final[juego_editado].mal:=false;
@@ -1060,6 +1152,8 @@ if not(estoy_anadiendo) then begin
   form2.labelededit13.Text:=games_final[juego_editado].mapper;
   form2.checkbox1.Checked:=games_final[juego_editado].gus;
   form2.checkbox2.Checked:=games_final[juego_editado].scumm;
+  form2.CheckBox4.Checked:=games_final[juego_editado].solo_scumm;
+  form2.checkbox4click(nil);
   form2.labelededit2.Text:=games_final[juego_editado].year;
   form2.labelededit3.Text:=games_final[juego_editado].company;
   form2.labelededit15.Text:=games_final[juego_editado].mensaje;
@@ -1097,6 +1191,8 @@ end else begin
   form2.labelededit9.Text:='';
   form2.checkbox1.Checked:=false;
   form2.checkbox2.Checked:=false;
+  form2.checkbox3.Checked:=false;
+  form2.CheckBox4.Checked:=false;
   form2.labelededit10.Text:='';
   form2.labelededit13.Text:='';
   form2.labelededit14.Text:='';
@@ -1108,7 +1204,6 @@ end else begin
   form2.combobox5.ItemIndex:=1;
   form2.labelededit10.Enabled:=false;
   form2.button3.visible:=false;
-  form2.checkbox3.Checked:=false;
 end;
 image_string:=main_config.dir_imgs+form2.labelededit4.text+'_000.png';
 if FileExists(image_string) then begin
@@ -1154,6 +1249,5 @@ begin
   form4.checkbox1.Checked:=main_config.mostrar_fallan;
   form4.checkbox2.Checked:=main_config.mostrar_anadidos;
 end;
-
 
 end.

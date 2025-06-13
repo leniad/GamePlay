@@ -18,6 +18,7 @@ type
     CheckBox1: TCheckBox;
     CheckBox2: TCheckBox;
     CheckBox3: TCheckBox;
+    CheckBox4: TCheckBox;
     ComboBox1: TComboBox;
     ComboBox4: TComboBox;
     ComboBox5: TComboBox;
@@ -54,6 +55,7 @@ type
     procedure Button2Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
     procedure CheckBox3Click(Sender: TObject);
+    procedure CheckBox4Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure LabeledEdit4KeyUp(Sender: TObject; var Key: Word;
@@ -103,6 +105,7 @@ begin
     end;
     total_juegos:=total_juegos-1;
   end;
+  guardar_juegos_anadidos;
   form2.close;
 end;
 
@@ -111,10 +114,41 @@ begin
   if checkbox3.checked then begin
     groupbox3.Caption:=list_zip[1];
     labelededit9.EditLabel.Caption:=list_zip[3];
+    if not(containstext(lowercase(form2.labelededit9.Text),'.zip')) then form2.labelededit9.Text:=form2.labelededit9.text+'.zip';
   end else begin
     groupbox3.Caption:=list_zip[0];
     labelededit9.EditLabel.Caption:=list_zip[2];
+    if containstext(lowercase(form2.labelededit9.Text),'.zip') then form2.labelededit9.Text:=stringreplace(form2.labelededit9.text,'.zip','',[rfIgnoreCase]);
   end;
+end;
+
+procedure TForm2.CheckBox4Click(Sender: TObject);
+begin
+  if checkbox4.Checked then begin
+      checkbox2.enabled:=false;
+      groupbox10.visible:=false;
+      labelededit5.visible:=false;
+      labelededit6.visible:=false;
+      labelededit7.visible:=false;
+      labelededit8.visible:=false;
+      labelededit10.visible:=false;
+      labelededit19.visible:=false;
+      labelededit20.visible:=false;
+      combobox5.visible:=false;
+      statictext3.Visible:=false;
+    end else begin
+      checkbox2.enabled:=true;
+      groupbox10.visible:=true;
+      labelededit5.visible:=true;
+      labelededit6.visible:=true;
+      labelededit7.visible:=true;
+      labelededit8.visible:=true;
+      labelededit10.visible:=true;
+      labelededit19.visible:=true;
+      labelededit20.visible:=true;
+      combobox5.visible:=true;
+      statictext3.Visible:=true;
+    end;
 end;
 
 procedure TForm2.FormCreate(Sender: TObject);
@@ -140,8 +174,7 @@ begin
   save_game_show;
 end;
 
-procedure TForm2.LabeledEdit4KeyUp(Sender: TObject; var Key: Word;
-  Shift: TShiftState);
+procedure TForm2.LabeledEdit4KeyUp(Sender: TObject; var Key: Word;Shift: TShiftState);
 var
   r:trect;
   image_string:string;

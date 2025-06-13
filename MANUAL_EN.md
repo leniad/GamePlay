@@ -41,6 +41,7 @@ Color codes:
 - **Blue**: Game from the default list and available.
 - **Yellow**: Manually added game and available.
 - **Gray**: Listed game, but with errors and not available.
+- **Purple**: A game that only works with the ScummVM engine.
 
 Play using `ENTER`, double-click, or the _Play_ button.
 > If you type a name, it will be searched among the list.
@@ -104,7 +105,7 @@ Restores original settings. (_Panic button_)
 
 ## 3. Add / Edit / Delete Games (Advanced Options)
 
-![Edit Games](https://i.ibb.co/Y4LznW2m/gameplay-save.png)
+![Edit Games](https://i.ibb.co/bjNrwZJM/add-game.jpg)
 
 If you enable 'Advanced Options' on the main screen, two more buttons will appear: 'Add Games' and 'Edit/Delete Games'.<br>
 In this menu, you can add new games to the main list or edit existing manually added games.<br>
@@ -117,6 +118,7 @@ However, manually added games can be edited permanently.
 - **Year and Company**: Optional game info.
 - **ZIP Archive**: Mark if the game is zipped. File must be in the directory set in 'Advanced Configuration'.
 - **Compatible with ScummVM**: Check if the game is supported by ScummVM.
+- **Only works in ScummVM**: The game only works with the ScummVM engine, so it will not be listed when other engines are selected. (Example: 'Arthur Teacher Trouble').
 - **Directory/ZIP File**: Indicate the folder or ZIP file name. If uncompressed, the folder must be in the same location as Gameplay.
 - **Executable File**: Full name of the game’s executable (e.g. '.exe', '.com', '.bat'). For disk images ('.img'), a second image option will unlock.
 - **Parameters**: Parameters to pass to the executable (e.g., 'Maniac Mansion')
@@ -134,3 +136,19 @@ However, manually added games can be edited permanently.
 - **Manuals, Maps, and Guides**: Add documents that open with the info button. Multiple files can be separated by '$'. If too many, specify a folder ending with `'\\'` (must exist in the configured path).
 - **Language**: Select the game’s language. 'General' means it’s monolingual and won’t be filtered.
 - **Type**: Select the game type to later filter from the main screen.
+
+## 4. Adding Engines on Linux
+To add the engines and later configure them in Gameplay on Linux, the easiest way is to use the 'snap' tool.<br>
+Once you have it installed (check Google for how to install it on your specific distro), run the following commands:
+
+<pre>
+sudo snap install dosbox-x
+sudo snap install dosbox-staging
+sudo snap install scummvm
+</pre>
+After installing the three engines, you should run the following commands to locate the executables and add them to the Gameplay configuration:<br>
+<pre>
+whereis dosbox-x
+whereis dosbox-staging
+whereis scummvm
+</pre>

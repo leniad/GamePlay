@@ -42,6 +42,7 @@ Código de colores:
 - **Azul**: Juego del listado predeterminado y disponible.
 - **Amarillo**: Juego añadido manualmente y disponible.
 - **Gris**: Juego listado, pero con errores y no disponible.
+- **Morado**: Juego que funciona sólo con el motor ScummVM.
 
 Juega haciendo `ENTER`, doble click o pulsando el botón de _Play_.
 > Si escribes el nombre, se buscará entre los de la lista.
@@ -103,7 +104,7 @@ Restaura la configuración original. (_Botón del pánico_)
 ---
 ## 3. Añadir / Modificar / Borrar Juegos (Opciones Avanzadas)
 
-![Modificar Juegos](https://i.ibb.co/Y4LznW2m/gameplay-save.png)
+![Modificar Juegos](https://i.ibb.co/bjNrwZJM/add-game.jpg)
 
 Si pulsas la opción en la pantalla principal 'Opciones Avanzadas' aparecerán dos botones extras, 'Añadir Juegos' y 'Modificar/Borrar Juegos'.<br>
 En este menú, puedes añadir juegos nuevos que se añadirán a la lista principal junto con los que vienen por defecto o puedes modificar los juegos ya añadidos.<br>
@@ -116,6 +117,7 @@ En cambio, si el juego lo has añadido manualmente, si podrás modificar los val
 - **Año de publicación y compañía**: Información del juego, es opcional.
 - **Fichero comprimido en ZIP**: Si el juego viene comprimido en ZIP, marca esta casilla. Ten en cuenta que el fichero debe estar en el directorio configurado en la sección 'Configuración Avanzada'.
 - **Compatible con ScummVM**: Si el juego está en el listado de los soportados por ScummVM, marca esta casilla. Cuando selecciones el motor de emulación ScummVM, este juego aparecerá en el listado
+-  **Sólo funciona en ScummVM**: El juego sólo funciona con el motor ScummVM, por lo que no se listará cuando se seleccione los otros motores. (Ejemplo: 'Arthur Teacher Trouble')
 - **Directorio/Fichero ZIP**: Aquí se debe indicar el directorio (en caso de que no esté comprimido) o el nombre del fichero ZIP. En caso de no estar comprimido, el directorio con el juego debe estar en el mismo lugar que Gameplay.
 - **Fichero Ejecutable**: Aquí hay que indicar el nombre completo del fichero ejecutable del juego, con su extensión, puede ser '.exe', '.com', '.bat', etc. En el caso de que sea una imagen de disco con extensión '.img', se desbloqueará la casilla 'Imagen Segundo Disco' donde se podrá añadir una imagen de un segundo disco de forma opcional. Gameplay comprueba que este fichero exista, ya sea en la carpeta del juego o dentro del fichero ZIP, en caso de no existir, no se puede continuar
 - **Parámetros**: Aquí hay que poner los parámetros que queremos pasarle al fichero que ejecuta el juego (Ejemplo: 'Maniac Mansion')
@@ -133,3 +135,18 @@ En cambio, si el juego lo has añadido manualmente, si podrás modificar los val
 - **Manuales, Mapas y Guías**: Puedes añadir cualquier documento para que cuando se pulse el botón se abra. Si hay más de un documento que quieras que se abra (por ejemplo varios manuales), puedes separarlos por el símbolo '$' (Ejemplo 'manual1.pdf$manual2.pdf$manual3.txt$) y se abrirán todos a la vez. Si son una cantidad importante de ficheros, puedes indicar un directorio simplemente terminando el nombre con el carácter '`\`' y cuando se pulse el botón correspondiente se abrirá la carpeta seleccionada (ten en cuenta que debe estar dentro de la ruta indicada en la configuración). Ejemplo: 'Leisure Suir Larry in the Land of the Lounge Lizards'
 - **Idioma**: Aquí puedes seleccionar el idioma del juego, para luego con los filtros de idioma poder seleccionarlo. El idioma 'General' significa que sólo tiene un idioma, por lo que no se puede filtrar.
 - **Tipo**: Aquí se puede seleccionar el tipo de juego, para poder filtrarlo más tarde en los filtros de la pantalla principal.
+
+### 4. Añadir motores en Linux
+Para añadir los motores y posteriormente configurarlos en gameplay en un Linux, lo más sencillo es utilizar la herramienta 'snap'.<br>
+Una vez la tengas instalada (consulta Google para ver tu distro e instalar la herramienta) ejecuta lo siguiente:<br>
+<pre>
+sudo snap install dosbox-x
+sudo snap install dosbox-staging
+sudo snap install scummvm
+</pre>
+Una vez terminada la instalación de los tres motores, deberás ejecutar los siguientes comandos para localizar los ejecutables y poder ponerlos en la configuración de Gameplay:<br>
+<pre>
+whereis dosbox-x
+whereis dosbox-staging
+whereis scummvm
+</pre>

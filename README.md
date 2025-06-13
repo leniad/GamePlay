@@ -1,7 +1,7 @@
 # GAMEPLAY
 ### What is Gameplay?
 Gameplay is a frontend for DosBox, DosBox-X, and Scumm. It lets you play MS-DOS games easily and quickly—no complications, no configuration needed. Just choose a game from the list and play. Everything is preconfigured (best audio, best graphics, extra parameters, etc.).<br>
-![Pantalla Principal](https://i.ibb.co/dwPpGrF0/gameplay.jpg)
+![Pantalla Principal](https://i.ibb.co/JVzTZMH/gameplay-021.jpg)
 ### What games can I play?
 Initially, there's a list of over 300 ready-to-play games. They include preview images, manuals, maps, and guides so you can enjoy the full game experience. No need to configure anything—not audio, not video—just enjoy.
 ### Can I add more games?

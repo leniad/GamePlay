@@ -22,9 +22,10 @@ type
     memoria:integer;
     setup:string;
     zip:boolean;
+    solo_scumm:boolean;
   end;
 const
-  GAME_TOTAL=303;  //+2  //Doomdata!!!
+  GAME_TOTAL=306;  //+2  //Doomdata!!!
   GAME_DATA:array[0..(GAME_TOTAL-1)] of tipo_games=(
   (nombre:'Bruce Lee';dir:'brucelee';exec:'brucelee.img';ciclos:300;grafica:'cga_composite';extra_param:'-set joysticktype=2axis';mapper:'brucelee.map';memoria:1;zip:true),
   (nombre:'Lost Vikings, the';dir:'lostv';exec:'vikings.exe';setup:'setup.exe';zip:true),
@@ -77,7 +78,7 @@ const
   (nombre:'Secret of Monkey Island, the (EN)';dir:'mi_v_en';exec:'monkey.exe';params:'r';scumm:true;zip:true),
   (nombre:'King''s Quest IV - The Perils of Rosella';dir:'kq4';exec:'sierra.exe';scumm:true;zip:true),
   (nombre:'Leisure Suit Larry 6 - Shape Up (ES)';dir:'lsl6_es';exec:'sierra.exe';exec_pre:'LH ULTRAMID -C -M100 ';ciclos:1;gus:true;scumm:true;zip:true),
-  (nombre:'Secret of Monkey Island, the (ES) (EGA)';dir:'mi_e_es';exec:'monkey.exe';ciclos:3000;zip:true),
+  (nombre:'Secret of Monkey Island, the (ES/EGA)';dir:'mi_e_es';exec:'monkey.exe';ciclos:3000;zip:true),
   (nombre:'Poli Diaz - El Potro de Vallecas';dir:'polidiaz';exec:'polidiaz.img';memoria:1;zip:true),
   (nombre:'King''s Quest - Quest for the Crown (CGA-PCBooter)';dir:'kq1_cga';exec:'kq1_cga.img';ciclos:300;grafica:'cga_composite';memoria:1;zip:true),
   (nombre:'Archon - The Light and the Dark';dir:'archon';exec:'archon.img';ciclos:300;grafica:'cga_composite';extra_param:'-set core=normal';memoria:1;zip:true),
@@ -94,7 +95,7 @@ const
   (nombre:'Uridium';dir:'uridium';exec:'uridium.exe';ciclos:3000;extra_param:'-set joysticktype=2axis';mapper:'uridium.map';zip:true),
   (nombre:'Conquests of Camelot - King Arthur the Search for the Grail';dir:'camelot';exec:'sierra.com';scumm:true;zip:true),
   (nombre:'Day of the Tentacle (ES)';dir:'dott_es';exec:'tentacle.exe';scumm:true;zip:true),
-  (nombre:'King''s Quest V: Absence Makes the Heart go Yonder (ES)';dir:'kq5_es';exec:'sierra.exe';scumm:true;zip:true),
+  (nombre:'King''s Quest V: Absence Makes the Heart go Yonder (ES/VGA)';dir:'kq5_es';exec:'sierra.exe';scumm:true;zip:true),
   (nombre:'King''s Quest VI: Heir Today Gone Tomorrow (ES)';dir:'kq6_es';exec:'sierra.exe';scumm:true;zip:true),
   (nombre:'Monkey Island 2 - LeChuck''s Revenge (ES)';dir:'mi2_es';exec:'monkey2.exe';params:'r s';scumm:true;zip:true),
   (nombre:'Robocop';dir:'robocop';exec:'robocop.exe';grafica:'tandy';zip:true),
@@ -102,8 +103,8 @@ const
   (nombre:'Legend of Kyrandia, the (ES)';dir:'KYRAN_ES';exec:'main.exe';scumm:true;zip:true),
   (nombre:'Legend of Kyrandia - The Hand of Fate, the (ES)';dir:'kyra2_es';exec:'hof.exe';scumm:true;zip:true),
   (nombre:'Space Quest Chapter I - The Sarien Encounter';dir:'sq1';exec:'sierra.com';grafica:'tandy';scumm:true;zip:true),
-  (nombre:'Space Quest Chapter I - The Sarien Encounter VGA (ES)';dir:'sq1_es';exec:'scidhuv.exe';scumm:true;zip:true),
-  (nombre:'Space Quest Chapter I - The Sarien Encounter EGA (EN)';dir:'sq1_en';exec:'sciduv.exe';scumm:true;zip:true),
+  (nombre:'Space Quest Chapter I - The Sarien Encounter (ES/VGA)';dir:'sq1_es';exec:'scidhuv.exe';scumm:true;zip:true),
+  (nombre:'Space Quest Chapter I - The Sarien Encounter (EN/EGA)';dir:'sq1_en';exec:'sciduv.exe';scumm:true;zip:true),
   (nombre:'Space Quest Chapter II - Vohaul''s Revenge';dir:'sq2';exec:'sierra.com';grafica:'tandy';scumm:true;zip:true),
   (nombre:'Space Quest Chapter III - The Pirates of Pestulon';dir:'sq3';exec:'sierra.com';scumm:true;zip:true),
   (nombre:'Viking Child, the';dir:'vikingc';exec:'vc.exe';ciclos:3000;zip:true),
@@ -178,8 +179,8 @@ const
   (nombre:'Alf';dir:'alf';exec:'alf.exe';ciclos:300;zip:true),
   (nombre:'Alkatraz';dir:'alkatraz';exec:'alkatraz.exe';zip:true),
   (nombre:'King''s Quest IV - The Perils of Rosella (AGI)';dir:'kq4_agi';exec:'kq4.com';grafica:'tandy';scumm:true;zip:true),
-  (nombre:'EcoQuest 1 - The Search for Cetus';dir:'ecoq_es';exec:'scidhuv.exe';scumm:true;zip:true),
-  (nombre:'EcoQuest 2 - El Secreto Perdido de la Selva Amazonica';dir:'ecoq2_es';exec:'sierra.exe';scumm:true;zip:true),
+  (nombre:'EcoQuest 1 - The Search for Cetus (ES)';dir:'ecoq_es';exec:'scidhuv.exe';scumm:true;zip:true),
+  (nombre:'EcoQuest 2 - El Secreto Perdido de la Selva Amazonica (ES)';dir:'ecoq2_es';exec:'sierra.exe';scumm:true;zip:true),
   (nombre:'Golden Axe';dir:'goldaxe';exec:'goldaxe.exe';zip:true),
   (nombre:'Megaphoenix';dir:'mphoenix';exec:'dinamic.exe';zip:true),
   (nombre:'Satan';dir:'satan';exec:'satan.img';memoria:1;zip:true),
@@ -225,7 +226,7 @@ const
   (nombre:'Black Cauldron, the (PC-Booter)';dir:'bc_boot';exec:'BC_D1.IMG';segundo_disco:'BC_D2.IMG';ciclos:1000;grafica:'tandy';memoria:1;zip:true),
   (nombre:'Mortal Kombat 3';dir:'mk3';exec:'mk3.exe';ciclos:1;gus:true;cdrom:'CD\mk3.cue';memoria:30;zip:true),
   (nombre:'Dune II - La Batalla por Arrakis';dir:'dune2_es';exec:'dune2.exe';ciclos:1;zip:true),
-  (nombre:'Indiana Jones y la Última Cruzada';dir:'indy3_es';exec:'indy3.exe';params:'a v';ciclos:3000;scumm:true;zip:true),
+  (nombre:'Indiana Jones y la Última Cruzada (ES)';dir:'indy3_es';exec:'indy3.exe';params:'a v';ciclos:3000;scumm:true;zip:true),
   (nombre:'Heimdall';dir:'heimdall';exec:'heimdall.exe';ciclos:3000;zip:true),
   (nombre:'Tyrian';dir:'tyrian';exec:'tyrian.exe';exec_pre:'LH c:\extras\ultrasnd\ULTRAMID -C -M100';ciclos:1;gus:true;memoria:30;zip:true),
   (nombre:'Escape from the Planet of the Robot Monsters';dir:'escape';exec:'escape.exe';mapper:'escape.map';zip:true),
@@ -243,8 +244,8 @@ const
   (nombre:'F40 Pursuit Simulator';dir:'f40psega';exec:'f40ptl.exe';ciclos:1500;zip:true),
   (nombre:'F40 Pursuit Simulator (CGA)';dir:'f40pscga';exec:'f40.exe';ciclos:1500;zip:true),
   (nombre:'Crazy Cars III';dir:'ccars3';exec:'cc3.com';zip:true),
-  (nombre:'Leisure Suir Larry 1 in the Land of the Lounge Lizards (EN)';dir:'lsl1_en';exec:'scidhuv.exe';ciclos:6000;scumm:true;zip:true),
-  (nombre:'Leisure Suir Larry 1 in the Land of the Lounge Lizards (ES)';dir:'lsl1_es';exec:'scidhuv.exe';ciclos:6000;scumm:true;zip:true),
+  (nombre:'Leisure Suir Larry 1 in the Land of the Lounge Lizards (EN/VGA)';dir:'lsl1_en';exec:'scidhuv.exe';ciclos:6000;scumm:true;zip:true),
+  (nombre:'Leisure Suir Larry 1 in the Land of the Lounge Lizards (ES/VGA)';dir:'lsl1_es';exec:'scidhuv.exe';ciclos:6000;scumm:true;zip:true),
   (nombre:'F29 Retaliator';dir:'f29retal';exec:'retal.exe';ciclos:1;zip:true),
   (nombre:'Bad Dudes';dir:'baddudes';exec:'baddudes.exe';ciclos:1000;zip:true),
   (nombre:'Karateka';dir:'karateka';exec:'karateka.exe';ciclos:450;zip:true),
@@ -312,7 +313,6 @@ const
   (nombre:'Blood Money';dir:'bloodm';exec:'bm.exe';extra_param:'-set a20=off';zip:true),
   (nombre:'Ulises';dir:'ulises';exec:'ulises.exe';ciclos:3000;zip:true),
   (nombre:'Magic Pockets';dir:'magicp';exec:'pocket_k.exe';zip:true),
-  //
   (nombre:'Game Over';dir:'gameover';exec:'gameover.img';ciclos:750;memoria:1;zip:true),
   (nombre:'Army Moves';dir:'amoves';exec:'amoves.img';ciclos:300;memoria:1;zip:true),
   (nombre:'Arctic Moves';dir:'arcticm';exec:'arctic.exe';exec_pre:'amfix.com';zip:true),
@@ -326,10 +326,14 @@ const
   (nombre:'After Burner II';dir:'AFTERB2';exec:'AB.EXE';grafica:'tandy';memoria:1;zip:true),
   (nombre:'Altered Beast';dir:'ABEAST';exec:'BEASTY.EXE';zip:true),
   (nombre:'Quest for Glory I - So you want to be a Hero (VGA)';dir:'QG1_VGA';exec:'SCIDHUV.EXE';scumm:true;zip:true),
-  (nombre:'Discworld/Mundodisco';dir:'DISCW';exec:'disc.bat';gus:true;scumm:true;zip:true),
+  (nombre:'Discworld/Mundodisco (MULT)';dir:'DISCW';exec:'disc.bat';gus:true;scumm:true;zip:true),
   (nombre:'Maniac Mansion (ES)';dir:'MANIACES';exec:'maniac.exe';params:'p';grafica:'tandy';scumm:true;memoria:1;zip:true),
   (nombre:'Maniac Mansion (EN)';dir:'MANIACEN';exec:'maniac.exe';params:'p';grafica:'tandy';scumm:true;memoria:1;zip:true),
-  (nombre:'Maniac Mansion (OLD EN)';dir:'MANIACO';exec:'maniac.exe';scumm:true;memoria:1;zip:true)
+  (nombre:'Maniac Mansion (EN/OLD)';dir:'MANIACO';exec:'maniac.exe';scumm:true;memoria:1;zip:true),
+  //
+  (nombre:'Arthur''s Teacher Trouble';dir:'ARTHURTT';zip:true;solo_scumm:true),
+  (nombre:'Ultimate Doom, the';dir:'ULTDOOM';exec:'doom.exe';ciclos:1;gus:true;memoria:32;zip:true),
+  (nombre:'Tortoise and the Hare, the';dir:'TORTOISE';zip:true;solo_scumm:true)
 );
 
 implementation
