@@ -25,7 +25,7 @@ type
     solo_scumm:boolean;
   end;
 const
-  GAME_TOTAL=306;  //+2  //Doomdata!!!
+  GAME_TOTAL=337;
   GAME_DATA:array[0..(GAME_TOTAL-1)] of tipo_games=(
   (nombre:'Bruce Lee';dir:'brucelee';exec:'brucelee.img';ciclos:300;grafica:'cga_composite';extra_param:'-set joysticktype=2axis';mapper:'brucelee.map';memoria:1;zip:true),
   (nombre:'Lost Vikings, the';dir:'lostv';exec:'vikings.exe';setup:'setup.exe';zip:true),
@@ -69,7 +69,7 @@ const
   (nombre:'Rise of the Triad';dir:'rise';exec:'rott.exe';ciclos:1;gus:true;memoria:30;zip:true),
   (nombre:'Risky Woods (EN)';dir:'risky_en';exec:'risky.exe';zip:true),
   (nombre:'WarCraft - Orcs & Humans';dir:'warc';exec:'war.exe';setup:'setup.exe';zip:true),
-  (nombre:'LHX - Attack Chopper';dir:'lhx';exec:'lhx.exe';ciclos:3000;extra_param:'vga adlibsound high';zip:true),
+  (nombre:'LHX - Attack Chopper';dir:'lhx';exec:'lhx.exe';params:'vga adlibsound high';ciclos:3000;zip:true),
   (nombre:'Loom (ES)';dir:'loom_es';exec:'loom.exe';params:'r';scumm:true;zip:true),
   (nombre:'Loom (EN)';dir:'loom_en';exec:'loom.exe';params:'r';scumm:true;zip:true),
   (nombre:'Loom (DE)';dir:'loom_de';exec:'loom.exe';params:'r';scumm:true;zip:true),
@@ -330,10 +330,41 @@ const
   (nombre:'Maniac Mansion (ES)';dir:'MANIACES';exec:'maniac.exe';params:'p';grafica:'tandy';scumm:true;memoria:1;zip:true),
   (nombre:'Maniac Mansion (EN)';dir:'MANIACEN';exec:'maniac.exe';params:'p';grafica:'tandy';scumm:true;memoria:1;zip:true),
   (nombre:'Maniac Mansion (EN/OLD)';dir:'MANIACO';exec:'maniac.exe';scumm:true;memoria:1;zip:true),
-  //
   (nombre:'Arthur''s Teacher Trouble';dir:'ARTHURTT';zip:true;solo_scumm:true),
   (nombre:'Ultimate Doom, the';dir:'ULTDOOM';exec:'doom.exe';ciclos:1;gus:true;memoria:32;zip:true),
-  (nombre:'Tortoise and the Hare, the';dir:'TORTOISE';zip:true;solo_scumm:true)
+  (nombre:'Tortoise and the Hare, the';dir:'TORTOISE';zip:true;solo_scumm:true),
+  //
+  (nombre:'Cannon Fodder';dir:'CANNONF';exec:'can.exe';zip:true),
+  (nombre:'Cannon Fodder 2 (ES)';dir:'CANNONF2';exec:'cannon.exe';exec_pre:'cd exe[RET]copy cf2_es.exe ..\cannon.exe[RET]cd ..[RET]loadfix -1';zip:true),
+  (nombre:'Cannon Fodder 2 (EN)';dir:'CANNONF2';exec:'cannon.exe';exec_pre:'loadfix -1';zip:true),
+  (nombre:'Cannon Fodder 2 (FR)';dir:'CANNONF2';exec:'cannon.exe';exec_pre:'cd exe[RET]copy cf2_fr.exe ..\cannon.exe[RET]cd ..[RET]loadfix -1';zip:true),
+  (nombre:'Cannon Fodder 2 (IT)';dir:'CANNONF2';exec:'cannon.exe';exec_pre:'cd exe[RET]copy cf2_it.exe ..\cannon.exe[RET]cd ..[RET]loadfix -1';zip:true),
+  (nombre:'Bram Stoker''s Dracula';dir:'BDRACULA';exec:'dracula.bat';zip:true),
+  (nombre:'Elvira Mistress of the Dark';dir:'ELVIRA';exec:'elvira.bat';zip:true),
+  (nombre:'Elvira II The Jaws of Cerberus (ES)';dir:'CERBE_ES';exec:'cerberus.bat';zip:true),
+  (nombre:'Elvira II The Jaws of Cerberus (EN)';dir:'CERBE_EN';exec:'cerberus.bat';zip:true),
+  (nombre:'King''s Quest - Quest for the Crown (Tandy-PCBooter)';dir:'kq1tandy';exec:'kq1tandy.img';ciclos:1000;grafica:'tandy';memoria:1;zip:true),
+  (nombre:'King''s Quest - Quest for the Crown (PcJr-PCBooter)';dir:'kq1pcjr';exec:'kq1pcjr.img';ciclos:450;grafica:'pcjr';memoria:1;zip:true),
+  (nombre:'Rampage';dir:'RAMPAGE';exec:'rampage.exe';ciclos:1500;zip:true),
+  (nombre:'Xenon';dir:'XENON';exec:'xenon.exe';ciclos:1500;zip:true),
+  (nombre:'Xenon 2 Megablast';dir:'XENON2';exec:'xenon2.exe';zip:true),
+  (nombre:'Space Ace';dir:'SPACEACE';exec:'spaceace.exe';zip:true),
+  (nombre:'Space Ace: II Borf''s Revenge';dir:'SPACEA2';exec:'sa2.exe';zip:true),
+  (nombre:'StarQuake';dir:'STARQUAK';exec:'quake.exe';ciclos:850;grafica:'cga';zip:true),
+  (nombre:'Sirwood';dir:'SIRWOOD';exec:'sirwood.exe';extra_param:'-set a20=off';zip:true),
+  (nombre:'Mutan Zone';dir:'MUTANZ';exec:'mutan.img';ciclos:450;grafica:'cga';memoria:1;zip:true),
+  (nombre:'Police Quest II: The Vengeance';dir:'PQ2';exec:'sierra.com';scumm:true;zip:true),
+  (nombre:'Police Quest in Pursuit of the Death Angel';dir:'PQ1';exec:'sierra.com';grafica:'tandy';scumm:true;zip:true),
+  (nombre:'Police Quest in Pursuit of the Death Angel (OLD v2.0A)';dir:'PQ1_OLD';exec:'sierra.com';grafica:'tandy';scumm:true;zip:true),
+  (nombre:'Police Quest in Pursuit of the Death Angel (VGA)';dir:'PQ1_VGA';exec:'SCIDHUV.exe';scumm:true;zip:true),
+  (nombre:'Police Quest III: The Kindred (ES)';dir:'PQ3_ES';exec:'sierra.exe';scumm:true;zip:true),
+  (nombre:'Police Quest III: The Kindred (EN/VGA)';dir:'PQ3_EN_V';exec:'sierra.bat';scumm:true;zip:true),
+  (nombre:'Police Quest III: The Kindred (EN/EGA)';dir:'PQ3_EN_E';exec:'SCIDUV.EXE';scumm:true;zip:true),
+  (nombre:'Buck Rogers Planet of Zoom';dir:'BUCKROG';exec:'BUCKROG.IMG';ciclos:450;grafica:'pcjr';memoria:1;zip:true),
+  (nombre:'Congo Bongo';dir:'CONGO';exec:'CONGO.IMG';ciclos:300;grafica:'cga';memoria:1;zip:true),
+  (nombre:'Digdug';dir:'DIGDUG';exec:'DIGDUG.IMG';ciclos:300;memoria:1;zip:true),
+  (nombre:'Man Hunter: New York';dir:'MH';exec:'sierra.com';scumm:true;zip:true),
+  (nombre:'Man Hunter 2: San Francisco';dir:'MH2';exec:'sierra.com';scumm:true;zip:true)
 );
 
 implementation

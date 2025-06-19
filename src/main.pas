@@ -75,13 +75,13 @@ type
 const
   MAX_GAMES=1000;
   TEMP_DIR='TEMP';
-  VERSION='v0.21β';
+  VERSION='v0.22β';
 
 var
   orden_games:array[0..(MAX_GAMES-1)] of integer;
   games_final:array[0..(MAX_GAMES-1)] of tipo_final;
   main_config:tipo_config;
-  idioma_sel,juego_editado,total_juegos:integer;
+  idioma_sel,juego_editado,total_juegos,total_scumm,total_no_scumm:integer;
   estoy_anadiendo:boolean;
 
 implementation
@@ -248,7 +248,8 @@ end else begin
 end;
 end;
 //Lo dejo con el tamaño que toca!! No con el total, ya que puede que no los muestre todos
-form1.Label5.Caption:='TOTAL: '+inttostr(contador)+'/'+inttostr(total_juegos);
+if form1.radiobutton3.Checked then form1.Label5.Caption:='TOTAL: '+inttostr(contador)+'/'+inttostr(total_scumm)
+  else form1.Label5.Caption:='TOTAL: '+inttostr(contador)+'/'+inttostr(total_no_scumm);
 //Si no hay nada, lo muestro todo y todos mal
 if contador=0 then begin
   form1.stringgrid1.RowCount:=1;
@@ -458,6 +459,12 @@ for f:=0 to (total_juegos-2) do begin
       orden_games[h+1]:=pos;
     end;
   end;
+end;
+total_scumm:=0;
+total_no_scumm:=0;
+for f:=0 to (total_juegos-1) do begin
+  if (games_final[f].scumm or games_final[f].solo_scumm) then total_scumm:=total_scumm+1;
+  if not(games_final[f].solo_scumm) then total_no_scumm:=total_no_scumm+1;
 end;
 end;
 
@@ -805,17 +812,6 @@ if (not(form1.radiobutton3.Checked) and games_final[ngame].solo_scumm) then begi
   MessageDlg(list_error[8],mtError,[mbOk],0);
   exit;
 end;
-//Mostrar mensaje de ayuda
-if form1.checkbox2.Checked then begin
-  if games_final[ngame].mensaje<>'' then begin
-      temp_str:=games_final[ngame].mensaje;
-      if form1.radiobutton1.Checked then temp_disco:='CONTROL+F4'
-        else {$ifdef windows}temp_disco:='F11+O';{$else}temp_disco:='F12+O';{$endif}
-      if ContainsText(temp_str,'[KEY_DISK]') then temp_str:=StringReplace(temp_str,'[KEY_DISK]',temp_disco,[]);
-      if ContainsText(temp_str,'[RET]') then temp_str:=StringReplace(temp_str,'[RET]',RETURN,[rfReplaceAll]);
-      MessageDlg(temp_str,mtInformation,[mbOK],0);
-  end;
-end;
 //Si es un ZIP lo descomprimo!
 if games_final[ngame].zip then begin
   delete_dir(TEMP_DIR+'\'+games_final[ngame].dir);
@@ -824,6 +820,17 @@ if games_final[ngame].zip then begin
   exec_dir:=cambiar_path(TEMP_DIR+'\'+games_final[ngame].dir);
 end else exec_dir:=games_final[ngame].dir;
 if not(form1.radiobutton3.Checked) then begin //DosBox
+  //Mostrar mensaje de ayuda
+  if form1.checkbox2.Checked then begin
+    if games_final[ngame].mensaje<>'' then begin
+      temp_str:=games_final[ngame].mensaje;
+      if form1.radiobutton1.Checked then temp_disco:='CONTROL+F4'
+        else temp_disco:={$ifdef windows}'F11+O';{$else}'F12+O';{$endif}
+      if ContainsText(temp_str,'[KEY_DISK]') then temp_str:=StringReplace(temp_str,'[KEY_DISK]',temp_disco,[]);
+      if ContainsText(temp_str,'[RET]') then temp_str:=StringReplace(temp_str,'[RET]',RETURN,[rfReplaceAll]);
+      MessageDlg(temp_str,mtInformation,[mbOK],0);
+    end;
+  end;
   //cantidad de memoria
   if games_final[ngame].memoria=0 then exec_memoria:='16'
     else exec_memoria:=inttostr(games_final[ngame].memoria);
@@ -861,7 +868,7 @@ if not(form1.radiobutton3.Checked) then begin //DosBox
   //Comprobar si tiene un CD
   if games_final[ngame].cdrom<>'' then begin
     cd_rom_dir:=cambiar_path(main_config.dir_base+exec_dir+'\'+games_final[ngame].cdrom);
-    temp_str:='imgmount d: '+cd_rom_dir+' -t cdrom';
+    temp_str:='imgmount d: "'+cd_rom_dir+'" -t cdrom';
     WriteLn(play_file,temp_str);
   end;
   //Comprobar parametros previos a la ejecucion
@@ -871,7 +878,7 @@ if not(form1.radiobutton3.Checked) then begin //DosBox
       //Si es un ZIP la carpeta base es TEMP
       if games_final[ngame].zip then temp_str:=main_config.dir_base+TEMP_DIR+'\'+games_final[ngame].dir
         else temp_str:=main_config.dir_base+games_final[ngame].dir;
-      exec_pre:=StringReplace(exec_pre,'[GAME_DIR]',temp_str,[]);
+      exec_pre:=StringReplace(exec_pre,'[GAME_DIR]','"'+temp_str+'"',[]);
     end;
     if ContainsText(exec_pre,'[RET]') then exec_pre:=StringReplace(exec_pre,'[RET]',RETURN,[rfReplaceAll]);
     WriteLn(play_file,exec_pre);

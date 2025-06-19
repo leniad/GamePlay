@@ -339,10 +339,41 @@ const
   (manual:'ManiacMansion_ Manual_ES.pdf$ManiacMansion_Claves.pdf$ManiacMansion_Libro _Pistas.pdf';image_name:'maniac';idioma:ESP;tipo:AG),
   (manual:'ManiacMansion_Manual_EN.pdf$ManiacMansion_Claves.pdf$ManiacMansion_Hintbook.pdf';image_name:'maniac';idioma:ING;tipo:AG),
   (manual:'ManiacMansion_old_RF.pdf';image_name:'maniac_old';idioma:ING;tipo:AG),
-  //
   (manual:'arthurtt_manual.pdf';image_name:'arthurtt';idioma:ING;tipo:AG),
   (manual:'UltimateDoom_manual.pdf';image_name:'ultdoom';tipo:TRESD),
-  (manual:'tortoise_hare_manual.pdf';image_name:'tortoise';idioma:ING;tipo:AG)
+  (manual:'tortoise_hare_manual.pdf';image_name:'tortoise';idioma:ING;tipo:AG),
+  //
+  (manual:'CannonFodder.pdf';image_name:'cannonf';tipo:ARCADE),
+  (manual:'CannonFodder2_Manual.pdf$CannonFodder2_RF.pdf';image_name:'cannonf2';idioma:ESP;tipo:ARCADE),
+  (manual:'CannonFodder2_Manual.pdf$CannonFodder2_RF.pdf';image_name:'cannonf2';idioma:ING;tipo:ARCADE),
+  (manual:'CannonFodder2_Manual.pdf$CannonFodder2_RF.pdf';image_name:'cannonf2';idioma:FRA;tipo:ARCADE),
+  (manual:'CannonFodder2_Manual.pdf$CannonFodder2_RF.pdf';image_name:'cannonf2';idioma:ITA;tipo:ARCADE),
+  (manual:'Bram Stokers Dracula_Manual.pdf';image_name:'bdracula';tipo:TRESD;mensaje:'Pulsa 3 para seleccionar SoundBlaster'),
+  (manual:'Elvira_Manual_EN.pdf$Elvira_Manual_ES.pdf$Elvira_Cluebook.pdf$Elvira_ClueBook_rest.pdf';image_name:'elvira';tipo:RPG),
+  (manual:'Elvira2_Manual_ES.pdf$Elvira2_Hintbook.pdf';image_name:'cerberus';idioma:ESP;tipo:RPG),
+  (manual:'Elvira2_Manual_EN.pdf$Elvira2_Hintbook.pdf';image_name:'cerberus';idioma:ING;tipo:RPG),
+  (year:'1987';company:'Sierra';manual:'kq1_manual.pdf';map:'kq1\';guia:'kq1_wt_1.txt$kq1_wt_2.html';image_name:'kq1';tipo:AG),
+  (year:'1987';company:'Sierra';manual:'kq1_manual.pdf';map:'kq1\';guia:'kq1_wt_1.txt$kq1_wt_2.html';image_name:'kq1';tipo:AG),
+  (manual:'Rampage_CommandCard.pdf$Rampage_DemolitionGuide.pdf';image_name:'rampage';tipo:ARCADE;mensaje:'Pulsa 2 para seleccionar EGA'),
+  (manual:'Xenon_Manual.pdf';image_name:'xenon';tipo:ARCADE;mensaje:'Pulsa 2 para seleccionar EGA'),
+  (manual:'Xenon2_Manual.pdf';image_name:'xenon2';tipo:ARCADE;mensaje:'Pulsa ENTER para empezar'),
+  (guia:'spaceace.txt';image_name:'spaceace';tipo:ARCADE),
+  (manual:'SpaceAce2_Manual.pdf$SpaceAce2_Codes.pdf';guia:'spaceace2.txt';image_name:'spaceace2';tipo:ARCADE),
+  (manual:'Starquake_Manual.pdf';image_name:'starquake';tipo:ARCADE),
+  (manual:'Sirwood_Manual.pdf';image_name:'sirwood';tipo:ARCADE;mensaje:'Pulsa F4 para VGA'),
+  (manual:'MutanZone_Manual.pdf';image_name:'mutanzone';tipo:ARCADE),
+  (manual:'PoliceQuest2_Manual.pdf$PoliceQuest2_HB.pdf';map:'PoliceQuest2_Map.pdf';image_name:'pq2';idioma:ING;tipo:AG),
+  (manual:'PQ1_Manual.pdf$PQ1_HB.pdf$PQ1_RF.pdf';map:'PQ1_map.pdf';image_name:'pq1';idioma:ING;tipo:AG),
+  (manual:'PQ1_Manual.pdf$PQ1_HB.pdf$PQ1_RF.pdf';map:'PQ1_map.pdf';image_name:'pq1';idioma:ING;tipo:AG),
+  (manual:'PQ1_VGA_Gazette.pdf$PQ1_VGA_HB.pdf$PQ1_VGA_PokerInstructions.pdf';map:'PQ1_VGA_Map.pdf';image_name:'pq1_vga';idioma:ING;tipo:AG),
+  (manual:'PQ3_Manual_ES.pdf$PQ3_HB_ES.pdf';image_name:'pq3';idioma:ESP;tipo:AG),
+  (manual:'PQ3_Manual_MULTI.pdf$PQ3_HB.pdf';image_name:'pq3';idioma:ING;tipo:AG),
+  (manual:'PQ3_Manual_MULTI.pdf$PQ3_HB.pdf';image_name:'pq3_ega';idioma:ING;tipo:AG),
+  (image_name:'buckrog';tipo:ARCADE),
+  (image_name:'congo';tipo:ARCADE),
+  (manual:'DigDug_Manual.pdf';image_name:'digdug';tipo:ARCADE),
+  (manual:'Manhunter_FieldGuide.pdf$Manhunter_HB.pdf$Manhunter_RF.pdf';map:'Manhunter_Map.pdf';image_name:'mh';idioma:ING;tipo:AG),
+  (manual:'Manhunter2_FieldGuide.pdf$Manhunter2_HB.pdf$Manhunter2_RF.pdf';image_name:'mh2';idioma:ING;tipo:AG)
   );
 
 implementation

@@ -244,7 +244,8 @@ begin
     BitBtn2.Enabled:=false;
     BitBtn3.Enabled:=false;
   end else stringgrid1.RowCount:=pos;
-  Label5.Caption:='TOTAL: '+inttostr(pos)+'/'+inttostr(total_juegos);
+  if form1.radiobutton3.Checked then form1.Label5.Caption:='TOTAL: '+inttostr(pos)+'/'+inttostr(total_scumm)
+     else form1.Label5.Caption:='TOTAL: '+inttostr(pos)+'/'+inttostr(total_no_scumm);
   StringGrid1Click(nil);
   if stringgrid1.Cells[1,0]<>'' then button2.Enabled:=not(games_final[orden_games[pos]].interno) or main_config.leer_fijos;
 end;
