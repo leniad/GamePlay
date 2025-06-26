@@ -51,6 +51,8 @@ type
     CheckBox2: TCheckBox;
     LabeledEdit12: TLabeledEdit;
     Button15: TButton;
+    LabeledEdit13: TLabeledEdit;
+    Button16: TButton;
     procedure Button1Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure Button2Click(Sender: TObject);
@@ -78,6 +80,7 @@ type
     procedure CheckBox1Click(Sender: TObject);
     procedure CheckBox2Click(Sender: TObject);
     procedure Button15Click(Sender: TObject);
+    procedure Button16Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -130,6 +133,7 @@ begin
   labelededit1.Text:=main_config.dir_base+'extras\dosbox\dosbox.exe';
   labelededit2.Text:=main_config.dir_base+'extras\dosbox_x\dosbox-x.exe';
   labelededit3.Text:=main_config.dir_base+'extras\scummvm\scummvm.exe';
+  labelededit13.Text:=main_config.dir_base+'dsp\dsp.exe';
   labelededit6.Text:=main_config.dir_base+'extras\manual\';
   labelededit7.Text:=main_config.dir_base+'extras\maps\';
   labelededit8.Text:=main_config.dir_base+'extras\walk\';
@@ -149,6 +153,14 @@ begin
   if Opendialog1.Execute then labelededit12.Text:=opendialog1.FileName;
 end;
 
+procedure TForm4.Button16Click(Sender: TObject);
+begin
+  openDialog1.InitialDir:=extractfilepath(main_config.dsp_exe);
+  openDialog1.Options:=[ofFileMustExist];
+  Opendialog1.Filter:='EXE file (*.exe)|*.exe';
+  if Opendialog1.Execute then labelededit13.Text:=opendialog1.FileName;
+end;
+
 procedure TForm4.Button1Click(Sender: TObject);
 begin
   main_config.config_dosbox:=labelededit4.Text;
@@ -158,6 +170,7 @@ begin
   main_config.dosbox_exe:=labelededit1.Text;
   main_config.dosbox_x_exe:=labelededit2.Text;
   main_config.scumm_exe:=labelededit3.Text;
+  main_config.dsp_exe:=labelededit13.Text;
   main_config.dir_manual:=labelededit6.Text;
   main_config.dir_mapas:=labelededit7.Text;
   main_config.dir_guias:=labelededit8.Text;

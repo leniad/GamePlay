@@ -18,9 +18,9 @@ object Form4: TForm4
   TextHeight = 15
   object GroupBox1: TGroupBox
     Left = 591
-    Top = 8
+    Top = 6
     Width = 577
-    Height = 150
+    Height = 146
     Caption = 'Fichero configuraci'#243'n'
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
@@ -49,7 +49,7 @@ object Form4: TForm4
     end
     object LabeledEdit5: TLabeledEdit
       Left = 10
-      Top = 77
+      Top = 70
       Width = 517
       Height = 23
       EditLabel.Width = 51
@@ -71,7 +71,7 @@ object Form4: TForm4
     end
     object LabeledEdit12: TLabeledEdit
       Left = 10
-      Top = 120
+      Top = 110
       Width = 517
       Height = 23
       EditLabel.Width = 59
@@ -101,9 +101,9 @@ object Form4: TForm4
   end
   object GroupBox2: TGroupBox
     Left = 8
-    Top = 8
+    Top = 6
     Width = 577
-    Height = 158
+    Height = 180
     Caption = 'Ejecutables'
     TabOrder = 0
     object LabeledEdit1: TLabeledEdit
@@ -119,7 +119,7 @@ object Form4: TForm4
     end
     object LabeledEdit2: TLabeledEdit
       Left = 19
-      Top = 75
+      Top = 70
       Width = 514
       Height = 23
       EditLabel.Width = 51
@@ -130,7 +130,7 @@ object Form4: TForm4
     end
     object LabeledEdit3: TLabeledEdit
       Left = 19
-      Top = 120
+      Top = 110
       Width = 514
       Height = 23
       EditLabel.Width = 59
@@ -141,7 +141,7 @@ object Form4: TForm4
     end
     object Button4: TButton
       Left = 539
-      Top = 29
+      Top = 30
       Width = 33
       Height = 25
       Caption = 'Abrir'
@@ -150,7 +150,7 @@ object Form4: TForm4
     end
     object Button5: TButton
       Left = 539
-      Top = 74
+      Top = 70
       Width = 33
       Height = 25
       Caption = 'Abrir'
@@ -159,12 +159,32 @@ object Form4: TForm4
     end
     object Button6: TButton
       Left = 539
-      Top = 119
+      Top = 110
       Width = 33
       Height = 25
       Caption = 'Abrir'
       TabOrder = 5
       OnClick = Button6Click
+    end
+    object LabeledEdit13: TLabeledEdit
+      Left = 19
+      Top = 150
+      Width = 514
+      Height = 23
+      EditLabel.Width = 72
+      EditLabel.Height = 15
+      EditLabel.Caption = 'DSP Emulator'
+      TabOrder = 6
+      Text = ''
+    end
+    object Button16: TButton
+      Left = 539
+      Top = 150
+      Width = 33
+      Height = 25
+      Caption = 'Abrir'
+      TabOrder = 7
+      OnClick = Button16Click
     end
   end
   object RadioGroup1: TRadioGroup
@@ -240,9 +260,9 @@ object Form4: TForm4
   end
   object GroupBox3: TGroupBox
     Left = 8
-    Top = 172
+    Top = 186
     Width = 577
-    Height = 292
+    Height = 261
     Caption = 'Directorios Base'
     TabOrder = 2
     object LabeledEdit6: TLabeledEdit
@@ -259,7 +279,7 @@ object Form4: TForm4
     end
     object LabeledEdit7: TLabeledEdit
       Left = 19
-      Top = 75
+      Top = 70
       Width = 514
       Height = 23
       EditLabel.Width = 35
@@ -271,7 +291,7 @@ object Form4: TForm4
     end
     object LabeledEdit8: TLabeledEdit
       Left = 19
-      Top = 120
+      Top = 110
       Width = 514
       Height = 23
       EditLabel.Width = 29
@@ -292,7 +312,7 @@ object Form4: TForm4
     end
     object Button9: TButton
       Left = 539
-      Top = 79
+      Top = 70
       Width = 33
       Height = 25
       Caption = 'Abrir'
@@ -301,7 +321,7 @@ object Form4: TForm4
     end
     object Button10: TButton
       Left = 539
-      Top = 125
+      Top = 110
       Width = 33
       Height = 25
       Caption = 'Abrir'
@@ -310,7 +330,7 @@ object Form4: TForm4
     end
     object Button11: TButton
       Left = 539
-      Top = 166
+      Top = 150
       Width = 33
       Height = 25
       Caption = 'Abrir'
@@ -319,7 +339,7 @@ object Form4: TForm4
     end
     object LabeledEdit9: TLabeledEdit
       Left = 19
-      Top = 165
+      Top = 150
       Width = 514
       Height = 23
       EditLabel.Width = 22
@@ -331,7 +351,7 @@ object Form4: TForm4
     end
     object Button12: TButton
       Left = 539
-      Top = 206
+      Top = 190
       Width = 33
       Height = 25
       Caption = 'Abrir'
@@ -340,7 +360,7 @@ object Form4: TForm4
     end
     object LabeledEdit10: TLabeledEdit
       Left = 19
-      Top = 210
+      Top = 190
       Width = 514
       Height = 23
       EditLabel.Width = 51
@@ -352,7 +372,7 @@ object Form4: TForm4
     end
     object Button13: TButton
       Left = 539
-      Top = 253
+      Top = 230
       Width = 33
       Height = 25
       Caption = 'Abrir'
@@ -361,7 +381,7 @@ object Form4: TForm4
     end
     object LabeledEdit11: TLabeledEdit
       Left = 19
-      Top = 255
+      Top = 230
       Width = 514
       Height = 23
       EditLabel.Width = 30

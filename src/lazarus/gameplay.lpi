@@ -18,8 +18,8 @@
     <VersionInfo>
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
-      <MinorVersionNr Value="22"/>
-      <BuildNr Value="30"/>
+      <MinorVersionNr Value="30"/>
+      <BuildNr Value="33"/>
     </VersionInfo>
     <BuildModes>
       <Item Name="Default" Default="True"/>
@@ -83,6 +83,10 @@
       </Unit>
       <Unit>
         <Filename Value="..\main.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\dsp_data.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit>
     </Units>

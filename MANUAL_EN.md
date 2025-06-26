@@ -3,7 +3,7 @@
 **Gameplay** is divided into several sections.
 If you just want to play, **no initial configuration is needed**.
 
-![Main Screen](https://i.ibb.co/BHH34qgY/gameplay-manual.png)
+![Main Screen](https://i.ibb.co/RTZJXy22/gameplay-030-en.png)
 
 ---
 
@@ -21,6 +21,7 @@ You can choose between three programs to launch the games:
 - **DosBox**: Classic emulator, _staging_ version.
 - **DosBox-X**: Similar to DosBox, but with additional features.
 - **ScummVM**: Only for certain graphic adventures. When selected, the list is automatically adjusted.
+- **DSP Emulator**: Arcade, 8bits Computers and Consoles emulator.
 
 > The emulator is configured automatically, you don't need to do anything.
 
@@ -75,10 +76,10 @@ Access the advanced menu where you can change:
 
 ## 2. Advanced Configuration
 
-![Configuration](https://i.ibb.co/3yGQq0rB/gameplay-config.png)
+![Configuration](https://i.ibb.co/YTDQ32sn/config-en.png)
 
 ### 2.1 Executable Files
-To run games, Gameplay needs three emulators: DosBox, DosBox-X, and ScummVM.
+To run games, Gameplay needs three emulators: *DosBox, DosBox-X, ScummVM and DSP Emulator*.
 Here you can change the executable files to use other versions or emulator updates.
 
 ### 2.2 Main Directories
@@ -137,10 +138,15 @@ However, manually added games can be edited permanently.
 - **Language**: Select the game’s language. 'General' means it’s monolingual and won’t be filtered.
 - **Type**: Select the game type to later filter from the main screen.
 
-## 4. Adding Engines on Linux
-To add the engines and later configure them in Gameplay on Linux, the easiest way is to use the 'snap' tool.<br>
-Once you have it installed (check Google for how to install it on your specific distro), run the following commands:
+---
 
+## 4. Play on Linux
+If you have any problem running Gameplay after unzipping the file, you should run the following command in the same folder where you unzipped it (this will add the executable attribute)<br>
+<pre>
+bash fix_linux_exec.sh
+</pre>
+To add the engines and later configure them in Gameplay on Linux, the easiest way is to use the 'snap' tool.<br>
+Once you have it installed (check Google for how to install it on your specific distro), run the following commands:<br>
 <pre>
 sudo snap install dosbox-x
 sudo snap install dosbox-staging
@@ -152,3 +158,4 @@ whereis dosbox-x
 whereis dosbox-staging
 whereis scummvm
 </pre>
+*DSP Emulator* engine, is ready to work.

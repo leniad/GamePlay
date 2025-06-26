@@ -20,7 +20,8 @@ uses
   acercade in 'acercade.pas' {Form3},
   config in 'config.pas' {Form4},
   idioma_info in 'idioma_info.pas',
-  main in 'main.pas';
+  main in 'main.pas',
+  dsp_data in 'dsp_data.pas';
 
 {$R *.res}
 

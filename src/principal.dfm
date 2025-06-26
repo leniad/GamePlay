@@ -4,7 +4,7 @@ object Form1: TForm1
   Anchors = []
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
-  ClientHeight = 606
+  ClientHeight = 631
   ClientWidth = 1061
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -3712,8 +3712,8 @@ object Form1: TForm1
   OnShow = FormShow
   TextHeight = 20
   object Label5: TLabel
-    Left = 360
-    Top = 584
+    Left = 384
+    Top = 603
     Width = 82
     Height = 20
     Caption = 'Total: ---/---'
@@ -3734,7 +3734,7 @@ object Form1: TForm1
     Left = 252
     Top = 54
     Width = 418
-    Height = 531
+    Height = 543
     ColCount = 2
     FixedColor = clWhite
     FixedCols = 0
@@ -3752,12 +3752,12 @@ object Form1: TForm1
     Left = 8
     Top = 354
     Width = 233
-    Height = 189
+    Height = 215
     Caption = 'Opciones Generales'
     TabOrder = 2
     object CheckBox1: TCheckBox
       Left = 13
-      Top = 106
+      Top = 130
       Width = 213
       Height = 19
       TabStop = False
@@ -3767,7 +3767,7 @@ object Form1: TForm1
     end
     object CheckBox2: TCheckBox
       Left = 13
-      Top = 146
+      Top = 170
       Width = 212
       Height = 19
       TabStop = False
@@ -3779,7 +3779,7 @@ object Form1: TForm1
     end
     object CheckBox14: TCheckBox
       Left = 13
-      Top = 126
+      Top = 150
       Width = 97
       Height = 19
       TabStop = False
@@ -3793,7 +3793,7 @@ object Form1: TForm1
       Left = 13
       Top = 18
       Width = 180
-      Height = 85
+      Height = 106
       Caption = 'Motor'
       TabOrder = 3
       object RadioButton1: TRadioButton
@@ -3823,10 +3823,19 @@ object Form1: TForm1
         TabOrder = 2
         OnClick = RadioButton3Click
       end
+      object RadioButton4: TRadioButton
+        Left = 16
+        Top = 80
+        Width = 153
+        Height = 17
+        Caption = 'DSP Emulator'
+        TabOrder = 3
+        OnClick = RadioButton4Click
+      end
     end
     object CheckBox15: TCheckBox
       Left = 13
-      Top = 166
+      Top = 190
       Width = 212
       Height = 19
       TabStop = False
@@ -4047,7 +4056,7 @@ object Form1: TForm1
   end
   object BitBtn5: TBitBtn
     Left = 805
-    Top = 522
+    Top = 547
     Width = 161
     Height = 76
     Caption = 'Acerca de'
@@ -4675,7 +4684,7 @@ object Form1: TForm1
     Left = 685
     Top = 356
     Width = 361
-    Height = 162
+    Height = 167
     Caption = 'Informaci'#243'n del Juego'
     TabOrder = 6
     object Label1: TLabel
@@ -4745,7 +4754,7 @@ object Form1: TForm1
   end
   object Button1: TButton
     Left = 8
-    Top = 557
+    Top = 582
     Width = 110
     Height = 41
     Caption = 'A'#241'adir'#13#10'Juego'
@@ -4756,7 +4765,7 @@ object Form1: TForm1
   end
   object Button2: TButton
     Left = 124
-    Top = 557
+    Top = 582
     Width = 117
     Height = 41
     Caption = 'Editar/Borrar'#13#10'Juego'

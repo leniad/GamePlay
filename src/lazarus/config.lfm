@@ -13,6 +13,7 @@ object Form4: TForm4
   Font.Height = -14
   Font.Pitch = fpVariable
   Font.Quality = fqDraft
+  LCLVersion = '4.0.0.4'
   OnCreate = FormCreate
   OnShow = FormShow
   object Button1: TButton
@@ -26,17 +27,17 @@ object Form4: TForm4
   end
   object GroupBox2: TGroupBox
     Left = 10
-    Height = 202
+    Height = 240
     Top = 8
     Width = 721
     Caption = 'Ejecutables'
-    ClientHeight = 178
+    ClientHeight = 216
     ClientWidth = 717
     TabOrder = 0
     object LabeledEdit1: TLabeledEdit
-      Left = 24
+      Left = 20
       Height = 24
-      Top = 24
+      Top = 20
       Width = 642
       AutoSize = False
       EditLabel.Height = 19
@@ -47,7 +48,7 @@ object Form4: TForm4
     object LabeledEdit2: TLabeledEdit
       Left = 20
       Height = 24
-      Top = 80
+      Top = 70
       Width = 642
       AutoSize = False
       EditLabel.Height = 19
@@ -58,7 +59,7 @@ object Form4: TForm4
     object LabeledEdit3: TLabeledEdit
       Left = 20
       Height = 24
-      Top = 136
+      Top = 120
       Width = 642
       AutoSize = False
       EditLabel.Height = 19
@@ -69,7 +70,7 @@ object Form4: TForm4
     object Button4: TButton
       Left = 674
       Height = 31
-      Top = 24
+      Top = 20
       Width = 41
       Caption = 'Abrir'
       TabOrder = 3
@@ -78,7 +79,7 @@ object Form4: TForm4
     object Button5: TButton
       Left = 674
       Height = 31
-      Top = 80
+      Top = 70
       Width = 41
       Caption = 'Abrir'
       TabOrder = 4
@@ -87,11 +88,31 @@ object Form4: TForm4
     object Button6: TButton
       Left = 674
       Height = 31
-      Top = 136
+      Top = 120
       Width = 41
       Caption = 'Abrir'
       TabOrder = 5
       OnClick = Button6Click
+    end
+    object LabeledEdit13: TLabeledEdit
+      Left = 20
+      Height = 24
+      Top = 170
+      Width = 642
+      AutoSize = False
+      EditLabel.Height = 19
+      EditLabel.Width = 642
+      EditLabel.Caption = 'DSP Emulator'
+      TabOrder = 6
+    end
+    object Button16: TButton
+      Left = 674
+      Height = 31
+      Top = 170
+      Width = 41
+      Caption = 'Abrir'
+      TabOrder = 7
+      OnClick = Button16Click
     end
   end
   object RadioGroup1: TRadioGroup
@@ -176,10 +197,10 @@ object Form4: TForm4
     Top = 20
     Width = 721
     Caption = 'Configuración Extra'
-    ClientHeight = 185
+    ClientHeight = 186
     ClientWidth = 717
     Font.Color = clWindowText
-    Font.Height = -15
+    Font.Height = -14
     Font.Name = 'Segoe UI'
     ParentFont = False
     TabOrder = 1
@@ -207,7 +228,7 @@ object Form4: TForm4
       Top = 20
       Width = 645
       AutoSize = False
-      EditLabel.Height = 20
+      EditLabel.Height = 19
       EditLabel.Width = 645
       EditLabel.Caption = 'DosBox'
       TabOrder = 0
@@ -218,7 +239,7 @@ object Form4: TForm4
       Top = 80
       Width = 646
       AutoSize = False
-      EditLabel.Height = 20
+      EditLabel.Height = 19
       EditLabel.Width = 646
       EditLabel.Caption = 'DosBox-X'
       TabOrder = 1
@@ -229,7 +250,7 @@ object Form4: TForm4
       Top = 140
       Width = 646
       AutoSize = False
-      EditLabel.Height = 20
+      EditLabel.Height = 19
       EditLabel.Width = 646
       EditLabel.Caption = 'ScummVM'
       TabOrder = 2

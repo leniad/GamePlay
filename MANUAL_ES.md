@@ -3,10 +3,9 @@
 **Gameplay** está dividido en varias secciones.
 Si sólo quieres jugar, **inicialmente no hay que configurar nada**.
 
-![Pantalla Principal](https://i.ibb.co/BHH34qgY/gameplay-manual.png)
+![Pantalla Principal](https://i.ibb.co/NdMkjvC5/gameplay-030.png)
 
 ---
-
 ## 1. Pantalla principal
 
 ### 1.1 Filtros para los juegos
@@ -21,6 +20,7 @@ Puedes elegir entre tres programas para arrancar los juegos:
 - **DosBox**: Emulador clásico, versión _staging_.
 - **DosBox-X**: Similar a DosBox, pero con funciones adicionales.
 - **ScummVM**: Solo para ciertas aventuras gráficas. Al seleccionarlo, la lista se ajusta automáticamente.
+- **DSP Emulator**: Emulador para Arcade, Ordenadores 8bits y Consolas
 
 > El emulador se configura automáticamente, no necesitas hacer nada.
 
@@ -74,10 +74,10 @@ Acceso al menú avanzado, donde puedes cambiar:
 ---
 ## 2. Configuración Avanzada
 
-![Configuración](https://i.ibb.co/3yGQq0rB/gameplay-config.png)
+![Configuración](https://i.ibb.co/DHSg5h0S/config.png)
 
 ### 2.1 Ficheros ejecutables
-Par poder lanzar los juegos, Gameplay necesita tres emuladores DosBox, DosBox-X y ScummVM.
+Par poder lanzar los juegos, Gameplay necesita cuatro emuladores *DosBox, DosBox-X, ScummVM y DSP Emulator*.
 Aquí se pueden cambiar los ficheros ejecutables para elegir otras versiones, o actualizaciones de los emuladores.
 
 ### 2.2 Directorios Principales
@@ -135,8 +135,12 @@ En cambio, si el juego lo has añadido manualmente, si podrás modificar los val
 - **Manuales, Mapas y Guías**: Puedes añadir cualquier documento para que cuando se pulse el botón se abra. Si hay más de un documento que quieras que se abra (por ejemplo varios manuales), puedes separarlos por el símbolo '$' (Ejemplo 'manual1.pdf$manual2.pdf$manual3.txt$) y se abrirán todos a la vez. Si son una cantidad importante de ficheros, puedes indicar un directorio simplemente terminando el nombre con el carácter '`\`' y cuando se pulse el botón correspondiente se abrirá la carpeta seleccionada (ten en cuenta que debe estar dentro de la ruta indicada en la configuración). Ejemplo: 'Leisure Suir Larry in the Land of the Lounge Lizards'
 - **Idioma**: Aquí puedes seleccionar el idioma del juego, para luego con los filtros de idioma poder seleccionarlo. El idioma 'General' significa que sólo tiene un idioma, por lo que no se puede filtrar.
 - **Tipo**: Aquí se puede seleccionar el tipo de juego, para poder filtrarlo más tarde en los filtros de la pantalla principal.
-
-### 4. Añadir motores en Linux
+---
+### 4. Jugar en Linux
+Si tienes algún problema ejecutando Gameplay tras descomprimir el fichero, debes ejecutar el siguiente comando en la misma carpeta donde lo has descomprimido (esto añadirá el atributo de ejecutable)<br>
+<pre>
+bash fix_linux_exec.sh
+</pre>
 Para añadir los motores y posteriormente configurarlos en gameplay en un Linux, lo más sencillo es utilizar la herramienta 'snap'.<br>
 Una vez la tengas instalada (consulta Google para ver tu distro e instalar la herramienta) ejecuta lo siguiente:<br>
 <pre>
@@ -150,3 +154,4 @@ whereis dosbox-x
 whereis dosbox-staging
 whereis scummvm
 </pre>
+El motor de *DSP Emulator*, ya viene listo para ejecutar.

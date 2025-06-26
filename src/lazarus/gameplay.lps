@@ -10,7 +10,7 @@
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="45" Y="13"/>
-        <UsageCount Value="37"/>
+        <UsageCount Value="40"/>
       </Unit>
       <Unit>
         <Filename Value="principal.pas"/>
@@ -19,9 +19,9 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <IsVisibleTab Value="True"/>
-        <TopLine Value="48"/>
-        <CursorPos X="6" Y="56"/>
-        <UsageCount Value="37"/>
+        <TopLine Value="358"/>
+        <CursorPos X="19" Y="368"/>
+        <UsageCount Value="40"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit>
@@ -29,12 +29,12 @@
         <Filename Value="..\dosbox_config.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
-        <UsageCount Value="37"/>
+        <UsageCount Value="40"/>
       </Unit>
       <Unit>
         <Filename Value="..\games_data.pas"/>
         <IsPartOfProject Value="True"/>
-        <UsageCount Value="37"/>
+        <UsageCount Value="40"/>
       </Unit>
       <Unit>
         <Filename Value="..\games_info.pas"/>
@@ -42,7 +42,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="310"/>
         <CursorPos X="107" Y="327"/>
-        <UsageCount Value="37"/>
+        <UsageCount Value="40"/>
       </Unit>
       <Unit>
         <Filename Value="save_game.pas"/>
@@ -50,12 +50,10 @@
         <ComponentName Value="Form2"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="1"/>
-        <TopLine Value="44"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="45"/>
         <CursorPos X="47" Y="57"/>
-        <UsageCount Value="37"/>
-        <Loaded Value="True"/>
-        <LoadedDesigner Value="True"/>
+        <UsageCount Value="40"/>
       </Unit>
       <Unit>
         <Filename Value="acercade.pas"/>
@@ -64,9 +62,8 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="34"/>
-        <CursorPos X="39" Y="54"/>
-        <UsageCount Value="37"/>
+        <CursorPos Y="15"/>
+        <UsageCount Value="40"/>
       </Unit>
       <Unit>
         <Filename Value="config.pas"/>
@@ -74,21 +71,24 @@
         <ComponentName Value="Form4"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="2"/>
-        <TopLine Value="102"/>
-        <CursorPos X="36" Y="124"/>
-        <UsageCount Value="37"/>
-        <Loaded Value="True"/>
-        <LoadedDesigner Value="True"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="158"/>
+        <CursorPos X="58" Y="172"/>
+        <UsageCount Value="40"/>
       </Unit>
       <Unit>
         <Filename Value="..\main.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="3"/>
-        <TopLine Value="1129"/>
-        <CursorPos X="9" Y="1140"/>
-        <UsageCount Value="37"/>
-        <Loaded Value="True"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="503"/>
+        <CursorPos X="5" Y="529"/>
+        <UsageCount Value="40"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\dsp_data.pas"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <UsageCount Value="22"/>
       </Unit>
       <Unit>
         <Filename Value="unzip2.pas"/>
@@ -200,36 +200,36 @@
         <Caret Line="115" Column="28" TopLine="108"/>
       </Position>
       <Position>
-        <Filename Value="..\main.pas"/>
-        <Caret Line="101" TopLine="90"/>
+        <Filename Value="principal.pas"/>
+        <Caret Line="56" Column="6" TopLine="49"/>
       </Position>
       <Position>
-        <Filename Value="save_game.pas"/>
-        <Caret Line="106" Column="3" TopLine="86"/>
+        <Filename Value="principal.pas"/>
+        <Caret Line="280" TopLine="275"/>
       </Position>
       <Position>
-        <Filename Value="..\main.pas"/>
-        <Caret Line="3"/>
+        <Filename Value="principal.pas"/>
+        <Caret Line="291" TopLine="276"/>
       </Position>
       <Position>
-        <Filename Value="save_game.pas"/>
-        <Caret Line="106" Column="3" TopLine="86"/>
+        <Filename Value="principal.pas"/>
+        <Caret Line="280" TopLine="277"/>
       </Position>
       <Position>
-        <Filename Value="save_game.pas"/>
-        <Caret Line="108" Column="3" TopLine="88"/>
+        <Filename Value="principal.pas"/>
+        <Caret Line="85" Column="50" TopLine="69"/>
       </Position>
       <Position>
-        <Filename Value="save_game.pas"/>
-        <Caret Line="224" TopLine="205"/>
+        <Filename Value="principal.pas"/>
+        <Caret Line="104" Column="74" TopLine="90"/>
       </Position>
       <Position>
-        <Filename Value="save_game.pas"/>
-        <Caret Line="135" TopLine="114"/>
+        <Filename Value="principal.pas"/>
+        <Caret Line="106" Column="74" TopLine="90"/>
       </Position>
       <Position>
-        <Filename Value="save_game.pas"/>
-        <Caret Line="125" TopLine="117"/>
+        <Filename Value="principal.pas"/>
+        <Caret Line="177" Column="14" TopLine="162"/>
       </Position>
     </JumpHistory>
     <RunParams>

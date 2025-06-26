@@ -10,7 +10,7 @@ uses
   athreads,
   {$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, principal, games_info, games_data, main, save_game,
+  Forms, principal, games_info, games_data, main, dsp_data, save_game,
   acercade, config;
 
 {$R *.res}

@@ -1,16 +1,16 @@
 # GAMEPLAY
 ## ¿Qué es Gameplay?
-Es un frontend para DosBox, DosBox-X y Scumm. Te permite jugar a los juegos de MSDOS de forma sencilla y rápida, sin complicaciones, sin nada que configurar, simplemente elijes el que quieres de la lista y a jugar, todo está preconfigurado (elegido el mejor audio, la mejor grafica, parámetros extra...).<br>
-![Pantalla Principal](https://i.ibb.co/JVzTZMH/gameplay-021.jpg)
+Es un frontend para DosBox, DosBox-X, Scumm y DSP Emulator. Te permite jugar a los juegos de MSDOS y Arcade de forma sencilla y rápida, sin complicaciones, sin nada que configurar, simplemente elijes el que quieres de la lista y a jugar, todo está preconfigurado (elegido el mejor audio, la mejor grafica, parámetros extra...).<br>
+![Pantalla Principal](https://i.ibb.co/NdMkjvC5/gameplay-030.png)
 ### ¿A que juegos puedo jugar?
-Inicialmente hay un listado de más de 300 juegos listos para jugar, incluyen imágenes de previsualización, manuales, mapas y guías, para poder disfrutar del juego completo. No tienes que configurar nada, ni audio, ni video, nada, solo tienes que disfrutar.
+Inicialmente hay un listado de más de 300 juegos de MSDOS listos para jugar, incluyen imágenes de previsualización, manuales, mapas y guías, para poder disfrutar del juego completo. Tambien hay más de 400 juegos de Arcade, Consolas y Ordenadores de 8bits listos para jugar. No tienes que configurar nada, ni audio, ni video, nada, solo tienes que disfrutar.
 ### ¿Puedo añadir más juegos?
-Claro! Si tienes juegos favoritos y no están en el listado, puedes añadir tus propios juegos de manera sencilla y rápida. En las opciones avanzadas, puedes elegir si está en formato ZIP, añadir un CD-ROM, cambiar la memoria, tarjeta de video, añadirle los manuales, guías, mapas y más cosas.
+Claro! Si tienes juegos de MSDOS favoritos y no están en el listado, puedes añadir tus propios juegos de manera sencilla y rápida. En las opciones avanzadas, puedes elegir si está en formato ZIP, añadir un CD-ROM, cambiar la memoria, tarjeta de video, añadirle los manuales, guías, mapas y más cosas.
 ### ¿En que idioma esta Gameplay?
 Se detecta el idioma automáticamente, y selecciona entre español, inglés, alemán, francés e italiano. En caso de no ser ninguno de estos, se selecciona inglés por defecto.
 ### ¿Dónde lo descargo?
 Hay dos versiones, la versión "sólo ejecutables", o lo que es lo mismo el ejecutable y el código fuente que te puedes descargar aquí mismo buscando la ultima release.<br>
-Hay una versión completa, con todos los juegos, imágenes, manuales, mapas, guías y también los ejecutables para Windows de los emuladores, el enlace está tambien en la información de la release.
+Hay una versión completa, con todos los juegos, imágenes, manuales, mapas, guías y también los ejecutables para Windows y Linux de los emuladores, el enlace está tambien en la información de la release.
 ### ¿Cómo puedo contribuir?
 Fácil, si encuentras un fallo, simplemente abre una issue para que lo revise.<br>
 Si tienes juegos que quieres añadir, tienes mejores manuales, mejores versiones, etc. me los puedes  hacer llegar...<br>

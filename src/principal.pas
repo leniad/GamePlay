@@ -56,6 +56,7 @@ type
     ImageList3: TImageList;
     CheckBox15: TCheckBox;
     LabeledEdit1: TLabeledEdit;
+    RadioButton4: TRadioButton;
     procedure FormCreate(Sender: TObject);
     procedure BitBtn4Click(Sender: TObject);
     procedure StringGrid1Click(Sender: TObject);
@@ -81,6 +82,7 @@ type
     procedure CheckBox14Click(Sender: TObject);
     procedure CheckBox2Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure RadioButton4Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -92,7 +94,7 @@ var
 
 implementation
 {$R *.dfm}
-uses shellapi,strutils,save_game,acercade,config,idioma_info,main;
+uses shellapi,strutils,save_game,acercade,config,idioma_info,main,dsp_data;
 
 var
   image_num:integer;
@@ -233,7 +235,8 @@ if pos=0 then begin
   BitBtn3.Enabled:=false;
 end else stringgrid1.RowCount:=pos;
 if form1.radiobutton3.Checked then form1.Label5.Caption:='TOTAL: '+inttostr(pos)+'/'+inttostr(total_scumm)
-  else form1.Label5.Caption:='TOTAL: '+inttostr(pos)+'/'+inttostr(total_no_scumm);
+    else if form1.radiobutton4.Checked then form1.Label5.Caption:='TOTAL: '+inttostr(pos)+'/'+inttostr(GAME_TOTAL_DSP)
+      else form1.Label5.Caption:='TOTAL: '+inttostr(pos)+'/'+inttostr(total_no_scumm);
 StringGrid1Click(nil);
 if stringgrid1.Cells[1,0]<>'' then button2.Enabled:=not(games_final[orden_games[pos]].interno) or main_config.leer_fijos;
 end;
@@ -247,7 +250,11 @@ procedure TForm1.RadioButton1Click(Sender: TObject);
 begin
   if total_juegos=0 then exit;
   mostrar_juegos;
-  groupbox4.Enabled:=true;
+  checkbox9.Enabled:=true;
+  checkbox10.Enabled:=true;
+  checkbox11.Enabled:=true;
+  checkbox12.Enabled:=true;
+  checkbox13.Enabled:=true;
   checkbox3.Enabled:=true;
   checkbox16.Enabled:=true;
   checkbox6.Enabled:=true;
@@ -258,6 +265,8 @@ begin
   checkbox17.Enabled:=true;
   checkbox18.Enabled:=true;
   checkbox2.Enabled:=true;
+  checkbox15.Enabled:=true;
+  checkbox15click(nil);
   stringgrid1.Row:=0;
   LabeledEdit1.Text:='';
   if stringgrid1.Cells[1,0]<>'' then button2.Enabled:=not(games_final[strtoint(stringgrid1.Cells[1,0])].interno) or main_config.leer_fijos;
@@ -268,7 +277,11 @@ procedure TForm1.RadioButton3Click(Sender: TObject);
 begin
   if total_juegos=0 then exit;
   mostrar_juegos;
-  groupbox4.Enabled:=false;
+  checkbox9.Enabled:=true;
+  checkbox10.Enabled:=true;
+  checkbox11.Enabled:=true;
+  checkbox12.Enabled:=true;
+  checkbox13.Enabled:=true;
   checkbox3.Enabled:=false;
   checkbox16.Enabled:=false;
   checkbox6.Enabled:=false;
@@ -279,9 +292,38 @@ begin
   checkbox17.Enabled:=false;
   checkbox18.Enabled:=false;
   checkbox2.Enabled:=false;
+  checkbox15.Enabled:=true;
+  checkbox15click(nil);
   stringgrid1.Row:=0;
   LabeledEdit1.Text:='';
   if stringgrid1.Cells[1,0]<>'' then button2.Enabled:=not(games_final[strtoint(stringgrid1.Cells[1,0])].interno) or main_config.leer_fijos;
+  if form1.Visible then StringGrid1.SetFocus;
+end;
+
+procedure TForm1.RadioButton4Click(Sender: TObject);
+begin
+  if total_juegos=0 then exit;
+  mostrar_juegos;
+  checkbox9.Enabled:=false;
+  checkbox10.Enabled:=false;
+  checkbox11.Enabled:=false;
+  checkbox12.Enabled:=false;
+  checkbox13.Enabled:=false;
+  checkbox3.Enabled:=false;
+  checkbox16.Enabled:=false;
+  checkbox6.Enabled:=false;
+  checkbox4.Enabled:=false;
+  checkbox5.Enabled:=false;
+  checkbox7.Enabled:=false;
+  checkbox8.Enabled:=false;
+  checkbox17.Enabled:=false;
+  checkbox18.Enabled:=false;
+  checkbox2.Enabled:=false;
+  checkbox15.Enabled:=false;
+  button1.Visible:=false;
+  button2.Visible:=false;
+  stringgrid1.Row:=0;
+  LabeledEdit1.Text:='';
   if form1.Visible then StringGrid1.SetFocus;
 end;
 
@@ -310,13 +352,20 @@ begin
     poner_en_blanco;
     exit;
   end;
-  //Muestro las imagenes si las hay y pongo en marcha el timer
-  image_string:=main_config.dir_imgs+games_final[ngame].image_name+'_000.png';
-  if FileExists(image_string) then begin
-    Image1.Picture.LoadFromFile(image_string);
-    image_num:=0;
-    timer1.Enabled:=true;
-  end else poner_en_blanco;
+  if radiobutton4.Checked then begin
+    //Imagenes DSP
+    image_string:=dir_dsp+'preview\'+games_final[ngame].dir+'.png';
+    if FileExists(image_string) then Image1.Picture.LoadFromFile(image_string)
+      else poner_en_blanco;
+  end else begin
+    //Muestro las imagenes si las hay y pongo en marcha el timer
+    image_string:=main_config.dir_imgs+games_final[ngame].image_name+'_000.png';
+    if FileExists(image_string) then begin
+      Image1.Picture.LoadFromFile(image_string);
+      image_num:=0;
+      timer1.Enabled:=true;
+    end else poner_en_blanco;
+  end;
   //Compruebo si hay manuales, mapas o guia y activo los botones
   bitbtn1.Enabled:=games_final[ngame].manual<>'';
   bitbtn2.Enabled:=games_final[ngame].map<>'';
@@ -347,7 +396,7 @@ begin
     with TStringGrid(Sender),Canvas do begin
       if games_final[ngame].mal then Brush.Color:=BadColor
         else if games_final[ngame].solo_scumm then Brush.Color:=ScummColor
-          else if games_final[ngame].interno then Brush.Color:=SelectedColor
+          else if (games_final[ngame].interno or games_final[ngame].solo_dsp) then Brush.Color:=SelectedColor
             else Brush.Color:=AddedColor;
       FillRect(Rect);
       TextRect(Rect,Rect.Left+2,Rect.Top+2,Cells[aCol,aRow]);
