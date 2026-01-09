@@ -15,6 +15,7 @@ object Form2: TForm2
   Font.Style = []
   ParentBiDiMode = False
   Position = poDesigned
+  Scaled = False
   OnCreate = FormCreate
   OnKeyUp = FormKeyUp
   OnShow = FormShow
@@ -87,41 +88,25 @@ object Form2: TForm2
       Text = ''
       OnKeyUp = LabeledEdit4KeyUp
     end
-    object CheckBox3: TCheckBox
-      Left = 17
-      Top = 120
-      Width = 172
-      Height = 25
-      Hint = 
-        'Activar la tarjeta de sonido GUS, desactiva la Sound Blaster y R' +
-        'oland'
-      Caption = 'Fichero Comprimido en ZIP'
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 4
-      OnClick = CheckBox3Click
-    end
     object CheckBox2: TCheckBox
-      Left = 230
+      Left = 17
       Top = 109
       Width = 185
       Height = 25
-      Hint = 'Este Juego se puede ejecutar tambien con ScummVM'
       Caption = 'Compatible con ScummVM'
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 5
+      TabOrder = 4
     end
     object CheckBox4: TCheckBox
-      Left = 230
+      Left = 17
       Top = 129
       Width = 251
       Height = 25
-      Hint = 'Este Juego se puede ejecutar tambien con ScummVM'
       Caption = 'S'#243'lo funciona con ScummVM'
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 6
+      TabOrder = 5
       OnClick = CheckBox4Click
     end
   end
@@ -288,9 +273,6 @@ object Form2: TForm2
       Top = 26
       Width = 97
       Height = 25
-      Hint = 
-        'Activar la tarjeta de sonido GUS, desactiva la Sound Blaster y R' +
-        'oland'
       Caption = 'Activar GUS'
       ParentShowHint = False
       ShowHint = True

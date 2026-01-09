@@ -21,13 +21,6 @@ type
     Button4: TButton;
     Button5: TButton;
     Button6: TButton;
-    RadioGroup1: TRadioGroup;
-    RadioButton1: TRadioButton;
-    RadioButton2: TRadioButton;
-    RadioButton3: TRadioButton;
-    RadioButton4: TRadioButton;
-    RadioButton5: TRadioButton;
-    RadioButton6: TRadioButton;
     LabeledEdit5: TLabeledEdit;
     LabeledEdit4: TLabeledEdit;
     Button7: TButton;
@@ -53,6 +46,13 @@ type
     Button15: TButton;
     LabeledEdit13: TLabeledEdit;
     Button16: TButton;
+    GroupBox5: TGroupBox;
+    RadioButton1: TRadioButton;
+    RadioButton2: TRadioButton;
+    RadioButton3: TRadioButton;
+    RadioButton4: TRadioButton;
+    RadioButton5: TRadioButton;
+    RadioButton6: TRadioButton;
     procedure Button1Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure Button2Click(Sender: TObject);

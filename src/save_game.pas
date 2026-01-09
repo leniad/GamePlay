@@ -45,7 +45,6 @@ type
     Image1: TImage;
     Timer1: TTimer;
     LabeledEdit20: TLabeledEdit;
-    CheckBox3: TCheckBox;
     CheckBox2: TCheckBox;
     CheckBox4: TCheckBox;
     procedure FormCreate(Sender: TObject);
@@ -56,7 +55,6 @@ type
     procedure LabeledEdit5KeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure Timer1Timer(Sender: TObject);
     procedure LabeledEdit4KeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
-    procedure CheckBox3Click(Sender: TObject);
     procedure FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure CheckBox4Click(Sender: TObject);
   private
@@ -100,19 +98,6 @@ begin
   end;
   guardar_juegos_anadidos;
   form2.close;
-end;
-
-procedure TForm2.CheckBox3Click(Sender: TObject);
-begin
-  if checkbox3.checked then begin
-    groupbox3.Caption:=list_zip[1];
-    labelededit9.EditLabel.Caption:=list_zip[3];
-    if not(containstext(lowercase(form2.labelededit9.Text),'.zip')) then form2.labelededit9.Text:=form2.labelededit9.text+'.zip';
-  end else begin
-    groupbox3.Caption:=list_zip[0];
-    labelededit9.EditLabel.Caption:=list_zip[2];
-    if containstext(lowercase(form2.labelededit9.Text),'.zip') then form2.labelededit9.Text:=stringreplace(form2.labelededit9.text,'.zip','',[rfIgnoreCase]);
-  end;
 end;
 
 procedure TForm2.CheckBox4Click(Sender: TObject);

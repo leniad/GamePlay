@@ -1,5 +1,5 @@
 ﻿unit main;
-//{$DEFINE IS_DEBUG}
+{$DEFINE IS_DEBUG}
 interface
 
 procedure form_principal_create;
@@ -50,22 +50,26 @@ type
     mensaje:string;
     interno:boolean;
     mal:boolean;
-    solo_scumm:boolean;
-    solo_dsp:boolean;
+    motor:byte;
   end;
   tipo_config=record
      config_dosbox:string;
      config_dosbox_x:string;
      config_scummvm:string;
+     config_atari800:string;
+     config_apple:string;
      leer_fijos:boolean;
      mostrar_todos:boolean;
      mostrar_fallan:boolean;
      mostrar_anadidos:boolean;
+     motor_msdos:byte;
      dir_base:string;
      dosbox_exe:string;
      dosbox_x_exe:string;
      scumm_exe:string;
      dsp_exe:string;
+     apple2_exe:string;
+     atari800_exe:string;
      dir_manual:string;
      dir_mapas:string;
      dir_guias:string;
@@ -75,15 +79,22 @@ type
   end;
 
 const
-  MAX_GAMES=1000;
+  MAX_GAMES=2000;
   TEMP_DIR='TEMP';
-  VERSION='v0.30β';
+  VERSION='v0.40β';
+  {$IFDEF IS_DEBUG}
+  {$ifdef fpc}
+  debug_base_dir='/home/leniad/abandon/GamePlayVol1/';
+  {$else}
+  debug_base_dir='c:\datos\abandon\GamePlay Vol1\';
+  {$ENDIF}
+  {$endif}
 
 var
   orden_games:array[0..(MAX_GAMES-1)] of integer;
   games_final:array[0..(MAX_GAMES-1)] of tipo_final;
   main_config:tipo_config;
-  idioma_sel,juego_editado,total_juegos,total_scumm,total_no_scumm:integer;
+  idioma_sel,juego_editado,total_juegos,total_scumm,total_apple,total_atari800,total_msdos:integer;
   estoy_anadiendo:boolean;
   dir_dsp:string;
 
@@ -94,6 +105,23 @@ uses {$IFDEF WINDOWS}windows,shellapi{$ELSE}LCLIntf,process{$ENDIF},principal,
 
 const
  RETURN=chr(10);
+
+function tamano_fichero(nombre_fichero:string):integer;
+var
+  fichero:file of byte;
+  res:integer;
+begin
+  res:=0;
+  if fileexists(nombre_fichero) then begin
+    {$I-}
+    assignfile(fichero,nombre_fichero);
+    reset(fichero);
+    res:=filesize(fichero);
+    closefile(fichero);
+    {$I+}
+  end;
+  tamano_fichero:=res;
+end;
 
 function cambiar_path(cadena:string):string;
 begin
@@ -183,21 +211,30 @@ end;
 
 procedure mostrar_juegos;
 var
-  f,contador,mascara:integer;
+  f,contador,mascara,idioma_masq:integer;
+  motor:byte;
 
-procedure poner_juego_simple(pos:integer);
+procedure poner_juego_dsp(pos:integer);
 begin
   form1.stringgrid1.Cells[0,contador]:=games_final[orden_games[pos]].nombre;
   form1.stringgrid1.Cells[1,contador]:=inttostr(orden_games[pos]);
   contador:=contador+1;
 end;
 
-procedure poner_juego(pos:integer);
+procedure poner_juego_motor(pos:integer);
+var
+  motor_final:byte;
 begin
-if (main_config.mostrar_todos or not(games_final[orden_games[pos]].mal)) then begin
-  form1.stringgrid1.Cells[0,contador]:=games_final[orden_games[pos]].nombre;
-  form1.stringgrid1.Cells[1,contador]:=inttostr(orden_games[pos]);
-  contador:=contador+1;
+motor_final:=motor;
+if ((motor=1) and games_final[orden_games[pos]].scumm) then motor_final:=0;
+if (games_final[orden_games[pos]].motor=motor_final) then begin
+  if (((games_final[orden_games[f]].idioma and idioma_masq)<>0) or ((motor<>0) and (motor<>1)) or (form1.CheckBox18.Checked and (games_final[orden_games[f]].idioma=0))) then begin
+    if (games_final[orden_games[f]].tipo and mascara)<>0 then begin
+      form1.stringgrid1.Cells[0,contador]:=games_final[orden_games[pos]].nombre;
+      form1.stringgrid1.Cells[1,contador]:=inttostr(orden_games[pos]);
+      contador:=contador+1;
+    end;
+  end;
 end;
 end;
 
@@ -206,76 +243,46 @@ form1.stringgrid1.RowCount:=total_juegos;
 form1.Timer1.Enabled:=false;
 contador:=0;
 for f:=0 to form1.StringGrid1.ColCount-1 do form1.StringGrid1.Cols[f].Clear;
-if not(form1.RadioButton4.Checked) then begin
-  if main_config.mostrar_fallan then begin
-    for f:=0 to (total_juegos-1) do begin
-      if games_final[orden_games[f]].solo_dsp then continue;
-      if games_final[orden_games[f]].mal then begin
-        if form1.RadioButton3.Checked then begin
-          if (games_final[orden_games[f]].scumm or games_final[orden_games[f]].solo_scumm) then poner_juego_simple(f)
-        end else poner_juego_simple(f);
-      end;
-    end;
-  end else if main_config.mostrar_anadidos then begin
-            for f:=0 to (total_juegos-1) do begin
-              if games_final[orden_games[f]].solo_dsp then continue;
-              if not(games_final[orden_games[f]].interno) then begin
-                if form1.RadioButton3.Checked then begin
-                  if (games_final[orden_games[f]].scumm or games_final[orden_games[f]].solo_scumm) then poner_juego_simple(f);
-                end else poner_juego_simple(f);
-              end;
-            end;
-  end else begin
-    mascara:=AG*byte(form1.checkbox3.Checked)+ARCADE*byte(form1.checkbox16.Checked)+TRESD*byte(form1.checkbox6.Checked)+SIMULA*byte(form1.checkbox4.Checked)+SPORT*byte(form1.checkbox5.Checked)+PUZ*byte(form1.checkbox7.Checked)+RPG*byte(form1.checkbox8.Checked)+COCHES*byte(form1.checkbox17.Checked)+EXTRA*byte(form1.checkbox18.Checked);
-    //Si se quitan todos los filtros, los pongo todos...
-    if mascara=0 then mascara:=$ffffff;
-    for f:=0 to (total_juegos-1) do begin
-      if games_final[orden_games[f]].solo_dsp then continue;
-      if form1.radiobutton3.Checked then begin //ScummVM
-        if (games_final[orden_games[f]].scumm or games_final[orden_games[f]].solo_scumm) then begin
-          if (games_final[orden_games[f]].idioma=0) then poner_juego(f)
-            else if (form1.CheckBox9.Checked and (games_final[orden_games[f]].idioma=ESP)) then poner_juego(f)
-              else if (form1.CheckBox12.Checked and (games_final[orden_games[f]].idioma=ING)) then poner_juego(f)
-                else if (form1.CheckBox10.Checked and (games_final[orden_games[f]].idioma=ALE)) then poner_juego(f)
-                  else if (form1.CheckBox11.Checked and (games_final[orden_games[f]].idioma=FRA)) then poner_juego(f)
-                    else if (form1.CheckBox13.Checked and (games_final[orden_games[f]].idioma=ITA)) then poner_juego(f);
-        end;
-      end else begin //Resto
-        if not(games_final[orden_games[f]].solo_scumm) then begin
-          if (games_final[orden_games[f]].tipo and mascara)<>0 then begin
-            if games_final[orden_games[f]].idioma=0 then poner_juego(f)
-              else if (form1.CheckBox9.Checked and (games_final[orden_games[f]].idioma=ESP)) then poner_juego(f)
-                else if (form1.CheckBox12.Checked and (games_final[orden_games[f]].idioma=ING)) then poner_juego(f)
-                  else if (form1.CheckBox10.Checked and (games_final[orden_games[f]].idioma=ALE)) then poner_juego(f)
-                    else if (form1.CheckBox11.Checked and (games_final[orden_games[f]].idioma=FRA)) then poner_juego(f)
-                      else if (form1.CheckBox13.Checked and (games_final[orden_games[f]].idioma=ITA)) then poner_juego(f);
+if form1.RadioButton1.Checked then motor:=0
+  else if form1.RadioButton3.Checked then motor:=1
+    else if form1.RadioButton5.Checked then motor:=2
+      else if form1.RadioButton6.Checked then motor:=3
+        else if form1.RadioButton4.Checked then motor:=255;
+for f:=0 to (total_juegos-1) do begin
+  //DSP
+  if ((games_final[orden_games[f]].motor=255) and form1.RadioButton4.Checked) then begin
+    if main_config.mostrar_todos then poner_juego_dsp(f)
+      else begin
+              if main_config.mostrar_fallan then begin
+                if games_final[orden_games[f]].mal then poner_juego_dsp(f);
+              end else if not(games_final[orden_games[f]].mal) then poner_juego_dsp(f);
           end;
-        end;
+  end else begin //Resto
+    mascara:=AG*byte(form1.checkbox3.Checked)+ARCADE*byte(form1.checkbox16.Checked)+TRESD*byte(form1.checkbox6.Checked)+SIMULA*byte(form1.checkbox4.Checked)+SPORT*byte(form1.checkbox5.Checked)+PUZ*byte(form1.checkbox7.Checked)+RPG*byte(form1.checkbox8.Checked)+COCHES*byte(form1.checkbox17.Checked);
+    if ((mascara=0) or (motor=1)) then mascara:=$ffffff;
+    idioma_masq:=ESP*byte(form1.CheckBox9.Checked)+ING*byte(form1.CheckBox12.Checked)+ALE*byte(form1.CheckBox10.Checked)+FRA*byte(form1.CheckBox11.Checked)+ITA*byte(form1.CheckBox13.Checked)+$400*byte(form1.CheckBox18.Checked);
+    if ((idioma_masq=0) or (games_final[orden_games[f]].idioma=MUL)) then idioma_masq:=$ffffff;
+    if main_config.mostrar_todos then poner_juego_motor(f)
+      else begin
+        if main_config.mostrar_fallan then begin
+          if games_final[orden_games[f]].mal then poner_juego_motor(f)
+        end else if not(games_final[orden_games[f]].mal) then poner_juego_motor(f);
       end;
-  end;
-  end;
-end else begin
-  for f:=0 to (total_juegos-1) do begin
-    if games_final[orden_games[f]].solo_dsp then begin
-      if main_config.mostrar_fallan then begin
-        if games_final[orden_games[f]].mal then poner_juego_simple(f);
-      end else begin
-        if not(games_final[orden_games[f]].mal) then poner_juego_simple(f);
-      end;
-    end;
   end;
 end;
-  //Lo dejo con el tamaño que toca!! No con el total, ya que puede que no los muestre todos
-  if form1.radiobutton3.Checked then form1.Label5.Caption:='TOTAL: '+inttostr(contador)+'/'+inttostr(total_scumm)
-    else if form1.radiobutton4.Checked then form1.Label5.Caption:='TOTAL: '+inttostr(contador)+'/'+inttostr(GAME_TOTAL_DSP)
-      else form1.Label5.Caption:='TOTAL: '+inttostr(contador)+'/'+inttostr(total_no_scumm);
+  case motor of
+    0:form1.Label5.Caption:='TOTAL: '+inttostr(contador)+'/'+inttostr(total_msdos);
+    1:form1.Label5.Caption:='TOTAL: '+inttostr(contador)+'/'+inttostr(total_scumm);
+    2:form1.Label5.Caption:='TOTAL: '+inttostr(contador)+'/'+inttostr(total_apple);
+    3:form1.Label5.Caption:='TOTAL: '+inttostr(contador)+'/'+inttostr(total_atari800);
+    255:form1.Label5.Caption:='TOTAL: '+inttostr(contador)+'/'+inttostr(GAME_TOTAL_DSP);
+  end;
   //Si no hay nada, lo muestro todo y todos mal
   if contador=0 then begin
     form1.stringgrid1.RowCount:=1;
-    form1.BitBtn1.Enabled:=false;
-    form1.BitBtn2.Enabled:=false;
-    form1.BitBtn3.Enabled:=false;
-    form1.bitbtn4.Enabled:=false;
+    form1.Image4.visible:=false;
+    form1.image3.visible:=false;
+    form1.image5.visible:=false;
   end else form1.stringgrid1.RowCount:=contador;
   form1.StringGrid1Click(nil);
   if form1.Visible then form1.StringGrid1.SetFocus;
@@ -374,45 +381,47 @@ var
   f:integer;
   games_file:textfile;
   temps,juego:string;
+  mal:boolean;
 begin
 //Primero los fijos...
 for f:=0 to (GAME_TOTAL-1) do begin
- if GAME_DATA[f].zip then temps:=main_config.dir_zip+GAME_DATA[f].dir
-  else temps:=main_config.dir_base+GAME_DATA[f].dir;
- juego:=GAME_DATA[f].exec;
- if GAME_DATA[f].solo_scumm then begin
-  if GAME_DATA[f].zip then games_final[f].mal:=not(comprobar_si_existe_fichero(temps,juego,true))
-    else games_final[f].mal:=not(DirectoryExists(temps));
- end else games_final[f].mal:=not(comprobar_si_existe_fichero(temps,juego,GAME_DATA[f].zip));
- games_final[f].nombre:=GAME_DATA[f].nombre;
- games_final[f].dir:=GAME_DATA[f].dir;
- games_final[f].exec:=GAME_DATA[f].exec;
- games_final[f].params:=GAME_DATA[f].params;
- games_final[f].exec_pre:=GAME_DATA[f].exec_pre;
- games_final[f].exec_post:=GAME_DATA[f].exec_post;
- games_final[f].segundo_disco:=GAME_DATA[f].segundo_disco;
- games_final[f].ciclos:=GAME_DATA[f].ciclos;
- games_final[f].grafica:=GAME_DATA[f].grafica;
- games_final[f].extra_param:=GAME_DATA[f].extra_param;
- games_final[f].mapper:=GAME_DATA[f].mapper;
- games_final[f].gus:=GAME_DATA[f].gus;
- games_final[f].scumm:=GAME_DATA[f].scumm;
- games_final[f].cdrom:=GAME_DATA[f].cdrom;
- games_final[f].memoria:=GAME_DATA[f].memoria;
- games_final[f].setup:=GAME_DATA[f].setup;
- games_final[f].zip:=GAME_DATA[f].zip;
- games_final[f].solo_scumm:=GAME_DATA[f].solo_scumm;
- games_final[f].solo_dsp:=false;
- games_final[f].year:=GAME_INFO[f].year;
- games_final[f].company:=GAME_INFO[f].company;
- games_final[f].manual:=GAME_INFO[f].manual;
- games_final[f].map:=GAME_INFO[f].map;
- games_final[f].guia:=GAME_INFO[f].guia;
- games_final[f].image_name:=GAME_INFO[f].image_name;
- games_final[f].idioma:=GAME_INFO[f].idioma;
- games_final[f].tipo:=GAME_INFO[f].tipo;
- games_final[f].mensaje:=GAME_INFO[f].mensaje;
- games_final[f].interno:=true;
+  //Primero compruebo si existe el directorio y el fichero ejecutable
+  juego:=GAME_DATA[f].exec;
+  mal:=not(comprobar_si_existe_fichero(main_config.dir_base+GAME_DATA[f].dir,juego,false));
+  //No existe, pruebo si es un ZIP
+  if mal then begin
+    mal:=not(comprobar_si_existe_fichero(main_config.dir_zip+GAME_DATA[f].dir,juego,true));
+    if not(mal) then games_final[f].zip:=true;
+  end;
+  games_final[f].mal:=mal;
+  games_final[f].nombre:=GAME_DATA[f].nombre;
+  games_final[f].dir:=GAME_DATA[f].dir;
+  games_final[f].exec:=GAME_DATA[f].exec;
+  games_final[f].params:=GAME_DATA[f].params;
+  games_final[f].exec_pre:=GAME_DATA[f].exec_pre;
+  games_final[f].exec_post:=GAME_DATA[f].exec_post;
+  games_final[f].segundo_disco:=GAME_DATA[f].segundo_disco;
+  games_final[f].ciclos:=GAME_DATA[f].ciclos;
+  games_final[f].grafica:=GAME_DATA[f].grafica;
+  games_final[f].extra_param:=GAME_DATA[f].extra_param;
+  games_final[f].mapper:=GAME_DATA[f].mapper;
+  games_final[f].gus:=GAME_DATA[f].gus;
+  games_final[f].scumm:=GAME_DATA[f].scumm;
+  games_final[f].cdrom:=GAME_DATA[f].cdrom;
+  games_final[f].memoria:=GAME_DATA[f].memoria;
+  games_final[f].setup:=GAME_DATA[f].setup;
+  //games_final[f].zip:=GAME_DATA[f].zip;
+  games_final[f].motor:=GAME_DATA[f].motor;
+  games_final[f].year:=GAME_INFO[f].year;
+  games_final[f].company:=GAME_INFO[f].company;
+  games_final[f].manual:=GAME_INFO[f].manual;
+  games_final[f].map:=GAME_INFO[f].map;
+  games_final[f].guia:=GAME_INFO[f].guia;
+  games_final[f].image_name:=GAME_INFO[f].image_name;
+  games_final[f].idioma:=GAME_INFO[f].idioma;
+  games_final[f].tipo:=GAME_INFO[f].tipo;
+  games_final[f].mensaje:=GAME_INFO[f].mensaje;
+  games_final[f].interno:=true;
 end;
 //Juegos DSP
 total_juegos:=GAME_TOTAL;
@@ -422,7 +431,7 @@ for f:=0 to (GAME_TOTAL_DSP-1) do begin
  games_final[total_juegos].company:=GAME_DATA_DSP[f].exec;
  games_final[total_juegos].ciclos:=GAME_DATA_DSP[f].ciclos;
  games_final[total_juegos].year:=GAME_DATA_DSP[f].extra_param;
- games_final[total_juegos].solo_dsp:=true;
+ games_final[total_juegos].motor:=255;
  temps:=games_final[total_juegos].dir+'.zip';
  if temps<>'.zip' then begin
     games_final[total_juegos].mal:=not(comprobar_si_existe_fichero(dir_dsp+'roms',temps,false));
@@ -461,16 +470,18 @@ if fileexists(main_config.dir_base+'extra_games.info') then begin
     games_final[total_juegos].cdrom:=sacar_datos(juego);
     games_final[total_juegos].memoria:=sacar_numero(sacar_datos(juego));
     games_final[total_juegos].setup:=sacar_datos(juego);
-    games_final[total_juegos].zip:=sacar_numero(sacar_datos(juego))<>0;
-    games_final[total_juegos].solo_scumm:=sacar_numero(sacar_datos(juego))<>0;
-    games_final[total_juegos].solo_dsp:=false;
+    games_final[total_juegos].zip:=sacar_numero(sacar_datos(juego))<>0; //Lo dejo para no romper la compatibilidad
+    games_final[total_juegos].motor:=sacar_numero(sacar_datos(juego));
     games_final[total_juegos].interno:=false;
-    if games_final[total_juegos].zip then temps:=main_config.dir_zip+games_final[total_juegos].dir
-      else temps:=main_config.dir_base+games_final[total_juegos].dir;
-    if games_final[total_juegos].solo_scumm then begin
-      if games_final[total_juegos].zip then games_final[total_juegos].mal:=not(comprobar_si_existe_fichero(temps,games_final[total_juegos].exec,true))
-        else games_final[total_juegos].mal:=not(DirectoryExists(temps))
-    end else games_final[total_juegos].mal:=not(comprobar_si_existe_fichero(temps,games_final[total_juegos].exec,games_final[total_juegos].zip));
+    //Primero compruebo si existe el directorio y el fichero ejecutable
+    juego:=games_final[total_juegos].exec;
+    mal:=not(comprobar_si_existe_fichero(main_config.dir_base+games_final[total_juegos].dir,juego,false));
+    //No existe, pruebo si es un ZIP
+    if mal then begin
+      mal:=not(comprobar_si_existe_fichero(main_config.dir_zip+games_final[total_juegos].dir,juego,true));
+      if not(mal) then games_final[total_juegos].zip:=true;
+    end;
+    games_final[total_juegos].mal:=mal;
     total_juegos:=total_juegos+1;
 end;
 closefile(games_file);
@@ -497,10 +508,19 @@ for f:=0 to (total_juegos-2) do begin
   end;
 end;
 total_scumm:=0;
-total_no_scumm:=0;
+total_msdos:=0;
+total_apple:=0;
+total_atari800:=0;
 for f:=0 to (total_juegos-1) do begin
-  if (games_final[f].scumm or games_final[f].solo_scumm) then total_scumm:=total_scumm+1;
-  if (not(games_final[f].solo_scumm) and not(games_final[f].solo_dsp)) then total_no_scumm:=total_no_scumm+1;
+  case games_final[f].motor of
+    0:begin
+        total_msdos:=total_msdos+1;
+        if games_final[f].scumm then total_scumm:=total_scumm+1;
+      end;
+    1:total_scumm:=total_scumm+1;
+    2:total_apple:=total_apple+1;
+    3:total_atari800:=total_atari800+1;
+  end;
 end;
 end;
 
@@ -512,6 +532,19 @@ begin
   if fileexists(main_config.config_scummvm) then begin
     fich_ini:=Tinifile.Create(main_config.config_scummvm);
     fich_ini.WriteString('scummvm',identidad,valor);
+    fich_ini.Free;
+  end;
+  {$I+}
+end;
+
+procedure cambiar_apple_ini(section,identidad,valor:string);
+var
+  fich_ini:Tinifile;
+begin
+  {$I-}
+  if fileexists(main_config.config_apple) then begin
+    fich_ini:=Tinifile.Create(main_config.config_apple);
+    fich_ini.WriteString(section,identidad,valor);
     fich_ini.Free;
   end;
   {$I+}
@@ -542,8 +575,7 @@ begin
   total_juegos:=0;
   //Montar main_config, el orden es importante!!!
   {$IFDEF IS_DEBUG}
-  //main_config.dir_base:='/home/leniad/abandon/GamePlayVol1/';
-  main_config.dir_base:='d:\abandon\GamePlay Vol1\';
+  main_config.dir_base:=debug_base_dir;
   {$ELSE}
   main_config.dir_base:=ExtractFilePath(application.ExeName);
   {$ENDIF}
@@ -552,6 +584,7 @@ begin
   if fileexists(main_config.dir_base+'gameplay.ini') then begin
     fich_ini:=Tinifile.Create(main_config.dir_base+'gameplay.ini');
     //Filtros idioma
+    form1.checkbox18.Checked:=(fich_ini.readinteger('filtros','gen',1)<>0);
     form1.checkbox9.Checked:=(fich_ini.readinteger('filtros','esp',1)<>0);
     form1.checkbox12.Checked:=(fich_ini.readinteger('filtros','ing',1)<>0);
     form1.checkbox10.Checked:=(fich_ini.readinteger('filtros','ale',1)<>0);
@@ -566,32 +599,43 @@ begin
     form1.checkbox7.Checked:=(fich_ini.readinteger('filtros','puzles',1)<>0);
     form1.checkbox8.Checked:=(fich_ini.readinteger('filtros','rpg',1)<>0);
     form1.checkbox17.Checked:=(fich_ini.readinteger('filtros','coches',1)<>0);
-    form1.checkbox18.Checked:=(fich_ini.readinteger('filtros','extra',1)<>0);
     //Opciones
     f:=fich_ini.readinteger('opciones','motor',0);
     case f of
-      0:form1.radiobutton1.Checked:=true;
-      1:form1.radiobutton2.Checked:=true;
-      2:form1.radiobutton3.Checked:=true;
+      0,1:begin
+            form1.radiobutton1.Checked:=true;
+            form1.groupbox8.Visible:=true;
+          end;
+      2:begin
+          form1.radiobutton3.Checked:=true;
+          form1.groupbox8.Visible:=true;
+        end;
       3:form1.radiobutton4.Checked:=true;
+      4:form1.radiobutton5.Checked:=true;
+      5:form1.radiobutton6.Checked:=true;
     end;
     form1.checkbox1.Checked:=(fich_ini.readinteger('opciones','pantalla',1)<>0);
     form1.checkbox14.Checked:=(fich_ini.readinteger('opciones','sonido',1)<>0);
     form1.checkbox2.Checked:=(fich_ini.readinteger('opciones','ayuda',1)<>0);
-    form1.checkbox15.Checked:=(fich_ini.readinteger('opciones','avanzado',1)<>0);
+    form1.checkbox15.Checked:=(fich_ini.readinteger('opciones','avanzado',0)<>0);
     idioma_sel:=fich_ini.readinteger('opciones','idioma',200);
     //ficheros extra config
-    main_config.config_dosbox:=fich_ini.ReadString('opciones','config_dosbox','');
-    main_config.config_dosbox_x:=fich_ini.ReadString('opciones','config_dosbox_x','');
-    main_config.config_scummvm:=fich_ini.ReadString('opciones','config_scummvm','');
+    main_config.config_dosbox:=fich_ini.ReadString('opciones','config_dosbox',main_config.dir_base+'extras\config\dosbox.conf');
+    main_config.config_dosbox_x:=fich_ini.ReadString('opciones','config_dosbox_x',main_config.dir_base+'extras\config\dosbox-x.conf');
+    main_config.config_scummvm:=fich_ini.ReadString('opciones','config_scummvm',main_config.dir_base+'extras\config\scummvm.ini');
+    main_config.config_atari800:=fich_ini.ReadString('opciones','config_atari800',main_config.dir_base+'extras\config\altirra.ini');
+    main_config.config_apple:=fich_ini.ReadString('opciones','config_apple',main_config.dir_base+'extras\config\apple2.ini');
     main_config.leer_fijos:=(fich_ini.readinteger('opciones','leer_fijos',0)<>0);
     main_config.mostrar_todos:=(fich_ini.readinteger('opciones','mostrar_todos',0)<>0);
     main_config.mostrar_fallan:=(fich_ini.readinteger('opciones','mostrar_fallan',0)<>0);
     main_config.mostrar_anadidos:=(fich_ini.readinteger('opciones','mostrar_anadidos',0)<>0);
     main_config.dosbox_exe:=fich_ini.ReadString('opciones','dosbox_exe','');
     main_config.dosbox_x_exe:=fich_ini.ReadString('opciones','dosbox_x_exe','');
+    main_config.motor_msdos:=fich_ini.ReadInteger('opciones','motor_msdos',1);
     main_config.dsp_exe:=fich_ini.ReadString('opciones','dsp_exe',main_config.dir_base+'dsp\dsp.exe');
-    main_config.scumm_exe:=fich_ini.ReadString('opciones','scumm_exe','');
+    main_config.apple2_exe:=fich_ini.ReadString('opciones','apple2_exe',main_config.dir_base+'extras\apple2\AppleWin.exe');
+    main_config.atari800_exe:=fich_ini.ReadString('opciones','atari800_exe',main_config.dir_base+'extras\atari800\altirra.exe');
+    main_config.scumm_exe:=fich_ini.ReadString('opciones','scumm_exe',main_config.dir_base+'extras\scummvm\scummvm.exe');
     main_config.dir_manual:=fich_ini.ReadString('opciones','dir_manual',main_config.dir_base+'extras\manual\');
     main_config.dir_mapas:=fich_ini.ReadString('opciones','dir_maps',main_config.dir_base+'extras\maps\');
     main_config.dir_guias:=fich_ini.ReadString('opciones','dir_guias',main_config.dir_base+'extras\walk\');
@@ -600,8 +644,8 @@ begin
     main_config.dir_zip:=fich_ini.ReadString('opciones','dir_zips',main_config.dir_base+'zip_games\');
     fich_ini.Free;
   end else begin
-    form1.radiobutton2.Checked:=true;
-    form1.checkbox15.Checked:=false;
+    form1.radiobutton1.Checked:=true;
+    form1.groupbox8.visible:=true;
     idioma_sel:=200;
     main_config.leer_fijos:=false;
     main_config.mostrar_todos:=false;
@@ -612,6 +656,9 @@ begin
     main_config.dosbox_x_exe:=main_config.dir_base+'extras\dosbox_x\dosbox-x.exe';
     main_config.scumm_exe:=main_config.dir_base+'extras\scummvm\scummvm.exe';
     main_config.dsp_exe:=main_config.dir_base+'dsp\dsp.exe';
+    main_config.apple2_exe:=main_config.dir_base+'extras\apple2\AppleWin.exe';
+    main_config.atari800_exe:=main_config.dir_base+'extras\atari800\altirra.exe';
+    main_config.motor_msdos:=1;
     {$else}
     {$ifdef darwin}
     main_config.dosbox_exe:='/Applications/DOSBox Staging.app/Contents/MacOS/dosbox';
@@ -628,6 +675,8 @@ begin
     main_config.config_dosbox:=main_config.dir_base+'extras\config\dosbox.conf';
     main_config.config_dosbox_x:=main_config.dir_base+'extras\config\dosbox-x.conf';
     main_config.config_scummvm:=main_config.dir_base+'extras\config\scummvm.ini';
+    main_config.config_atari800:=main_config.dir_base+'extras\config\altirra.ini';
+    main_config.config_apple:=main_config.dir_base+'extras\config\apple2.ini';
     main_config.dir_manual:=main_config.dir_base+'extras\manual\';
     main_config.dir_mapas:=main_config.dir_base+'extras\maps\';
     main_config.dir_guias:=main_config.dir_base+'extras\walk\';
@@ -646,6 +695,7 @@ begin
   main_config.config_dosbox:=cambiar_path(main_config.config_dosbox);
   main_config.config_dosbox_x:=cambiar_path(main_config.config_dosbox_x);
   main_config.config_scummvm:=cambiar_path(main_config.config_scummvm);
+  main_config.config_apple:=cambiar_path(main_config.config_apple);
   {$endif}
   seleccionar_idioma;
   cambiar_idioma_principal;
@@ -662,6 +712,7 @@ begin
   cambiar_scumm_ini('extrapath',main_config.dir_mt32);
   //Modifico la config de DSP
   dir_dsp:=extractfilepath(main_config.dsp_exe);
+  if not(DirectoryExists(dir_dsp)) then CreateDir(dir_dsp);
   cambiar_dsp_ini('dsp','auto_exec','1');
   //Meto los juegos
   pillar_juegos;
@@ -681,11 +732,13 @@ begin
   r.Right:=0;
   r.Bottom:=0;
   form1.stringgrid1.Selection:=r;
-  form1.StringGrid1Click(nil);
-  form1.CheckBox15click(nil);
-  if (form1.radiobutton1.Checked or form1.radiobutton2.Checked) then form1.radiobutton1click(nil)
+  form1.stringgrid1.Options:=form1.stringgrid1.Options+[goRowSelect];
+  if form1.radiobutton1.Checked then form1.radiobutton1click(nil)
     else if form1.radiobutton3.Checked then form1.radiobutton3click(nil)
       else if form1.radiobutton4.Checked then form1.radiobutton4click(nil)
+        else if form1.radiobutton5.Checked then form1.radiobutton5click(nil);
+  if main_config.motor_msdos=0 then form1.radiobutton7.Checked:=true
+    else form1.RadioButton8.Checked:=true;
 end;
 
 procedure guardar_juegos_anadidos;
@@ -699,7 +752,7 @@ if DirectoryExists(main_config.dir_base) then begin
   AssignFile(games_file,main_config.dir_base+'extra_games.info');
   ReWrite(games_file);
   for f:=0 to (total_juegos-1) do begin
-    if (not(games_final[f].interno) and not(games_final[f].solo_dsp)) then begin
+    if (not(games_final[f].interno) and (games_final[f].motor<>255)) then begin
       write(games_file,games_final[f].nombre+';');
       write(games_file,games_final[f].dir+';');
       write(games_file,games_final[f].exec+';');
@@ -725,7 +778,7 @@ if DirectoryExists(main_config.dir_base) then begin
       write(games_file,inttostr(games_final[f].memoria)+';');
       write(games_file,games_final[f].setup+';');
       write(games_file,inttostr(byte(games_final[f].zip))+';');
-      writeln(games_file,inttostr(byte(games_final[f].solo_scumm)));
+      write(games_file,inttostr(games_final[f].motor));
     end;
   end;
   CloseFile(games_file);
@@ -764,6 +817,8 @@ var
 begin
 //Borro el directorio temporal
 delete_dir(TEMP_DIR);
+//Borro el directorio que deja el doom!
+delete_dir('DOOMDATA');
 if DirectoryExists(main_config.dir_base) then begin
   {$I-}
   //grabo los juegos
@@ -776,6 +831,7 @@ if DirectoryExists(main_config.dir_base) then begin
   fich_ini.WriteInteger('filtros','ale',byte(form1.checkbox10.Checked));
   fich_ini.WriteInteger('filtros','fra',byte(form1.checkbox11.Checked));
   fich_ini.WriteInteger('filtros','ita',byte(form1.checkbox13.Checked));
+  fich_ini.WriteInteger('filtros','gen',byte(form1.checkbox18.Checked));
   //Filtros tipo
   fich_ini.WriteInteger('filtros','ag',byte(form1.checkbox3.Checked));
   fich_ini.WriteInteger('filtros','arcade',byte(form1.checkbox16.Checked));
@@ -785,13 +841,13 @@ if DirectoryExists(main_config.dir_base) then begin
   fich_ini.WriteInteger('filtros','puzles',byte(form1.checkbox7.Checked));
   fich_ini.WriteInteger('filtros','rpg',byte(form1.checkbox8.Checked));
   fich_ini.WriteInteger('filtros','coches',byte(form1.checkbox17.Checked));
-  fich_ini.WriteInteger('filtros','extra',byte(form1.checkbox18.Checked));
   //Opciones
   f:=0;
   if form1.radiobutton1.Checked then f:=0
-    else if form1.radiobutton2.Checked then f:=1
-      else if form1.radiobutton3.Checked then f:=2
-        else if form1.radiobutton4.Checked then f:=3;
+    else if form1.radiobutton3.Checked then f:=2
+      else if form1.radiobutton4.Checked then f:=3
+        else if form1.radiobutton5.Checked then f:=4
+          else if form1.radiobutton6.Checked then f:=5;
   fich_ini.WriteInteger('opciones','motor',f);
   fich_ini.WriteInteger('opciones','pantalla',byte(form1.checkbox1.Checked));
   fich_ini.WriteInteger('opciones','sonido',byte(form1.checkbox14.Checked));
@@ -800,7 +856,10 @@ if DirectoryExists(main_config.dir_base) then begin
   fich_ini.WriteInteger('opciones','idioma',idioma_sel);
   fich_ini.WriteString('opciones','config_dosbox',main_config.config_dosbox);
   fich_ini.WriteString('opciones','config_dosbox_x',main_config.config_dosbox_x);
+  fich_ini.WriteInteger('opciones','motor_msdos',main_config.motor_msdos);
   fich_ini.WriteString('opciones','config_scummvm',main_config.config_scummvm);
+  fich_ini.WriteString('opciones','config_atari800',main_config.config_atari800);
+  fich_ini.WriteString('opciones','config_apple',main_config.config_apple);
   fich_ini.WriteInteger('opciones','leer_fijos',byte(main_config.leer_fijos));
   fich_ini.WriteInteger('opciones','mostrar_todos',byte(main_config.mostrar_todos));
   fich_ini.WriteInteger('opciones','mostrar_fallan',byte(main_config.mostrar_fallan));
@@ -809,6 +868,8 @@ if DirectoryExists(main_config.dir_base) then begin
   fich_ini.WriteString('opciones','dosbox_x_exe',main_config.dosbox_x_exe);
   fich_ini.WriteString('opciones','scumm_exe',main_config.scumm_exe);
   fich_ini.WriteString('opciones','dsp_exe',main_config.dsp_exe);
+  fich_ini.WriteString('opciones','apple2_exe',main_config.apple2_exe);
+  fich_ini.WriteString('opciones','atari800_exe',main_config.atari800_exe);
   fich_ini.WriteString('opciones','dir_manual',main_config.dir_manual);
   fich_ini.WriteString('opciones','dir_maps',main_config.dir_mapas);
   fich_ini.WriteString('opciones','dir_guias',main_config.dir_guias);
@@ -868,16 +929,30 @@ if games_final[ngame].mal then begin
   MessageDlg(list_error[7],mtError,[mbOk],0);
   exit;
 end;
-//Esto no deberia pasar nunca...
-if (not(form1.radiobutton3.Checked) and games_final[ngame].solo_scumm) then begin
-  MessageDlg(list_error[8],mtError,[mbOk],0);
-  exit;
+//DSP Emulator
+if form1.radiobutton4.Checked then begin
+    cambiar_dsp_ini('dsp','maquina',inttostr(games_final[ngame].ciclos));
+    if form1.checkbox14.Checked then exec_sound:='1'
+      else exec_sound:='0';
+    cambiar_dsp_ini('dsp','sonido_ena',exec_sound);
+    if form1.checkbox1.Checked then exec_fullscreen:='6'
+      else exec_fullscreen:='2';
+    cambiar_dsp_ini('dsp','video',exec_fullscreen);
+    cambiar_dsp_ini('dir','arcade',dir_dsp+'roms;');
+    cambiar_dsp_ini('dir','dir_samples',dir_dsp+'samples');
+    cambiar_dsp_ini('dir','spectrum_rom_48',dir_dsp+'roms\spectrum.zip');
+    cambiar_dsp_ini('dir','spectrum_rom_128',dir_dsp+'roms\spec128.zip');
+    cambiar_dsp_ini('dir','spectrum_rom_plus3',dir_dsp+'roms\plus3.zip');
+    {$ifdef windows}
+    ShellExecute(form1.Handle,'open',pchar(main_config.dsp_exe),nil,nil,SW_SHOWNORMAL);
+    {$else}
+    process:=tprocess.create(nil);
+    process.commandline:='"'+main_config.dsp_exe+'"';
+    process.execute;
+    process.free;
+    {$ENDIF}
+    exit;
 end;
-if (not(form1.radiobutton4.Checked) and games_final[ngame].solo_dsp) then begin
-  MessageDlg(list_error[8],mtError,[mbOk],0);
-  exit;
-end;
-if not(form1.radiobutton4.Checked) then begin
 //Si es un ZIP lo descomprimo!
 if games_final[ngame].zip then begin
   delete_dir(TEMP_DIR+'\'+games_final[ngame].dir);
@@ -885,60 +960,134 @@ if games_final[ngame].zip then begin
   extract_zip(main_config.dir_zip,games_final[ngame].dir);
   exec_dir:=cambiar_path(TEMP_DIR+'\'+games_final[ngame].dir);
 end else exec_dir:=games_final[ngame].dir;
-if not(form1.radiobutton3.Checked) then begin //DosBox
-  //Mostrar mensaje de ayuda
-  if form1.checkbox2.Checked then begin
-    if games_final[ngame].mensaje<>'' then begin
-      temp_str:=games_final[ngame].mensaje;
-      if form1.radiobutton1.Checked then temp_disco:='CONTROL+F4'
-        else temp_disco:={$ifdef windows}'F11+O';{$else}'F12+O';{$endif}
-      if ContainsText(temp_str,'[KEY_DISK]') then temp_str:=StringReplace(temp_str,'[KEY_DISK]',temp_disco,[]);
-      if ContainsText(temp_str,'[RET]') then temp_str:=StringReplace(temp_str,'[RET]',RETURN,[rfReplaceAll]);
-      MessageDlg(temp_str,mtInformation,[mbOK],0);
+//Mostrar mensaje de ayuda
+if( form1.checkbox2.Checked and not(form1.RadioButton3.Checked)) then begin
+  if games_final[ngame].mensaje<>'' then begin
+    temp_str:=games_final[ngame].mensaje;
+    if main_config.motor_msdos=0 then temp_disco:='CONTROL+F4'
+      else temp_disco:={$ifdef windows}'F11+O';{$else}'F12+O';{$endif}
+    if ContainsText(temp_str,'[KEY_DISK]') then temp_str:=StringReplace(temp_str,'[KEY_DISK]',temp_disco,[]);
+    if ContainsText(temp_str,'[RET]') then temp_str:=StringReplace(temp_str,'[RET]',RETURN,[rfReplaceAll]);
+    MessageDlg(temp_str,mtInformation,[mbOK],0);
+  end;
+end;
+//Apple ][
+if form1.radiobutton5.Checked then begin
+    if form1.checkbox14.Checked then exec_sound:='0'
+    else exec_sound:='59';
+    cambiar_apple_ini('Configuration','Speaker Volume',exec_sound);
+    cambiar_apple_ini('Configuration','Mockingboard Volume',exec_sound);
+    cambiar_apple_ini('Configuration\Slot 6','Last Disk Image 1','');
+    cambiar_apple_ini('Configuration\Slot 6','Last Disk Image 2','');
+    if games_final[ngame].grafica='ideal' then cambiar_apple_ini('Configuration','Video Emulation','1')
+      else if games_final[ngame].grafica='rgb' then cambiar_apple_ini('Configuration','Video Emulation','2')
+        else cambiar_apple_ini('Configuration','Video Emulation','4');
+    if games_final[ngame].segundo_disco<>'' then exec_sd:='-d2 "'+main_config.dir_base+exec_dir+'\'+games_final[ngame].segundo_disco+'"'
+      else exec_sd:='-d2-disconnected';
+    if form1.checkbox1.Checked then exec_fullscreen:=' -f'
+      else exec_fullscreen:='';
+    temp_str:='-d1 "'+main_config.dir_base+exec_dir+'\'+games_final[ngame].exec+'" '+exec_sd+' -conf "'+main_config.config_apple+'"'+exec_fullscreen;
+    ShellExecute(form1.Handle,'open',pchar(main_config.apple2_exe),pchar(temp_str),nil,SW_SHOWNORMAL);
+    exit;
+end;
+//Atari 800
+if form1.radiobutton6.Checked then begin
+  if form1.checkbox1.Checked then exec_fullscreen:=' /f'
+      else exec_fullscreen:='';
+  //if not(form1.checkbox14.Checked) then exec_sound:=' -nosound'
+  //  else exec_sound:=' -sound';
+  exec_c_param:='';
+  if ContainsText(games_final[ngame].exec,'.rom') then begin
+    if tamano_fichero(main_config.dir_base+exec_dir+'\'+games_final[ngame].exec)<8193 then exec_c_param:=' /cartmapper 1'
+      else exec_c_param:=' /cartmapper 2'
+  end;
+  temp_str:='/portablealt:"'+main_config.config_atari800+'"'+exec_fullscreen+exec_sound+exec_c_param+' "'+main_config.dir_base+exec_dir+'\'+games_final[ngame].exec+'"';
+  ShellExecute(form1.Handle,'open',pchar(main_config.atari800_exe),pchar(temp_str),nil,SW_SHOWNORMAL);
+  exit;
+end;
+//ScummVM
+if form1.radiobutton3.Checked then begin
+  if form1.checkbox1.Checked then exec_fullscreen:='--fullscreen'
+    else exec_fullscreen:='';
+  if form1.checkbox14.Checked then exec_sound:='false'
+    else exec_sound:='true';
+  cambiar_scumm_ini('mute',exec_sound);
+  temp_str:='--language=en';
+  case games_final[ngame].idioma of
+    MUL:case idioma_ind of
+            0:temp_str:='--language=es';
+            2:temp_str:='--language=de';
+            3:temp_str:='--language=fr';
+            4:temp_str:='--language=it';
+      end;
+    ESP:temp_str:='--language=es';
+    //ING:temp_str:='--language=en';
+    ALE:temp_str:='--language=de';
+    FRA:temp_str:='--language=fr';
+    ITA:temp_str:='--language=it';
+  end;
+  {$ifdef windows}
+  exec_parametros:='--no-console ';
+  {$else}
+  exec_parametros:='';
+  {$endif}
+  param_string:=exec_parametros+'--config="'+main_config.config_scummvm+'" --path="'+main_config.dir_base+exec_dir+'" --auto-detect  --native-mt32 '+exec_fullscreen+' '+temp_str;
+  {$ifdef windows}
+  ShellExecute(form1.Handle,'open',pchar(main_config.scumm_exe),pchar(param_string),nil,SW_SHOWNORMAL);
+  {$else}
+  process:=tprocess.create(nil);
+  process.commandline:='/bin/bash -c '''+main_config.scumm_exe+' '+cambiar_path(param_string)+'''';
+  process.execute;
+  process.free;
+  {$ENDIF}
+  exit;
+end;
+//MS-DOS
+//cantidad de memoria
+if games_final[ngame].memoria=0 then exec_memoria:='16'
+  else exec_memoria:=inttostr(games_final[ngame].memoria);
+//Configurar directorio del ejecutable, el ejecutable, si hay fichero extra de config y los parametros indispensables, el mt32 y los ciclos
+case main_config.motor_msdos of
+    0:begin //DosBox
+        exec_string:=main_config.dosbox_exe;
+        exec_dosbox_extra_config:=' --conf "'+main_config.config_dosbox+'" -set windowresolution=800x600 -set glshader=none -set ne2000=false';
+        {$ifdef windows}
+        temp_str:='['+games_final[ngame].nombre+']';
+        {$else}
+        temp_str:=''''+games_final[ngame].nombre+'''';
+        {$endif}
+        exec_parametros:='-set window_titlebar="program='+temp_str+' dosbox=auto cycles=off mouse=short" -set waitonerror=false -set memsize='+exec_memoria+' -set automount=false -set startup_verbosity=quiet -set mididevice=mt32 -set ultradir=C:\extras\ULTRASND';
+        exec_roland:='-set romdir="'+main_config.dir_mt32+'"';
+        exec_ciclos:='-set cpu_cycles=';
+      end;
+    1:begin //DosBox-X
+        exec_string:=main_config.dosbox_x_exe;
+        exec_dosbox_extra_config:=' --conf "'+main_config.config_dosbox_x+'" -set output=direct3d -set windowresolution='{$IFDEF IS_DEBUG}+'original'{$ELSE}+'800x600'{$ENDIF};
+        exec_parametros:='-set titlebar="'+games_final[ngame].nombre+'" -set showmenu=true -set "quit warning"=false -set autolock=true -set showbasic=false -set fastbioslogo=true -set "disable graphical splash"=true -set startbanner=false -set memsize='+exec_memoria+' -set mididevice=mt32 -set gustype=max -set ultradir=C:\extras\ULTRASND -set disney=true -set mouse_emulation=always';
+        exec_roland:='-set mt32.romdir="'+main_config.dir_mt32+'"';
+        exec_ciclos:='-set cycles=';
     end;
-  end;
-  //cantidad de memoria
-  if games_final[ngame].memoria=0 then exec_memoria:='16'
-    else exec_memoria:=inttostr(games_final[ngame].memoria);
-  //Configurar directorio del ejecutable, el ejecutable, si hay fichero extra de config y los parametros indispensables, el mt32 y los ciclos
-  if form1.radiobutton1.Checked then begin
-    exec_string:=main_config.dosbox_exe;
-    exec_dosbox_extra_config:=' --conf "'+main_config.config_dosbox+'" -set windowresolution=800x600 -set glshader=none -set ne2000=false';
-    {$ifdef windows}
-    temp_str:='['+games_final[ngame].nombre+']';
-    {$else}
-    temp_str:=''''+games_final[ngame].nombre+'''';
-    {$endif}
-    exec_parametros:='-set window_titlebar="program='+temp_str+' dosbox=auto cycles=off mouse=short" -set waitonerror=false -set memsize='+exec_memoria+' -set automount=false -set startup_verbosity=quiet -set mididevice=mt32 -set ultradir=C:\extras\ULTRASND';
-    exec_roland:='-set romdir="'+main_config.dir_mt32+'"';
-    exec_ciclos:='-set cpu_cycles=';
-  end else begin
-    exec_string:=main_config.dosbox_x_exe;
-    exec_dosbox_extra_config:=' --conf "'+main_config.config_dosbox_x+'" -set output=direct3d -set windowresolution='{$IFDEF IS_DEBUG}+'original'{$ELSE}+'800x600'{$ENDIF};
-    exec_parametros:='-set titlebar="'+games_final[ngame].nombre+'" -set showmenu=true -set "quit warning"=false -set autolock=true -set showbasic=false -set fastbioslogo=true -set "disable graphical splash"=true -set startbanner=false -set memsize='+exec_memoria+' -set mididevice=mt32 -set gustype=max -set ultradir=C:\extras\ULTRASND -set disney=true -set mouse_emulation=always';
-    exec_roland:='-set mt32.romdir="'+main_config.dir_mt32+'"';
-    exec_ciclos:='-set cycles=';
-  end;
-  if games_final[ngame].ciclos=-1 then exec_ciclos:=exec_ciclos+'auto'
+end;
+if games_final[ngame].ciclos=-1 then exec_ciclos:=exec_ciclos+'auto'
       else if games_final[ngame].ciclos=1 then exec_ciclos:=exec_ciclos+'max'
         else if games_final[ngame].ciclos<>0 then exec_ciclos:=exec_ciclos+inttostr(games_final[ngame].ciclos)
           else exec_ciclos:=exec_ciclos+'12000';
-  //Crear bat de ejecucion
-  {$I-}
-  AssignFile(play_file,cambiar_path(main_config.dir_base+TEMP_DIR+'\start.bat'));
-  ReWrite(play_file);
-  WriteLn(play_file, '@echo off');
-  WriteLn(play_file,'c:');
-  WriteLn(play_file,'cd \');
-  WriteLn(play_file,'cd '+exec_dir);
-  //Comprobar si tiene un CD
-  if games_final[ngame].cdrom<>'' then begin
+//Crear bat de ejecucion
+{$I-}
+AssignFile(play_file,cambiar_path(main_config.dir_base+TEMP_DIR+'\start.bat'));
+ReWrite(play_file);
+WriteLn(play_file, '@echo off');
+WriteLn(play_file,'c:');
+WriteLn(play_file,'cd \');
+WriteLn(play_file,'cd '+exec_dir);
+//Comprobar si tiene un CD
+if games_final[ngame].cdrom<>'' then begin
     cd_rom_dir:=cambiar_path(main_config.dir_base+exec_dir+'\'+games_final[ngame].cdrom);
     temp_str:='imgmount d: "'+cd_rom_dir+'" -t cdrom';
     WriteLn(play_file,temp_str);
-  end;
-  //Comprobar parametros previos a la ejecucion
-  if games_final[ngame].exec_pre<>'' then begin
+end;
+//Comprobar parametros previos a la ejecucion
+if games_final[ngame].exec_pre<>'' then begin
     exec_pre:=games_final[ngame].exec_pre;
     if ContainsText(exec_pre,'[GAME_DIR]') then begin
       //Si es un ZIP la carpeta base es TEMP
@@ -948,27 +1097,25 @@ if not(form1.radiobutton3.Checked) then begin //DosBox
     end;
     if ContainsText(exec_pre,'[RET]') then exec_pre:=StringReplace(exec_pre,'[RET]',RETURN,[rfReplaceAll]);
     WriteLn(play_file,exec_pre);
-  end;
-  //Añadir, si existe, un fichero de setup que hay que ejecutar
-  if games_final[ngame].setup<>'' then begin
-    WriteLn(play_file,games_final[ngame].setup);
-  end;
-  //Añadir el ejecutable
-  exec_params:=games_final[ngame].params;
-  if ContainsText(games_final[ngame].exec,'.bat') then begin
-    WriteLn(play_file,'call '+games_final[ngame].exec+' '+exec_params);
-  end else begin
-    WriteLn(play_file,games_final[ngame].exec+' '+exec_params);
-  end;
-  //Añadir el ejecutable post
-  if games_final[ngame].exec_post<>'' then begin
+end;
+//Añadir, si existe, un fichero de setup que hay que ejecutar
+if games_final[ngame].setup<>'' then WriteLn(play_file,games_final[ngame].setup);
+//Añadir el ejecutable
+exec_params:=games_final[ngame].params;
+if ContainsText(games_final[ngame].exec,'.bat') then begin
+  WriteLn(play_file,'call '+games_final[ngame].exec+' '+exec_params);
+end else begin
+  WriteLn(play_file,games_final[ngame].exec+' '+exec_params);
+end;
+//Añadir el ejecutable post
+if games_final[ngame].exec_post<>'' then begin
     temp_str:=games_final[ngame].exec_post;
     if ContainsText(temp_str,'[RET]') then temp_str:=StringReplace(temp_str,'[RET]',RETURN,[rfReplaceAll]);
     WriteLn(play_file,temp_str);
-  end;
-  WriteLn(play_file,'exit');
-  CloseFile(play_file);
-  {$I+}
+end;
+WriteLn(play_file,'exit');
+CloseFile(play_file);
+{$I+}
   //Comprobar si tengo parametros extra
   exec_extra:=games_final[ngame].extra_param;
   //Comprobar si tengo que activar el sonido
@@ -1013,64 +1160,6 @@ if not(form1.radiobutton3.Checked) then begin //DosBox
   process.execute;
   process.free;
   {$ENDIF}
-end else begin  //ScummVM
-  if form1.checkbox1.Checked then exec_fullscreen:='--fullscreen'
-    else exec_fullscreen:='';
-  if form1.checkbox14.Checked then exec_sound:='false'
-    else exec_sound:='true';
-  cambiar_scumm_ini('mute',exec_sound);
-  case games_final[ngame].idioma of
-    ESP:temp_str:='--language=es';
-    ING:temp_str:='--language=en';
-    ALE:temp_str:='--language=de';
-    FRA:temp_str:='--language=fr';
-    ITA:temp_str:='--language=it';
-      else case idioma_ind of
-            0:temp_str:='--language=es';
-            2:temp_str:='--language=de';
-            3:temp_str:='--language=fr';
-            4:temp_str:='--language=it';
-              else temp_str:='--language=en';
-      end;
-  end;
-  {$ifdef windows}
-  exec_parametros:='--no-console ';
-  {$else}
-  exec_parametros:='';
-  {$endif}
-  param_string:=exec_parametros+'--config="'+main_config.config_scummvm+'" --path="'+main_config.dir_base+exec_dir+'" --auto-detect  --native-mt32 '+exec_fullscreen+' '+temp_str;
-  {$ifdef windows}
-  ShellExecute(form1.Handle,'open',pchar(main_config.scumm_exe),pchar(param_string),nil,SW_SHOWNORMAL);
-  {$else}
-  process:=tprocess.create(nil);
-  process.commandline:='/bin/bash -c '''+main_config.scumm_exe+' '+cambiar_path(param_string)+'''';
-  process.execute;
-  process.free;
-  {$ENDIF}
-end;
-//DSP Emulator!
-end else begin
-  cambiar_dsp_ini('dsp','maquina',inttostr(games_final[ngame].ciclos));
-  if form1.checkbox14.Checked then exec_sound:='1'
-    else exec_sound:='0';
-  cambiar_dsp_ini('dsp','sonido_ena',exec_sound);
-  if form1.checkbox1.Checked then exec_fullscreen:='6'
-    else exec_fullscreen:='2';
-  cambiar_dsp_ini('dsp','video',exec_fullscreen);
-  cambiar_dsp_ini('dir','arcade',dir_dsp+'roms;');
-  cambiar_dsp_ini('dir','dir_samples',dir_dsp+'samples');
-  cambiar_dsp_ini('dir','spectrum_rom_48',dir_dsp+'roms\spectrum.zip');
-  cambiar_dsp_ini('dir','spectrum_rom_128',dir_dsp+'roms\spec128.zip');
-  cambiar_dsp_ini('dir','spectrum_rom_plus3',dir_dsp+'roms\plus3.zip');
-  {$ifdef windows}
-  ShellExecute(form1.Handle,'open',pchar(main_config.dsp_exe),nil,nil,SW_SHOWNORMAL);
-  {$else}
-  process:=tprocess.create(nil);
-  process.commandline:='"'+main_config.dsp_exe+'"';
-  process.execute;
-  process.free;
-  {$ENDIF}
-end;
 end;
 
 function comprobar_existe(ruta:string;directorio:string):boolean;
@@ -1102,16 +1191,15 @@ end;
 function save_game_accept:boolean;
 var
   temps,directorio_final:string;
+  es_zip:boolean;
 begin
   save_game_accept:=false;
+  if containstext(lowercase(form2.labelededit9.Text),'.zip') then es_zip:=true
+    else es_zip:=false;
   games_final[juego_editado].nombre:=form2.labelededit1.Text;
-  if form2.checkbox3.Checked then begin
-    if containstext(lowercase(form2.labelededit9.Text),'.zip') then temps:=stringreplace(form2.labelededit9.text,'.zip','',[rfIgnoreCase])
-      else temps:=form2.labelededit9.Text;
-    games_final[juego_editado].dir:=temps;
-  end else begin
-    games_final[juego_editado].dir:=form2.labelededit9.Text;
-  end;
+  temps:=form2.labelededit9.Text;
+  if es_zip then temps:=stringreplace(temps,'.zip','',[rfIgnoreCase]);
+  games_final[juego_editado].dir:=temps;
   games_final[juego_editado].exec:=form2.labelededit5.Text;
   games_final[juego_editado].params:=form2.labelededit6.Text;
   games_final[juego_editado].exec_pre:=form2.labelededit7.Text;
@@ -1172,19 +1260,19 @@ begin
     7:games_final[juego_editado].tipo:=$80;
     8:games_final[juego_editado].tipo:=$200;
   end;
-  if form2.checkbox3.Checked then directorio_final:=main_config.dir_zip+games_final[juego_editado].dir
+  if es_zip then directorio_final:=main_config.dir_zip+games_final[juego_editado].dir
     else directorio_final:=main_config.dir_base+games_final[juego_editado].dir;
-  if ((games_final[juego_editado].cdrom<>'') and (not(comprobar_si_existe_fichero(directorio_final,games_final[juego_editado].cdrom,form2.checkbox3.Checked)))) then begin
+  if ((games_final[juego_editado].cdrom<>'') and (not(comprobar_si_existe_fichero(directorio_final,games_final[juego_editado].cdrom,es_zip)))) then begin
     MessageDlg(list_error[3], mtError,[mbOk],0);
     exit;
   end;
-  if ((games_final[juego_editado].setup<>'') and (not(comprobar_si_existe_fichero(directorio_final,games_final[juego_editado].setup,form2.checkbox3.Checked)))) then begin
+  if ((games_final[juego_editado].setup<>'') and (not(comprobar_si_existe_fichero(directorio_final,games_final[juego_editado].setup,es_zip)))) then begin
     MessageDlg(list_error[4], mtError,[mbOk],0);
     exit;
   end;
   //Solo ScummVM
   if form2.CheckBox4.Checked then begin
-    if form2.checkbox3.Checked then begin
+    if es_zip then begin
       if not(comprobar_si_existe_fichero(directorio_final,games_final[juego_editado].exec,true)) then begin
         MessageDlg(list_error[5], mtError,[mbOk],0);
         exit;
@@ -1195,15 +1283,15 @@ begin
         exit;
       end;
     end;
-    games_final[juego_editado].solo_scumm:=form2.checkbox4.Checked;
+    if form2.checkbox4.Checked then games_final[juego_editado].motor:=1;
     games_final[juego_editado].exec:='';
   end else begin //Resto
-    if not(comprobar_si_existe_fichero(directorio_final,games_final[juego_editado].exec,form2.checkbox3.Checked)) then begin
+    if not(comprobar_si_existe_fichero(directorio_final,games_final[juego_editado].exec,es_zip)) then begin
       MessageDlg(list_error[5], mtError,[mbOk],0);
       exit;
     end;
   end;
-  games_final[juego_editado].zip:=form2.checkbox3.Checked;
+  games_final[juego_editado].zip:=es_zip;
   games_final[juego_editado].mal:=false;
   if estoy_anadiendo then begin
     games_final[juego_editado].interno:=false;
@@ -1221,13 +1309,8 @@ begin
 datos_cancel:=games_final[juego_editado];
 if not(estoy_anadiendo) then begin
   form2.labelededit1.Text:=games_final[juego_editado].nombre;
-  if games_final[juego_editado].zip then begin
-    form2.checkbox3.Checked:=true;
-    form2.labelededit9.Text:=games_final[juego_editado].dir+'.zip';
-  end else begin
-    form2.checkbox3.Checked:=false;
-    form2.labelededit9.Text:=games_final[juego_editado].dir;
-  end;
+  if games_final[juego_editado].zip then form2.labelededit9.Text:=games_final[juego_editado].dir+'.zip'
+    else form2.labelededit9.Text:=games_final[juego_editado].dir;
   form2.labelededit5.Text:=games_final[juego_editado].exec;
   if ContainsText(form2.labelededit5.Text,'.img') then form2.labelededit10.Enabled:=true
     else form2.labelededit10.Enabled:=false;
@@ -1248,7 +1331,7 @@ if not(estoy_anadiendo) then begin
   form2.labelededit13.Text:=games_final[juego_editado].mapper;
   form2.checkbox1.Checked:=games_final[juego_editado].gus;
   form2.checkbox2.Checked:=games_final[juego_editado].scumm;
-  form2.CheckBox4.Checked:=games_final[juego_editado].solo_scumm;
+  form2.CheckBox4.Checked:=(games_final[juego_editado].motor=1);
   form2.checkbox4click(nil);
   form2.labelededit2.Text:=games_final[juego_editado].year;
   form2.labelededit3.Text:=games_final[juego_editado].company;
@@ -1280,14 +1363,13 @@ end else begin
   form2.labelededit5.Text:='';
   form2.labelededit6.Text:='';
   form2.labelededit7.Text:='';
-  form2.labelededit11.Text:='12000';
-  form2.labelededit12.Text:='16';
+  form2.labelededit11.Text:='3000';
+  form2.labelededit12.Text:='1';
   form2.combobox1.ItemIndex:=0;
   form2.labelededit8.Text:='';
   form2.labelededit9.Text:='';
   form2.checkbox1.Checked:=false;
   form2.checkbox2.Checked:=false;
-  form2.checkbox3.Checked:=false;
   form2.CheckBox4.Checked:=false;
   form2.labelededit10.Text:='';
   form2.labelededit13.Text:='';

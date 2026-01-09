@@ -3,7 +3,7 @@
 **Gameplay** is divided into several sections.
 If you just want to play, **no initial configuration is needed**.
 
-![Main Screen](https://i.ibb.co/RTZJXy22/gameplay-030-en.png)
+![Main Screen](https://i.ibb.co/7JTdbBSz/gameplay-040-en.png)
 
 ---
 
@@ -13,15 +13,17 @@ If you just want to play, **no initial configuration is needed**.
 You can choose:
 - The game's language.
 - The game type.
+
 The list will update based on the selected options.
 
-### 1.2 Emulation Engine
-You can choose between three programs to launch the games:
+### 1.2 Emulated System
+You can choose:
 
-- **DosBox**: Classic emulator, _staging_ version.
-- **DosBox-X**: Similar to DosBox, but with additional features.
+- **MS-DOS**: MS-DOS classic games.
 - **ScummVM**: Only for certain graphic adventures. When selected, the list is automatically adjusted.
 - **DSP Emulator**: Arcade, 8bits Computers and Consoles emulator.
+- **Apple II**: Games for the Apple II computer series
+- **Atari 800**: Games for the Atari 800 computer series
 
 > The emulator is configured automatically, you don't need to do anything.
 
@@ -33,8 +35,7 @@ You can choose between three programs to launch the games:
 - **Advanced Options**: Show advanced options, meaning buttons to add, edit or delete games.
 
 ### 1.4 Search Game
-If you type the name of the game you're looking for, the list will be filtered accordingly.
-Press `ESC` to clear the search and show the original list.
+If you type the name of the game you're looking for, the game will be selected from the list.
 
 ### 1.5 Game List
 
@@ -106,7 +107,7 @@ Restores original settings. (_Panic button_)
 
 ## 3. Add / Edit / Delete Games (Advanced Options)
 
-![Edit Games](https://i.ibb.co/bjNrwZJM/add-game.jpg)
+![Edit Games](https://i.ibb.co/B2Rsbxch/add-game-040-en.png)
 
 If you enable 'Advanced Options' on the main screen, two more buttons will appear: 'Add Games' and 'Edit/Delete Games'.<br>
 In this menu, you can add new games to the main list or edit existing manually added games.<br>
@@ -117,10 +118,9 @@ However, manually added games can be edited permanently.
 - **Full Name**: Name shown in the list
 - **Image Name**: Filename of the preview image. It must end with '_000' and be in PNG format. Just input the base name (e.g., 'rastan'). Additional rotating images should be named '001', '002', etc.
 - **Year and Company**: Optional game info.
-- **ZIP Archive**: Mark if the game is zipped. File must be in the directory set in 'Advanced Configuration'.
 - **Compatible with ScummVM**: Check if the game is supported by ScummVM.
 - **Only works in ScummVM**: The game only works with the ScummVM engine, so it will not be listed when other engines are selected. (Example: 'Arthur Teacher Trouble').
-- **Directory/ZIP File**: Indicate the folder or ZIP file name. If uncompressed, the folder must be in the same location as Gameplay.
+- **Directory/ZIP File**: Indicate the folder or ZIP file name. If uncompressed, the folder must be in the same location as Gameplay. If ZIP compressed, the game must be inside the ZIP folder configured.
 - **Executable File**: Full name of the game’s executable (e.g. '.exe', '.com', '.bat'). For disk images ('.img'), a second image option will unlock.
 - **Parameters**: Parameters to pass to the executable (e.g., 'Maniac Mansion')
 - **Run BEFORE**: DOS commands to run before starting the game (e.g., file copy or disk mount).

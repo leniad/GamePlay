@@ -3,7 +3,7 @@
 **Gameplay** está dividido en varias secciones.
 Si sólo quieres jugar, **inicialmente no hay que configurar nada**.
 
-![Pantalla Principal](https://i.ibb.co/NdMkjvC5/gameplay-030.png)
+![Pantalla Principal](https://i.ibb.co/kgMc9yXS/gameplay-040-es.png)
 
 ---
 ## 1. Pantalla principal
@@ -12,15 +12,17 @@ Si sólo quieres jugar, **inicialmente no hay que configurar nada**.
 Puedes elegir:
 - El idioma del juego.
 - El tipo de juego.
+
 La lista se actualizará según las opciones elegidas.
 
-### 1.2 Motor de emulación
-Puedes elegir entre tres programas para arrancar los juegos:
+### 1.2 Sistema a emular
+Puedes elegir entre:
 
-- **DosBox**: Emulador clásico, versión _staging_.
-- **DosBox-X**: Similar a DosBox, pero con funciones adicionales.
+- **MS-DOS**: Juegos para el sistema MS-DOS.
 - **ScummVM**: Solo para ciertas aventuras gráficas. Al seleccionarlo, la lista se ajusta automáticamente.
 - **DSP Emulator**: Emulador para Arcade, Ordenadores 8bits y Consolas
+- **Apple II**: Juegos para la serie de ordenadores Apple II
+- **Atari 800**: Juegos para la serie de ordenadores Atari 800
 
 > El emulador se configura automáticamente, no necesitas hacer nada.
 
@@ -33,8 +35,7 @@ Puedes elegir entre tres programas para arrancar los juegos:
 - **Opciones Avanzadas**: Mostrar las opciones avanzadas, o lo que es lo mismo, los botones para añadir juegos, editarlos o borrarlos.
 
 ### 1.4 Buscar juego
-Si tecleas el nombre del juego que buscas, se buscará y modificará la lista de juegos para buscar el que contenga las letras tecleadas.
-Pulsa `ESC`se borrará todo lo escrito y se mostrará la lista original
+Si tecleas el nombre del juego que buscas, se buscará en el listado.
 
 ### 1.5 Listado de juegos
 
@@ -44,7 +45,7 @@ Código de colores:
 - **Gris**: Juego listado, pero con errores y no disponible.
 - **Morado**: Juego que funciona sólo con el motor ScummVM.
 
-Juega haciendo `ENTER`, doble click o pulsando el botón de _Play_.
+Juega pulsando `ENTER` o doble click sobre el juego.
 > Si escribes el nombre, se buscará entre los de la lista.
 
 ### 1.6 Juegos disponibles / Juegos totales
@@ -104,7 +105,7 @@ Restaura la configuración original. (_Botón del pánico_)
 ---
 ## 3. Añadir / Modificar / Borrar Juegos (Opciones Avanzadas)
 
-![Modificar Juegos](https://i.ibb.co/bjNrwZJM/add-game.jpg)
+![Modificar Juegos](https://i.ibb.co/VYw0Y7q8/add-game-040-es.png)
 
 Si pulsas la opción en la pantalla principal 'Opciones Avanzadas' aparecerán dos botones extras, 'Añadir Juegos' y 'Modificar/Borrar Juegos'.<br>
 En este menú, puedes añadir juegos nuevos que se añadirán a la lista principal junto con los que vienen por defecto o puedes modificar los juegos ya añadidos.<br>
@@ -115,7 +116,6 @@ En cambio, si el juego lo has añadido manualmente, si podrás modificar los val
 - **Nombre completo**: Nombre que aparecerá en el listado
 - **Nombre de la imagen**: Aquí se especifica el nombre del fichero de la imagen de previsualización. Hay que tener varias cosas en cuenta, el nombre del fichero real debe finalizar con '_000' y el formato debe ser PNG, pero en este apartado no tienes que poner '_000.png' sólo el nombre. Por ejemplo, tenemos un fichero de imagen con el nombre 'rastan_000.png', si ponemos 'rastan' veremos que carga la imagen. Si queremos añadir más imágenes que vayan rotando cada segundo, simplemente deberemos llamarlas con '001', '002', etc. Siguiendo el ejemplo si tenemos tres ficheros de imágenes 'rastan_000.png', 'rastan_001.png' y 'rastan_002.png', veremos como se cargan las tres imágenes rotando con un segundo de tiempo entre cada una.
 - **Año de publicación y compañía**: Información del juego, es opcional.
-- **Fichero comprimido en ZIP**: Si el juego viene comprimido en ZIP, marca esta casilla. Ten en cuenta que el fichero debe estar en el directorio configurado en la sección 'Configuración Avanzada'.
 - **Compatible con ScummVM**: Si el juego está en el listado de los soportados por ScummVM, marca esta casilla. Cuando selecciones el motor de emulación ScummVM, este juego aparecerá en el listado
 -  **Sólo funciona en ScummVM**: El juego sólo funciona con el motor ScummVM, por lo que no se listará cuando se seleccione los otros motores. (Ejemplo: 'Arthur Teacher Trouble')
 - **Directorio/Fichero ZIP**: Aquí se debe indicar el directorio (en caso de que no esté comprimido) o el nombre del fichero ZIP. En caso de no estar comprimido, el directorio con el juego debe estar en el mismo lugar que Gameplay.

@@ -13,6 +13,7 @@ object Form4: TForm4
   Font.Name = 'Segoe UI'
   Font.Style = []
   Position = poDesigned
+  Scaled = False
   OnCreate = FormCreate
   OnShow = FormShow
   TextHeight = 15
@@ -96,7 +97,7 @@ object Form4: TForm4
     Width = 121
     Height = 49
     Caption = 'ACEPTAR'
-    TabOrder = 15
+    TabOrder = 8
     OnClick = Button1Click
   end
   object GroupBox2: TGroupBox
@@ -187,75 +188,13 @@ object Form4: TForm4
       OnClick = Button16Click
     end
   end
-  object RadioGroup1: TRadioGroup
-    Left = 591
-    Top = 164
-    Width = 294
-    Height = 90
-    Caption = 'Idioma'
-    TabOrder = 3
-  end
-  object RadioButton1: TRadioButton
-    Left = 648
-    Top = 187
-    Width = 89
-    Height = 15
-    Caption = 'Auto'
-    TabOrder = 4
-    OnClick = RadioButton1Click
-  end
-  object RadioButton2: TRadioButton
-    Left = 648
-    Top = 208
-    Width = 89
-    Height = 15
-    Caption = 'Espa'#241'ol'
-    TabOrder = 5
-    OnClick = RadioButton2Click
-  end
-  object RadioButton3: TRadioButton
-    Left = 648
-    Top = 229
-    Width = 89
-    Height = 15
-    Caption = 'English'
-    TabOrder = 6
-    OnClick = RadioButton3Click
-  end
-  object RadioButton4: TRadioButton
-    Left = 752
-    Top = 187
-    Width = 89
-    Height = 15
-    Caption = 'Deutsch'
-    TabOrder = 7
-    OnClick = RadioButton4Click
-  end
-  object RadioButton5: TRadioButton
-    Left = 752
-    Top = 208
-    Width = 81
-    Height = 15
-    Caption = 'Fran'#231'ais'
-    TabOrder = 8
-    OnClick = RadioButton5Click
-  end
-  object RadioButton6: TRadioButton
-    Left = 752
-    Top = 229
-    Width = 81
-    Height = 15
-    Caption = 'Italiano'
-    TabOrder = 9
-    OnClick = RadioButton6Click
-  end
   object Button7: TButton
     Left = 952
     Top = 391
     Width = 121
     Height = 49
     Caption = 'CANCELAR'
-    TabOrder = 16
+    TabOrder = 9
     OnClick = Button7Click
   end
   object GroupBox3: TGroupBox
@@ -398,7 +337,7 @@ object Form4: TForm4
     Width = 195
     Height = 17
     Caption = 'Leer valores de los juegos fijos'
-    TabOrder = 10
+    TabOrder = 3
     OnClick = CheckBox10Click
   end
   object CheckBox11: TCheckBox
@@ -407,7 +346,7 @@ object Form4: TForm4
     Width = 195
     Height = 17
     Caption = 'Mostrar todos los juegos'
-    TabOrder = 11
+    TabOrder = 4
     OnClick = CheckBox11Click
   end
   object Button14: TButton
@@ -418,7 +357,7 @@ object Form4: TForm4
     BiDiMode = bdLeftToRight
     Caption = 'VALORES'#13' POR DEFECTO'
     ParentBiDiMode = False
-    TabOrder = 14
+    TabOrder = 7
     WordWrap = True
     OnClick = Button14Click
   end
@@ -428,7 +367,7 @@ object Form4: TForm4
     Width = 195
     Height = 40
     Caption = 'Mostrar solo los juegos que no funcionan'
-    TabOrder = 12
+    TabOrder = 5
     WordWrap = True
     OnClick = CheckBox1Click
   end
@@ -438,9 +377,75 @@ object Form4: TForm4
     Width = 195
     Height = 40
     Caption = 'Mostrar solo juegos a'#241'adidos'
-    TabOrder = 13
+    TabOrder = 6
     WordWrap = True
     OnClick = CheckBox2Click
+  end
+  object GroupBox5: TGroupBox
+    Left = 665
+    Top = 176
+    Width = 150
+    Height = 94
+    Margins.Left = 5
+    Margins.Top = 5
+    Margins.Right = 5
+    Margins.Bottom = 5
+    Caption = 'Idioma'
+    TabOrder = 10
+    object RadioButton1: TRadioButton
+      Left = 10
+      Top = 27
+      Width = 89
+      Height = 15
+      Caption = 'Auto'
+      TabOrder = 0
+      OnClick = RadioButton1Click
+    end
+    object RadioButton2: TRadioButton
+      Left = 10
+      Top = 48
+      Width = 72
+      Height = 15
+      Caption = 'Espa'#241'ol'
+      TabOrder = 1
+      OnClick = RadioButton2Click
+    end
+    object RadioButton3: TRadioButton
+      Left = 10
+      Top = 69
+      Width = 69
+      Height = 15
+      Caption = 'English'
+      TabOrder = 2
+      OnClick = RadioButton3Click
+    end
+    object RadioButton4: TRadioButton
+      Left = 80
+      Top = 27
+      Width = 67
+      Height = 15
+      Caption = 'Deutsch'
+      TabOrder = 3
+      OnClick = RadioButton4Click
+    end
+    object RadioButton5: TRadioButton
+      Left = 80
+      Top = 48
+      Width = 68
+      Height = 15
+      Caption = 'Fran'#231'ais'
+      TabOrder = 4
+      OnClick = RadioButton5Click
+    end
+    object RadioButton6: TRadioButton
+      Left = 80
+      Top = 69
+      Width = 68
+      Height = 15
+      Caption = 'Italiano'
+      TabOrder = 5
+      OnClick = RadioButton6Click
+    end
   end
   object OpenDialog1: TOpenDialog
     Left = 628

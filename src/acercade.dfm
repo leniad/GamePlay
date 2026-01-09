@@ -3750,7 +3750,7 @@ object Form3: TForm3
       Top = 88
       Width = 214
       Height = 23
-      Caption = 'Copyright Leniad 2024-2025'
+      Caption = 'Copyright Leniad 2024-2026'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -17
