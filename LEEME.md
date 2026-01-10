@@ -1,6 +1,6 @@
 # GAMEPLAY
 ## ¿Qué es Gameplay?
-Es un frontend para DosBox, DosBox-X, Scumm y DSP Emulator. Te permite jugar a los juegos de MSDOS y Arcade de forma sencilla y rápida, sin complicaciones, sin nada que configurar, simplemente elijes el que quieres de la lista y a jugar, todo está preconfigurado (elegido el mejor audio, la mejor grafica, parámetros extra...).<br>
+Es un frontend para juegos de MS-DOS, ScummVM, Apple II, Atari 800 y DSP Emulator. Te permite jugar a los juegos de forma sencilla y rápida, sin complicaciones, sin nada que configurar, simplemente elijes el que quieres de la lista y a jugar, todo está preconfigurado (elegido el mejor audio, la mejor grafica, parámetros extra...).<br>
 ![Pantalla Principal](https://i.ibb.co/kgMc9yXS/gameplay-040-es.png)
 ### ¿A que juegos puedo jugar?
 Inicialmente hay un listado de 358 juegos de MSDOS, 68 de ScummVM (2 exclusivos), 102 de Apple II y 26 juegos de Atari 800 listos para jugar, incluyen imágenes de previsualización, manuales, mapas y guías, para poder disfrutar del juego completo. Tambien hay más de 400 juegos de Arcade, Consolas y Ordenadores de 8bits listos para jugar. No tienes que configurar nada, ni audio, ni video, nada, solo tienes que disfrutar.
