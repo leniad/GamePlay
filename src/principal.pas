@@ -57,11 +57,13 @@ type
     RadioButton8: TRadioButton;
     CheckBox15: TCheckBox;
     CheckBox18: TCheckBox;
+    GroupBox2: TGroupBox;
+    RadioButton2: TRadioButton;
+    RadioButton9: TRadioButton;
     procedure FormCreate(Sender: TObject);
     procedure StringGrid1Click(Sender: TObject);
     procedure StringGrid1DblClick(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
-    procedure BitBtn2Click(Sender: TObject);
     procedure StringGrid1DrawCell(Sender:TObject;ACol,ARow:LongInt;Rect:TRect;State:TGridDrawState);
     procedure RadioButton3Click(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -69,8 +71,6 @@ type
     procedure Button1Click(Sender:TObject);
     procedure Button2Click(Sender:TObject);
     procedure CheckBox1Click(Sender: TObject);
-    procedure CheckBox14Click(Sender: TObject);
-    procedure CheckBox2Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure RadioButton4Click(Sender: TObject);
     procedure RadioButton5Click(Sender: TObject);
@@ -85,6 +85,9 @@ type
     procedure StringGrid1KeyUp(Sender:TObject; var Key:Word;Shift:TShiftState);
     procedure CheckBox15Click(Sender:TObject);
     procedure CheckBox3Click(Sender: TObject);
+    procedure RadioButton6Click(Sender: TObject);
+    procedure RadioButton9Click(Sender: TObject);
+    procedure RadioButton2Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -102,17 +105,13 @@ var
   image_num:integer;
   typed:string;
 
-procedure TForm1.BitBtn2Click(Sender: TObject);
-begin
-abrir_ficheros_separados(games_final[numero_juego].map,main_config.dir_mapas);
-end;
-
 procedure TForm1.Button1Click(Sender: TObject);
 begin
   juego_editado:=total_juegos;
   estoy_anadiendo:=true;
   form2.showmodal;
   ordena_juegos;
+  mostrar_juegos;
 end;
 
 procedure TForm1.Button2Click(Sender: TObject);
@@ -122,24 +121,16 @@ begin
   estoy_anadiendo:=false;
   form2.showmodal;
   ordena_juegos;
-end;
-
-procedure TForm1.CheckBox14Click(Sender: TObject);
-begin
-  if form1.Visible then StringGrid1.SetFocus;
+  mostrar_juegos;
 end;
 
 procedure TForm1.CheckBox15Click(Sender: TObject);
 begin
   groupbox8.visible:=checkbox15.Checked;
-end;
-
-procedure TForm1.CheckBox1Click(Sender: TObject);
-begin
   if form1.Visible then StringGrid1.SetFocus;
 end;
 
-procedure TForm1.CheckBox2Click(Sender: TObject);
+procedure TForm1.CheckBox1Click(Sender: TObject);
 begin
   if form1.Visible then StringGrid1.SetFocus;
 end;
@@ -198,8 +189,18 @@ begin
   if form1.Visible then StringGrid1.SetFocus;
 end;
 
+procedure opciones_avanzadas_msdos;
+begin
+  form1.checkbox15.Enabled:=true;
+  form1.button1.Visible:=true;
+  form1.button2.Visible:=true;
+  form1.groupbox2.visible:=false;
+  form1.groupbox8.visible:=form1.checkbox15.Checked;
+end;
+
 procedure TForm1.RadioButton1Click(Sender: TObject);
 begin
+  main_config.motor:=MMSDOS;
   checkbox9.Enabled:=true;
   checkbox10.Enabled:=true;
   checkbox11.Enabled:=true;
@@ -215,18 +216,23 @@ begin
   checkbox8.Enabled:=true;
   checkbox17.Enabled:=true;
   checkbox2.Enabled:=true;
-  checkbox15.Enabled:=true;
-  groupbox8.visible:=checkbox15.Checked;
   groupbox9.visible:=true;
+  form1.groupbox8.Height:=148;
+  opciones_avanzadas_msdos;
   if stringgrid1.Cells[1,0]<>'' then button2.Enabled:=not(games_final[strtoint(stringgrid1.Cells[1,0])].interno) or main_config.leer_fijos;
   if total_juegos=0 then exit;
-  mostrar_juegos;
   stringgrid1.Row:=0;
-  if form1.Visible then StringGrid1.SetFocus;
+  mostrar_juegos;
+end;
+
+procedure TForm1.RadioButton2Click(Sender: TObject);
+begin
+  main_config.apple2_joy:=false;
 end;
 
 procedure TForm1.RadioButton3Click(Sender: TObject);
 begin
+  main_config.motor:=MSCUMM;
   checkbox9.Enabled:=true;
   checkbox10.Enabled:=true;
   checkbox11.Enabled:=true;
@@ -242,18 +248,18 @@ begin
   checkbox8.Enabled:=false;
   checkbox17.Enabled:=false;
   checkbox2.Enabled:=false;
-  checkbox15.Enabled:=true;
-  groupbox8.visible:=checkbox15.Checked;
   groupbox9.visible:=false;
+  form1.groupbox8.Height:=90;
+  opciones_avanzadas_msdos;
   if stringgrid1.Cells[1,0]<>'' then button2.Enabled:=not(games_final[strtoint(stringgrid1.Cells[1,0])].interno) or main_config.leer_fijos;
   if total_juegos=0 then exit;
-  mostrar_juegos;
   stringgrid1.Row:=0;
-  if form1.Visible then StringGrid1.SetFocus;
+  mostrar_juegos;
 end;
 
 procedure TForm1.RadioButton4Click(Sender: TObject);
 begin
+  main_config.motor:=MDSP;
   checkbox9.Enabled:=false;
   checkbox10.Enabled:=false;
   checkbox11.Enabled:=false;
@@ -272,13 +278,13 @@ begin
   checkbox15.Enabled:=false;
   groupbox8.visible:=false;
   if total_juegos=0 then exit;
-  mostrar_juegos;
   stringgrid1.Row:=0;
-  if form1.Visible then StringGrid1.SetFocus;
+  mostrar_juegos;
 end;
 
 procedure TForm1.RadioButton5Click(Sender: TObject);
 begin
+  main_config.motor:=MAPPLE2;
   checkbox9.Enabled:=false;
   checkbox10.Enabled:=false;
   checkbox11.Enabled:=false;
@@ -294,22 +300,58 @@ begin
   checkbox8.Enabled:=true;
   checkbox17.Enabled:=true;
   checkbox2.Enabled:=true;
-  checkbox15.Enabled:=false;
-  groupbox8.visible:=false;
+  checkbox15.Enabled:=true;
+  button1.Visible:=false;
+  button2.Visible:=false;
+  form1.groupbox8.Height:=90;
+  groupbox9.visible:=false;
+  groupbox2.visible:=true;
+  groupbox8.visible:=checkbox15.Checked;
   if total_juegos=0 then exit;
-  mostrar_juegos;
   stringgrid1.Row:=0;
-  if form1.Visible then StringGrid1.SetFocus;
+  mostrar_juegos;
+end;
+
+procedure TForm1.RadioButton6Click(Sender: TObject);
+begin
+  main_config.motor:=MATARI8;
+  form1.checkbox9.Enabled:=false;
+  form1.checkbox10.Enabled:=false;
+  form1.checkbox11.Enabled:=false;
+  form1.checkbox12.Enabled:=false;
+  form1.checkbox13.Enabled:=false;
+  form1.checkbox18.Enabled:=false;
+  form1.checkbox3.Enabled:=true;
+  form1.checkbox16.Enabled:=true;
+  form1.checkbox6.Enabled:=true;
+  form1.checkbox4.Enabled:=true;
+  form1.checkbox5.Enabled:=true;
+  form1.checkbox7.Enabled:=true;
+  form1.checkbox8.Enabled:=true;
+  form1.checkbox17.Enabled:=true;
+  form1.checkbox2.Enabled:=true;
+  form1.checkbox15.Enabled:=false;
+  form1.groupbox8.visible:=false;
+  if total_juegos=0 then exit;
+  form1.stringgrid1.Row:=0;
+  mostrar_juegos;
 end;
 
 procedure TForm1.RadioButton7Click(Sender: TObject);
 begin
   main_config.motor_msdos:=0;
+  if form1.Visible then StringGrid1.SetFocus;
 end;
 
 procedure TForm1.RadioButton8Click(Sender: TObject);
 begin
   main_config.motor_msdos:=1;
+  if form1.Visible then StringGrid1.SetFocus;
+end;
+
+procedure TForm1.RadioButton9Click(Sender: TObject);
+begin
+  main_config.apple2_joy:=true;
 end;
 
 procedure TForm1.StringGrid1Click(Sender: TObject);
@@ -337,7 +379,7 @@ begin
     poner_en_blanco;
     exit;
   end;
-  if radiobutton4.Checked then begin
+  if main_config.motor=MDSP then begin
     //Imagenes DSP
     image_string:=dir_dsp+'preview\'+games_final[ngame].dir+'.png';
     if FileExists(image_string) then Image1.Picture.LoadFromFile(image_string)
@@ -379,9 +421,10 @@ begin
   if ngame=-1 then exit;
   if ((state=[gdSelected,gdFocused]) or (state=[gdSelected])) then
     with TStringGrid(Sender),Canvas do begin
+      font.Color:=0;
       if games_final[ngame].mal then Brush.Color:=BadColor
-        else if (games_final[ngame].motor=1) then Brush.Color:=ScummColor
-          else if (games_final[ngame].interno or (games_final[ngame].motor=255)) then Brush.Color:=SelectedColor
+        else if (games_final[ngame].motor=MSCUMM) then Brush.Color:=ScummColor
+          else if (games_final[ngame].interno or (games_final[ngame].motor=MDSP)) then Brush.Color:=SelectedColor
             else Brush.Color:=AddedColor;
       FillRect(Rect);
       TextRect(Rect,Rect.Left+2,Rect.Top+2,Cells[aCol,aRow]);
@@ -392,10 +435,10 @@ procedure TForm1.StringGrid1KeyUp(Sender: TObject; var Key: Word; Shift: TShiftS
 var
   f:integer;
   temps:string;
-  myRect:TGridRect;
 begin
 case key of
-  13:StringGrid1DblClick(nil);
+  13:if not(estoy_ejecutando) then StringGrid1DblClick(nil)
+        else estoy_ejecutando:=false;
   48..57,65..90:begin
             typed:=typed+lowercase(char(key));
             timer2.Enabled:=false;
@@ -403,14 +446,9 @@ case key of
             for f:=1 to (stringgrid1.RowCount-1) do begin
               temps:=ansilowercase(copy(stringgrid1.Cells[0,f],0,length(typed)));
               if typed=temps then begin
-                myRect.Left:=0;
-                myRect.Top:=f;
-                myRect.Right:=1;
-                myRect.Bottom:=f;
-                stringgrid1.Selection:=myRect;
+                stringgrid1.row:=f;
                 if (f-10)<1 then stringgrid1.TopRow:=1
                   else stringgrid1.TopRow:=f-10;
-                stringgrid1.Options:=stringgrid1.Options+[goRowSelect];
                 StringGrid1Click(nil);
                 break;
               end;

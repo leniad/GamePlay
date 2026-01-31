@@ -3721,8 +3721,8 @@ object Form1: TForm1
     Caption = 'Total: ---/---'
   end
   object Image2: TImage
-    Left = 895
-    Top = 533
+    Left = 988
+    Top = 464
     Width = 38
     Height = 40
     Cursor = crHandPoint
@@ -6472,7 +6472,7 @@ object Form1: TForm1
       Checked = True
       State = cbChecked
       TabOrder = 1
-      OnClick = CheckBox2Click
+      OnClick = CheckBox1Click
     end
     object CheckBox14: TCheckBox
       Left = 16
@@ -6484,7 +6484,7 @@ object Form1: TForm1
       Checked = True
       State = cbChecked
       TabOrder = 2
-      OnClick = CheckBox14Click
+      OnClick = CheckBox1Click
     end
     object GroupBox7: TGroupBox
       Left = 16
@@ -6536,7 +6536,7 @@ object Form1: TForm1
         Height = 17
         Caption = 'Atari 800'
         TabOrder = 4
-        OnClick = RadioButton5Click
+        OnClick = RadioButton6Click
       end
     end
     object CheckBox15: TCheckBox
@@ -6790,12 +6790,42 @@ object Form1: TForm1
   object GroupBox8: TGroupBox
     Left = 673
     Top = 364
-    Width = 320
+    Width = 293
     Height = 148
     Caption = 'Opciones Avanzadas'
     TabOrder = 4
+    object GroupBox2: TGroupBox
+      Left = 18
+      Top = 20
+      Width = 214
+      Height = 64
+      Margins.Left = 5
+      Margins.Top = 5
+      Margins.Right = 5
+      Margins.Bottom = 5
+      Caption = 'Emular Joystick'
+      TabOrder = 3
+      object RadioButton2: TRadioButton
+        Left = 14
+        Top = 20
+        Width = 89
+        Height = 15
+        Caption = 'Teclado'
+        TabOrder = 0
+        OnClick = RadioButton2Click
+      end
+      object RadioButton9: TRadioButton
+        Left = 14
+        Top = 39
+        Width = 89
+        Height = 18
+        Caption = 'Joystick'
+        TabOrder = 1
+        OnClick = RadioButton9Click
+      end
+    end
     object Button1: TButton
-      Left = 59
+      Left = 35
       Top = 28
       Width = 100
       Height = 41
@@ -6806,7 +6836,7 @@ object Form1: TForm1
       OnClick = Button1Click
     end
     object Button2: TButton
-      Left = 181
+      Left = 165
       Top = 28
       Width = 100
       Height = 41

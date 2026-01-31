@@ -125,12 +125,12 @@
         <VerInfo_Locale>1033</VerInfo_Locale>
         <Icon_MainIcon>gfx\gameplay_Icon_b.ico</Icon_MainIcon>
         <VerInfo_MajorVer>0</VerInfo_MajorVer>
-        <VerInfo_MinorVer>30</VerInfo_MinorVer>
-        <VerInfo_Keys>CompanyName=Leniad;FileDescription=$(MSBuildProjectName);FileVersion=0.30.0.39;InternalName=GamePlay;LegalCopyright=Leniad;LegalTrademarks=;OriginalFilename=;ProgramID=com.embarcadero.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=0.20.0;Comments=</VerInfo_Keys>
+        <VerInfo_MinorVer>41</VerInfo_MinorVer>
+        <VerInfo_Keys>CompanyName=Leniad;FileDescription=$(MSBuildProjectName);FileVersion=0.41.0.46;InternalName=GamePlay;LegalCopyright=Leniad;LegalTrademarks=;OriginalFilename=;ProgramID=com.embarcadero.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=0.20.0;Comments=</VerInfo_Keys>
         <UWP_DelphiLogo44>gfx\gameplay_Icon.png</UWP_DelphiLogo44>
         <UWP_DelphiLogo150>gfx\gameplay_Icon.png</UWP_DelphiLogo150>
         <VerInfo_AutoIncVersion>true</VerInfo_AutoIncVersion>
-        <VerInfo_Build>39</VerInfo_Build>
+        <VerInfo_Build>46</VerInfo_Build>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win64)'!=''">
         <AppDPIAwarenessMode>PerMonitorV2</AppDPIAwarenessMode>

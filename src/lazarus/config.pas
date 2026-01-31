@@ -35,6 +35,7 @@ type
     GroupBox1: TGroupBox;
     GroupBox2: TGroupBox;
     GroupBox3: TGroupBox;
+    GroupBox5: TGroupBox;
     LabeledEdit1: TLabeledEdit;
     LabeledEdit10: TLabeledEdit;
     LabeledEdit11: TLabeledEdit;
@@ -55,7 +56,6 @@ type
     RadioButton4: TRadioButton;
     RadioButton5: TRadioButton;
     RadioButton6: TRadioButton;
-    RadioGroup1: TRadioGroup;
     procedure Button10Click(Sender: TObject);
     procedure Button11Click(Sender: TObject);
     procedure Button12Click(Sender: TObject);
