@@ -1,6 +1,6 @@
 # GamePlay status #
 ![Main Screen](https://i.ibb.co/JWy6v0yY/gameplay-042-en.png)<br>
-<b>13/02/26 - GamePlay updated to 0.42b<br>
+<b>14/02/26 - GamePlay updated to 0.42b
 <pre>
 -General
     +Fixed game filters
