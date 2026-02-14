@@ -1,5 +1,5 @@
 ﻿unit main;
-{$DEFINE IS_DEBUG}
+//{$DEFINE IS_DEBUG}
 interface
 
 procedure form_principal_create;
@@ -25,6 +25,7 @@ type
     nombre:string;
     dir:string;
     exec:string;
+    loadfix:boolean;
     params:string;
     exec_pre:string;
     exec_post:string;
@@ -88,7 +89,7 @@ const
   MDSP=255;
   MAX_GAMES=2000;
   TEMP_DIR='TEMP';
-  VERSION='v0.50β';
+  VERSION='v0.42β';
   {$IFDEF IS_DEBUG}
   {$ifndef windows}
   debug_base_dir='/home/leniad/abandon/GamePlayVol1/';
@@ -102,7 +103,7 @@ var
   games_final:array[0..(MAX_GAMES-1)] of tipo_final;
   main_config:tipo_config;
   idioma_sel,juego_editado,total_juegos,total_scumm,total_apple,total_atari800,total_msdos:integer;
-  estoy_anadiendo,estoy_ejecutando:boolean;
+  ejecutar_setup,estoy_anadiendo,estoy_ejecutando:boolean;
   dir_dsp:string;
 
 implementation
@@ -246,13 +247,14 @@ end;
 end;
 
 begin
+if total_juegos=0 then exit;
 form1.stringgrid1.RowCount:=total_juegos;
 form1.Timer1.Enabled:=false;
 contador:=0;
-for f:=0 to form1.StringGrid1.ColCount-1 do form1.StringGrid1.Cols[f].Clear;
 for f:=0 to (total_juegos-1) do begin
   //DSP
-  if (games_final[orden_games[f]].motor=main_config.motor) then begin
+  if (games_final[orden_games[f]].motor=MDSP) then begin
+    if main_config.motor<>MDSP then continue;
     if main_config.mostrar_todos then poner_juego_dsp(f)
       else begin
               if main_config.mostrar_fallan then begin
@@ -396,6 +398,7 @@ for f:=0 to (GAME_TOTAL-1) do begin
   games_final[f].nombre:=GAME_DATA[f].nombre;
   games_final[f].dir:=GAME_DATA[f].dir;
   games_final[f].exec:=GAME_DATA[f].exec;
+  games_final[f].loadfix:=GAME_DATA[f].loadfix;
   games_final[f].params:=GAME_DATA[f].params;
   games_final[f].exec_pre:=GAME_DATA[f].exec_pre;
   games_final[f].exec_post:=GAME_DATA[f].exec_post;
@@ -471,6 +474,7 @@ if fileexists(main_config.dir_base+'extra_games.info') then begin
     games_final[total_juegos].setup:=sacar_datos(juego);
     games_final[total_juegos].zip:=sacar_numero(sacar_datos(juego))<>0; //Lo dejo para no romper la compatibilidad
     games_final[total_juegos].motor:=sacar_numero(sacar_datos(juego));
+    games_final[total_juegos].loadfix:=sacar_numero(sacar_datos(juego))<>0;
     games_final[total_juegos].interno:=false;
     //Primero compruebo si existe el directorio y el fichero ejecutable
     juego:=games_final[total_juegos].exec;
@@ -726,6 +730,7 @@ begin
   if main_config.motor_msdos=0 then form1.radiobutton7.Checked:=true
     else form1.RadioButton8.Checked:=true;
   estoy_ejecutando:=false;
+  ejecutar_setup:=false;
 end;
 
 procedure guardar_juegos_anadidos;
@@ -805,6 +810,8 @@ begin
 delete_dir(TEMP_DIR);
 //Borro el directorio que deja el doom!
 delete_dir('DOOMDATA');
+deletefile(main_config.dir_base+'LCACHE00.TMP');
+delete_dir('DELUXE');
 if DirectoryExists(main_config.dir_base) then begin
   {$I-}
   //grabo los juegos
@@ -897,7 +904,7 @@ end;
 
 procedure form_principal_execute;
 var
-  cd_rom_dir,exec_dir,exec_base,exec_memoria,exec_parametros,exec_dosbox_extra_config,temp_str,temp_disco,exec_mapper,exec_sd,exec_roland,exec_extra,exec_params,exec_gus,exec_sound,exec_c_param,exec_string,param_string,exec_ciclos,exec_video,exec_fullscreen,exec_pre:string;
+  cd_rom_dir,exec_dir,exec_base,exec_memoria,exec_parametros,exec_dosbox_extra_config,temp_str,temp_str2,temp_disco,exec_mapper,exec_sd,exec_roland,exec_extra,exec_params,exec_gus,exec_sound,exec_c_param,exec_string,param_string,exec_ciclos,exec_video,exec_fullscreen,exec_pre:string;
   ngame:integer;
   play_file:textfile;
   {$IFNDEF WINDOWS}
@@ -1027,8 +1034,8 @@ case main_config.motor of
   end;
   MMSDOS:begin //MS-DOS
     //cantidad de memoria
-    if games_final[ngame].memoria=0 then exec_memoria:='16'
-      else exec_memoria:=inttostr(games_final[ngame].memoria);
+    if games_final[ngame].memoria<>0 then exec_memoria:=inttostr(games_final[ngame].memoria)
+      else exec_memoria:='16';
     //Configurar directorio del ejecutable, el ejecutable, si hay fichero extra de config y los parametros indispensables, el mt32 y los ciclos
     case main_config.motor_msdos of
       0:begin //DosBox
@@ -1051,6 +1058,7 @@ case main_config.motor of
           exec_ciclos:='-set cycles=';
         end;
     end;
+    //Velocidad CPU
     if games_final[ngame].ciclos=-1 then exec_ciclos:=exec_ciclos+'auto'
       else if games_final[ngame].ciclos=1 then exec_ciclos:=exec_ciclos+'max'
         else if games_final[ngame].ciclos<>0 then exec_ciclos:=exec_ciclos+inttostr(games_final[ngame].ciclos)
@@ -1071,22 +1079,27 @@ case main_config.motor of
     end;
     //Comprobar parametros previos a la ejecucion
     if games_final[ngame].exec_pre<>'' then begin
-      exec_pre:=games_final[ngame].exec_pre;
-      if ContainsText(exec_pre,'[GAME_DIR]') then begin
+        exec_pre:=games_final[ngame].exec_pre;
         //Si es un ZIP la carpeta base es TEMP
-        if games_final[ngame].zip then temp_str:=main_config.dir_base+TEMP_DIR+'\'+games_final[ngame].dir
-          else temp_str:=main_config.dir_base+games_final[ngame].dir;
+        if games_final[ngame].zip then begin
+            temp_str:=main_config.dir_base+TEMP_DIR+'\'+games_final[ngame].dir;
+            temp_str2:='c:\'+TEMP_DIR+'\'+games_final[ngame].dir;
+        end else begin
+           temp_str:=main_config.dir_base+games_final[ngame].dir;
+            temp_str2:='c:\'+games_final[ngame].dir;
+        end;
         exec_pre:=StringReplace(exec_pre,'[GAME_DIR]','"'+temp_str+'"',[]);
-      end;
-      if ContainsText(exec_pre,'[RET]') then exec_pre:=StringReplace(exec_pre,'[RET]',RETURN,[rfReplaceAll]);
-      WriteLn(play_file,exec_pre);
+        exec_pre:=StringReplace(exec_pre,'[GAME_INT]',temp_str2,[]);
+        if ContainsText(exec_pre,'[RET]') then exec_pre:=StringReplace(exec_pre,'[RET]',RETURN,[rfReplaceAll]);
+        WriteLn(play_file,exec_pre);
     end;
     //Añadir, si existe, un fichero de setup que hay que ejecutar
-    if games_final[ngame].setup<>'' then WriteLn(play_file,games_final[ngame].setup);
+    if ejecutar_setup then WriteLn(play_file,games_final[ngame].setup);
     //Añadir el ejecutable
     exec_params:=games_final[ngame].params;
     if ContainsText(games_final[ngame].exec,'.bat') then WriteLn(play_file,'call '+games_final[ngame].exec+' '+exec_params)
-      else WriteLn(play_file,games_final[ngame].exec+' '+exec_params);
+      else if games_final[ngame].loadfix then WriteLn(play_file,'loadfix '+games_final[ngame].exec+' '+exec_params)
+            else WriteLn(play_file,games_final[ngame].exec+' '+exec_params);
     //Añadir el ejecutable post
     if games_final[ngame].exec_post<>'' then begin
         temp_str:=games_final[ngame].exec_post;
@@ -1112,6 +1125,7 @@ case main_config.motor of
     exec_video:='';
     if games_final[ngame].grafica<>'' then begin
       exec_video:='-machine '+games_final[ngame].grafica;
+      exec_memoria:='1';
       //Si es Dosbox, cambio el parametro
       if ((main_config.motor_msdos=0) and ContainsText(exec_video,'cga_composite')) then exec_video:='-machine cga -set composite=true';
     end;
@@ -1121,10 +1135,11 @@ case main_config.motor of
     if games_final[ngame].mapper<>'' then exec_mapper:='-set mapperfile="'+main_config.dir_base+'extras\mappers\'+games_final[ngame].mapper +'"'
       else exec_mapper:='';
     //Comprobar si es un PC-Booter (tiene la extension .img) o un cartucho PCJR
-    if (ContainsText(games_final[ngame].exec,'.img') or ContainsText(games_final[ngame].exec,'.jrc')) then begin
+    if ((ContainsText(games_final[ngame].exec,'.img') or ContainsText(games_final[ngame].exec,'.jrc')) and not(ContainsText(games_final[ngame].exec_pre,'imgmount'))) then begin
       if games_final[ngame].segundo_disco<>'' then exec_sd:=' c:\'+exec_dir+'\'+games_final[ngame].segundo_disco
         else exec_sd:='';
       exec_c_param:='-c "boot c:\'+exec_dir+'\'+games_final[ngame].exec+exec_sd+'"';
+      exec_memoria:='1';
     end else begin
       exec_c_param:='-c c:\TEMP\start.bat'
     end;
@@ -1183,6 +1198,7 @@ begin
   if es_zip then temps:=stringreplace(temps,'.zip','',[rfIgnoreCase]);
   games_final[juego_editado].dir:=temps;
   games_final[juego_editado].exec:=form2.labelededit5.Text;
+  games_final[juego_editado].loadfix:=form2.CheckBox3.Checked;
   games_final[juego_editado].params:=form2.labelededit6.Text;
   games_final[juego_editado].exec_pre:=form2.labelededit7.Text;
   games_final[juego_editado].exec_post:=form2.labelededit8.Text;
@@ -1294,6 +1310,7 @@ if not(estoy_anadiendo) then begin
   if games_final[juego_editado].zip then form2.labelededit9.Text:=games_final[juego_editado].dir+'.zip'
     else form2.labelededit9.Text:=games_final[juego_editado].dir;
   form2.labelededit5.Text:=games_final[juego_editado].exec;
+  form2.CheckBox3.Checked:=games_final[juego_editado].loadfix;
   if ContainsText(form2.labelededit5.Text,'.img') then form2.labelededit10.Enabled:=true
     else form2.labelededit10.Enabled:=false;
   form2.labelededit6.Text:=games_final[juego_editado].params;

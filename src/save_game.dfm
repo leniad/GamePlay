@@ -217,6 +217,17 @@ object Form2: TForm2
       TabOrder = 6
       Text = ''
     end
+    object CheckBox3: TCheckBox
+      Left = 567
+      Top = 25
+      Width = 95
+      Height = 27
+      Caption = 'Loadfix'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 8
+      OnClick = CheckBox4Click
+    end
   end
   object GroupBox10: TGroupBox
     Left = 8

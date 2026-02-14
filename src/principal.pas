@@ -4,7 +4,8 @@ interface
 uses
   Winapi.Windows,  System.SysUtils,  Vcl.Graphics, Vcl.Forms,
   Vcl.Grids, Vcl.StdCtrls, Vcl.Buttons, Vcl.ExtCtrls,pngimage, Vcl.Controls,
-  System.Classes, System.ImageList, Vcl.ImgList,inifiles,dialogs, Vcl.Mask;
+  System.Classes, System.ImageList, Vcl.ImgList,inifiles,dialogs, Vcl.Mask,
+  Vcl.Imaging.jpeg;
 
 type
   TForm1 = class(TForm)
@@ -60,6 +61,7 @@ type
     GroupBox2: TGroupBox;
     RadioButton2: TRadioButton;
     RadioButton9: TRadioButton;
+    Image7: TImage;
     procedure FormCreate(Sender: TObject);
     procedure StringGrid1Click(Sender: TObject);
     procedure StringGrid1DblClick(Sender: TObject);
@@ -88,6 +90,7 @@ type
     procedure RadioButton6Click(Sender: TObject);
     procedure RadioButton9Click(Sender: TObject);
     procedure RadioButton2Click(Sender: TObject);
+    procedure Image7Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -187,6 +190,14 @@ procedure TForm1.Image6Click(Sender: TObject);
 begin
   form3.showmodal;
   if form1.Visible then StringGrid1.SetFocus;
+end;
+
+procedure TForm1.Image7Click(Sender: TObject);
+begin
+  ejecutar_setup:=true;
+  form_principal_execute;
+  ejecutar_setup:=false;
+  if form1.Visible then groupbox7.SetFocus;
 end;
 
 procedure opciones_avanzadas_msdos;
@@ -397,6 +408,7 @@ begin
   image4.visible:=games_final[ngame].manual<>'';
   image3.visible:=games_final[ngame].guia<>'';
   image5.visible:=games_final[ngame].map<>'';
+  image7.visible:=games_final[ngame].setup<>'';
   label3.Caption:=games_final[ngame].company;
   label4.Caption:=games_final[ngame].year;
   button2.Enabled:=not(games_final[ngame].interno) or main_config.leer_fijos;

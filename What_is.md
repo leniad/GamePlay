@@ -1,9 +1,9 @@
 # GAMEPLAY
 ### What is Gameplay?
 Gameplay is a frontend for MS-DOS, ScummVM, Apple II, Atari 800 and DSP Emulator. It lets you play games easily and quickly — no complications, no configuration needed. Just choose a game from the list and play. Everything is preconfigured (best audio, best graphics, extra parameters, etc.).<br>
-![Main Screen](https://i.ibb.co/7JTdbBSz/gameplay-040-en.png)
+![Main Screen](https://i.ibb.co/JWy6v0yY/gameplay-042-en.png)
 ### Which games can I play?
-Initially, there's a list of 358 MS-DOS, 68 ScummVM (2 exclusive), 102 Apple II and 26 Atari 800 ready-to-play games. They include preview images, manuals, maps, and guides so you can enjoy the full game experience. There are also more than 400 Arcade games, Console, 8bits Computer emulator ready-to-play. No need to configure anything—not audio, not video—just enjoy.
+Initially, there's a list of 403 MS-DOS, 71 ScummVM (2 exclusive), 109 Apple II and 35 Atari 800 ready-to-play games. They include preview images, manuals, maps, and guides so you can enjoy the full game experience. There are also more than 400 Arcade games, Console, 8bits Computer emulator ready-to-play. No need to configure anything—not audio, not video—just enjoy.
 ### Can I add more games?
 Of course! If you have MS-DOS favorite games that aren't on the list, you can easily and quickly add your own. In the advanced options, you can choose ZIP format, add a CD-ROM, change memory settings, video card, attach manuals, guides, maps, and more.
 ### What language is Gameplay in?

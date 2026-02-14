@@ -47,6 +47,7 @@ type
     LabeledEdit20: TLabeledEdit;
     CheckBox2: TCheckBox;
     CheckBox4: TCheckBox;
+    CheckBox3: TCheckBox;
     procedure FormCreate(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure Button1Click(Sender: TObject);
