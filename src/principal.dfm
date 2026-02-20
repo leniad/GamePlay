@@ -5,7 +5,7 @@ object Form1: TForm1
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'Opciones Avanzadas'
-  ClientHeight = 600
+  ClientHeight = 626
   ClientWidth = 1050
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -3715,14 +3715,14 @@ object Form1: TForm1
   TextHeight = 20
   object Label5: TLabel
     Left = 392
-    Top = 576
+    Top = 598
     Width = 82
     Height = 20
     Caption = 'Total: ---/---'
   end
   object Image2: TImage
     Left = 988
-    Top = 464
+    Top = 492
     Width = 38
     Height = 40
     Cursor = crHandPoint
@@ -5839,7 +5839,7 @@ object Form1: TForm1
   end
   object Image6: TImage
     Left = 972
-    Top = 518
+    Top = 549
     Width = 78
     Height = 78
     Cursor = crHandPoint
@@ -6428,8 +6428,8 @@ object Form1: TForm1
     OnClick = Image6Click
   end
   object Image7: TImage
-    Left = 805
-    Top = 368
+    Left = 806
+    Top = 376
     Width = 100
     Height = 50
     Cursor = crHandPoint
@@ -6527,7 +6527,7 @@ object Form1: TForm1
     Left = 242
     Top = 8
     Width = 418
-    Height = 555
+    Height = 584
     ColCount = 2
     FixedColor = clWhite
     FixedCols = 0
@@ -6545,12 +6545,12 @@ object Form1: TForm1
     Left = 8
     Top = 359
     Width = 214
-    Height = 237
+    Height = 259
     Caption = 'Opciones Generales'
     TabOrder = 1
     object CheckBox1: TCheckBox
       Left = 16
-      Top = 150
+      Top = 170
       Width = 213
       Height = 19
       TabStop = False
@@ -6560,7 +6560,7 @@ object Form1: TForm1
     end
     object CheckBox2: TCheckBox
       Left = 16
-      Top = 190
+      Top = 210
       Width = 212
       Height = 19
       TabStop = False
@@ -6572,7 +6572,7 @@ object Form1: TForm1
     end
     object CheckBox14: TCheckBox
       Left = 16
-      Top = 170
+      Top = 190
       Width = 97
       Height = 19
       TabStop = False
@@ -6586,7 +6586,7 @@ object Form1: TForm1
       Left = 16
       Top = 17
       Width = 177
-      Height = 128
+      Height = 147
       Caption = 'Sistema'
       TabOrder = 3
       object RadioButton1: TRadioButton
@@ -6634,10 +6634,19 @@ object Form1: TForm1
         TabOrder = 4
         OnClick = RadioButton6Click
       end
+      object RadioButton10: TRadioButton
+        Left = 16
+        Top = 120
+        Width = 97
+        Height = 20
+        Caption = 'Amiga'
+        TabOrder = 5
+        OnClick = RadioButton10Click
+      end
     end
     object CheckBox15: TCheckBox
       Left = 16
-      Top = 210
+      Top = 230
       Width = 212
       Height = 19
       TabStop = False
@@ -6885,7 +6894,7 @@ object Form1: TForm1
   end
   object GroupBox8: TGroupBox
     Left = 673
-    Top = 420
+    Top = 440
     Width = 280
     Height = 148
     Caption = 'Opciones Avanzadas'

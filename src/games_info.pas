@@ -586,7 +586,19 @@ const
   (image_name:'madtv';tipo:ARCADE),
   (manual:'lsl6_en_manual.pdf$lsl6_hintbook.pdf$lsl6_RC.pdf';image_name:'lsl6';idioma:ING;tipo:AG),
   (manual:'lsl5_playspy_es.pdf$lsl5_Folleto AeroDork Airlines.pdf$lsl5_HintBook.pdf';image_name:'lsl5';idioma:ESP;tipo:AG),
-  (manual:'lsl5_playspy_en.pdf$lsl5_AeroDork_Airlines_Pamphlet.pdf$lsl5_HintBook.pdf$lsl5_RF.pdf';image_name:'lsl5';idioma:ING;tipo:AG)
+  (manual:'lsl5_playspy_en.pdf$lsl5_AeroDork_Airlines_Pamphlet.pdf$lsl5_HintBook.pdf$lsl5_RF.pdf';image_name:'lsl5';idioma:ING;tipo:AG),
+  (manual:'gng_manual.pdf';image_name:'gng_amiga';tipo:ARCADE),
+  (image_name:'savage_amiga';tipo:ARCADE;mensaje:'Cuando pida cambiar el disco pulsa [KEY_DISK] e inserta otro disco'),
+  (image_name:'gng2_amiga';tipo:ARCADE;mensaje:'Cuando pida el disco B pulsa [KEY_DISK] y seleccionalo'),
+  (manual:'afterwar_manual.pdf';image_name:'afterwar_amiga';tipo:ARCADE),
+  (manual:'nebulus_manual.pdf';image_name:'nebulus_amiga';tipo:ARCADE),
+  (image_name:'rislands_amiga';tipo:ARCADE),
+  (manual:'speedball2_manual.pdf$speedball2_RF.pdf$speedball2_programme.pdf';image_name:'sball2_amiga';tipo:ARCADE),
+  (image_name:'sentinel_amiga';tipo:ARCADE),
+  (manual:'sq1_manual.pdf';image_name:'sq_amiga';tipo:AG),
+  (manual:'lsl1_manual.pdf';image_name:'larry1_amiga';tipo:AG),
+  (image_name:'beachv_amiga';tipo:ARCADE),
+  (image_name:'banshee_amiga';tipo:ARCADE;mensaje:'Cuando pida cambiar el disco pulsa [KEY_DISK] e inserta otro disco')
   );
 
 implementation

@@ -59,6 +59,7 @@ type
      config_scummvm:string;
      config_atari800:string;
      config_apple:string;
+     config_amiga:string;
      leer_fijos:boolean;
      mostrar_todos:boolean;
      mostrar_fallan:boolean;
@@ -71,6 +72,7 @@ type
      dsp_exe:string;
      apple2_exe:string;
      atari800_exe:string;
+     amiga_exe:string;
      dir_manual:string;
      dir_mapas:string;
      dir_guias:string;
@@ -86,10 +88,11 @@ const
   MSCUMM=1;
   MAPPLE2=2;
   MATARI8=3;
+  MAMIGA=4;
   MDSP=255;
   MAX_GAMES=2000;
   TEMP_DIR='TEMP';
-  VERSION='v0.42β';
+  VERSION='v0.50β';
   {$IFDEF IS_DEBUG}
   {$ifndef windows}
   debug_base_dir='/home/leniad/abandon/GamePlayVol1/';
@@ -102,7 +105,7 @@ var
   orden_games:array[0..(MAX_GAMES-1)] of integer;
   games_final:array[0..(MAX_GAMES-1)] of tipo_final;
   main_config:tipo_config;
-  idioma_sel,juego_editado,total_juegos,total_scumm,total_apple,total_atari800,total_msdos:integer;
+  idioma_sel,juego_editado,total_juegos,total_scumm,total_apple,total_atari800,total_msdos,total_amiga:integer;
   ejecutar_setup,estoy_anadiendo,estoy_ejecutando:boolean;
   dir_dsp:string;
 
@@ -279,6 +282,7 @@ end;
     MSCUMM:temp_str:=inttostr(total_scumm);
     MAPPLE2:temp_str:=inttostr(total_apple);
     MATARI8:temp_str:=inttostr(total_atari800);
+    MAMIGA:temp_str:=inttostr(total_amiga);
     MDSP:temp_str:=inttostr(GAME_TOTAL_DSP);
   end;
   form1.Label5.Caption:='TOTAL: '+inttostr(contador)+'/'+temp_str;
@@ -514,15 +518,17 @@ total_scumm:=0;
 total_msdos:=0;
 total_apple:=0;
 total_atari800:=0;
+total_amiga:=0;
 for f:=0 to (total_juegos-1) do begin
   case games_final[f].motor of
-    0:begin
+    MMSDOS:begin
         total_msdos:=total_msdos+1;
         if games_final[f].scumm then total_scumm:=total_scumm+1;
       end;
-    1:total_scumm:=total_scumm+1;
-    2:total_apple:=total_apple+1;
-    3:total_atari800:=total_atari800+1;
+    MSCUMM:total_scumm:=total_scumm+1;
+    MAPPLE2:total_apple:=total_apple+1;
+    MATARI8:total_atari800:=total_atari800+1;
+    MAMIGA:total_amiga:=total_amiga+1;
   end;
 end;
 end;
@@ -536,6 +542,7 @@ begin
     MSCUMM:fichero:=main_config.config_scummvm;
     MAPPLE2:fichero:=main_config.config_apple;
     MATARI8:fichero:=main_config.config_atari800;
+    MAMIGA:fichero:=main_config.config_amiga;
     MDSP:fichero:=dir_dsp+'dsp.ini';
   end;
   {$I-}
@@ -595,6 +602,7 @@ begin
       MDSP:form1.radiobutton4.Checked:=true;
       MAPPLE2:form1.radiobutton5.Checked:=true;
       MATARI8:form1.radiobutton6.Checked:=true;
+      MAMIGA:form1.radiobutton10.Checked:=true;
     end;
     form1.checkbox1.Checked:=(fich_ini.readinteger('opciones','pantalla',1)<>0);
     form1.checkbox14.Checked:=(fich_ini.readinteger('opciones','sonido',1)<>0);
@@ -607,6 +615,7 @@ begin
     main_config.config_scummvm:=fich_ini.ReadString('opciones','config_scummvm',main_config.dir_base+'extras\config\scummvm.ini');
     main_config.config_atari800:=fich_ini.ReadString('opciones','config_atari800',main_config.dir_base+'extras\config\altirra.ini');
     main_config.config_apple:=fich_ini.ReadString('opciones','config_apple',main_config.dir_base+'extras\config\apple2.ini');
+    main_config.config_amiga:=fich_ini.ReadString('opciones','config_amiga',main_config.dir_base+'extras\winuae\winuae.ini');
     main_config.leer_fijos:=(fich_ini.readinteger('opciones','leer_fijos',0)<>0);
     main_config.mostrar_todos:=(fich_ini.readinteger('opciones','mostrar_todos',0)<>0);
     main_config.mostrar_fallan:=(fich_ini.readinteger('opciones','mostrar_fallan',0)<>0);
@@ -616,6 +625,7 @@ begin
     main_config.motor_msdos:=fich_ini.ReadInteger('opciones','motor_msdos',1);
     main_config.dsp_exe:=fich_ini.ReadString('opciones','dsp_exe',main_config.dir_base+'dsp\dsp.exe');
     main_config.apple2_exe:=fich_ini.ReadString('opciones','apple2_exe',main_config.dir_base+'extras\apple2\AppleWin.exe');
+    main_config.amiga_exe:=fich_ini.ReadString('opciones','amiga_exe',main_config.dir_base+'extras\winuae\winuae.exe');
     main_config.apple2_joy:=(fich_ini.readinteger('opciones','apple2_joy',0)<>0);
     main_config.atari800_exe:=fich_ini.ReadString('opciones','atari800_exe',main_config.dir_base+'extras\atari800\altirra.exe');
     main_config.scumm_exe:=fich_ini.ReadString('opciones','scumm_exe',main_config.dir_base+'extras\scummvm\scummvm.exe');
@@ -642,6 +652,7 @@ begin
     main_config.dsp_exe:=main_config.dir_base+'dsp\dsp.exe';
     main_config.apple2_exe:=main_config.dir_base+'extras\apple2\AppleWin.exe';
     main_config.atari800_exe:=main_config.dir_base+'extras\atari800\altirra.exe';
+    main_config.amiga_exe:=main_config.dir_base+'extras\winuae\winuae.exe';
     main_config.motor_msdos:=1;
     {$else}
     {$ifdef darwin}
@@ -661,6 +672,7 @@ begin
     main_config.config_scummvm:=main_config.dir_base+'extras\config\scummvm.ini';
     main_config.config_atari800:=main_config.dir_base+'extras\config\altirra.ini';
     main_config.config_apple:=main_config.dir_base+'extras\config\apple2.ini';
+    main_config.config_amiga:=main_config.dir_base+'extras\winuae\winuae.ini';
     main_config.apple2_joy:=false;
     main_config.dir_manual:=main_config.dir_base+'extras\manual\';
     main_config.dir_mapas:=main_config.dir_base+'extras\maps\';
@@ -681,6 +693,7 @@ begin
   main_config.config_dosbox_x:=cambiar_path(main_config.config_dosbox_x);
   main_config.config_scummvm:=cambiar_path(main_config.config_scummvm);
   main_config.config_apple:=cambiar_path(main_config.config_apple);
+  main_config.config_amiga:=cambiar_path(main_config.config_amiga);
   {$endif}
   seleccionar_idioma;
   cambiar_idioma_principal;
@@ -847,6 +860,7 @@ if DirectoryExists(main_config.dir_base) then begin
   fich_ini.WriteString('opciones','config_scummvm',main_config.config_scummvm);
   fich_ini.WriteString('opciones','config_atari800',main_config.config_atari800);
   fich_ini.WriteString('opciones','config_apple',main_config.config_apple);
+  fich_ini.WriteString('opciones','config_amiga',main_config.config_amiga);
   fich_ini.WriteInteger('opciones','leer_fijos',byte(main_config.leer_fijos));
   fich_ini.WriteInteger('opciones','mostrar_todos',byte(main_config.mostrar_todos));
   fich_ini.WriteInteger('opciones','mostrar_fallan',byte(main_config.mostrar_fallan));
@@ -856,6 +870,7 @@ if DirectoryExists(main_config.dir_base) then begin
   fich_ini.WriteString('opciones','scumm_exe',main_config.scumm_exe);
   fich_ini.WriteString('opciones','dsp_exe',main_config.dsp_exe);
   fich_ini.WriteString('opciones','apple2_exe',main_config.apple2_exe);
+  fich_ini.WriteString('opciones','amiga_exe',main_config.amiga_exe);
   fich_ini.WriteInteger('opciones','apple2_joy',byte(main_config.apple2_joy));
   fich_ini.WriteString('opciones','atari800_exe',main_config.atari800_exe);
   fich_ini.WriteString('opciones','dir_manual',main_config.dir_manual);
@@ -948,8 +963,13 @@ if (form1.checkbox2.Checked and (main_config.motor<>MSCUMM)) then begin
   if games_final[ngame].mensaje<>'' then begin
     estoy_ejecutando:=true;
     temp_str:=games_final[ngame].mensaje;
-    if main_config.motor_msdos=0 then temp_disco:='CONTROL+F4'
-      else temp_disco:={$ifdef windows}'F11+O';{$else}'F12+O';{$endif}
+    case main_config.motor of
+      MMSDOS:begin
+                if main_config.motor_msdos=0 then temp_disco:='CONTROL+F4'
+                  else temp_disco:={$ifdef windows}'F11+O';{$else}'F12+O';{$endif}
+             end;
+      MAMIGA:temp_disco:='FIN+F1';
+    end;
     if ContainsText(temp_str,'[KEY_DISK]') then temp_str:=StringReplace(temp_str,'[KEY_DISK]',temp_disco,[]);
     if ContainsText(temp_str,'[RET]') then temp_str:=StringReplace(temp_str,'[RET]',RETURN,[rfReplaceAll]);
     MessageDlg(temp_str,mtInformation,[mbOK],0);
@@ -1154,6 +1174,21 @@ case main_config.motor of
     process.commandline:='"'+exec_string+'" '+param_string;
     process.execute;
     process.free;
+    {$ENDIF}
+  end;
+  MAMIGA:begin
+    if games_final[ngame].grafica='aga' then exec_video:='gameplay_aga.uae'
+      else exec_video:='gameplay.uae';
+    if games_final[ngame].ciclos=0 then exec_ciclos:='-s floppy_speed=400'
+      else exec_ciclos:='-s floppy_speed='+inttostr(games_final[ngame].ciclos);
+    cambiar_ini(MAMIGA,'WinUAE','FloppyPath','..\..\'+exec_dir);
+    if form1.checkbox1.Checked then exec_fullscreen:='-s gfx_fullscreen_amiga=true'
+      else exec_fullscreen:='';
+    if not(form1.checkbox14.Checked) then exec_sound:='-s sound_output=interrupts'
+      else exec_sound:='';
+    param_string:='-G -f "'+main_config.dir_base+'\extras\config\'+exec_video+'" -0 "'+main_config.dir_base+exec_dir+'\'+games_final[ngame].exec+'" '+exec_fullscreen+' '+exec_sound+' '+exec_ciclos;
+    {$IFDEF WINDOWS}
+    ShellExecute(form1.Handle,'open',pchar(main_config.amiga_exe),pchar(param_string),nil,SW_SHOWNORMAL);
     {$ENDIF}
   end;
 end;

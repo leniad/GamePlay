@@ -1,9 +1,9 @@
 # GAMEPLAY
 ### What is Gameplay?
-Gameplay is a frontend for MS-DOS, ScummVM, Apple II, Atari 800 and DSP Emulator. It lets you play games easily and quickly — no complications, no configuration needed. Just choose a game from the list and play. Everything is preconfigured (best audio, best graphics, extra parameters, etc.).<br>
-![Main Screen](https://i.ibb.co/JWy6v0yY/gameplay-042-en.png)
+Gameplay is a frontend for MS-DOS, ScummVM, Apple II, Atari 800, Amiga and DSP Emulator. It lets you play games easily and quickly — no complications, no configuration needed. Just choose a game from the list and play. Everything is preconfigured (best audio, best graphics, extra parameters, etc.).<br>
+![Main Screen](https://i.ibb.co/bg99MCW6/gameplay-050-en.png)
 ### Which games can I play?
-Initially, there's a list of 403 MS-DOS, 71 ScummVM (2 exclusive), 109 Apple II and 35 Atari 800 ready-to-play games. They include preview images, manuals, maps, and guides so you can enjoy the full game experience. There are also more than 400 Arcade games, Console, 8bits Computer emulator ready-to-play. No need to configure anything—not audio, not video—just enjoy.
+Initially, there's a list of 403 MS-DOS, 71 ScummVM (2 exclusive), 109 Apple II, 35 Atari 800 and 12 Amiga ready-to-play games. They include preview images, manuals, maps, and guides so you can enjoy the full game experience. There are also more than 400 Arcade games, Console, 8bits Computer emulator ready-to-play. No need to configure anything—not audio, not video—just enjoy.
 ### Can I add more games?
 Of course! If you have MS-DOS favorite games that aren't on the list, you can easily and quickly add your own. In the advanced options, you can choose ZIP format, add a CD-ROM, change memory settings, video card, attach manuals, guides, maps, and more.
 ### What language is Gameplay in?
@@ -16,6 +16,6 @@ Yes of course! If you find a bug, just open an issue so it can be reviewed.
 If you have games you’d like to add, better manuals, improved versions, etc., feel free to send them to me.<br>
 The source code is also available, so you can review it, compile it, and send me improvements or suggestions.
 ### I have Linux. Can I use it?
-Absolutely! It works on Ubuntu, Fedora, etc. You’ll need to install the emulation engines beforehand, but it’s easy and explained in the manual. You can also compile it using Free Pascal.
+I'm working in a new version that support Linux.
 ### What about Mac users?
-Gameplay has a version for Intel-based Macs (x86). There are a few setup steps, but it works well. Unfortunately, I don’t have access to a Mac with an ARM processor, but in theory, compiling the source code with Free Pascal should make it work.
+Gameplay has a version for Intel-based Macs (x86). I'm working in a new version that support Mac.

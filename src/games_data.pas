@@ -26,7 +26,7 @@ type
     motor:byte;
   end;
 const
-  GAME_TOTAL=549;
+  GAME_TOTAL=561;
   GAME_DATA:array[0..(GAME_TOTAL-1)] of tipo_games=(
   (nombre:'Bruce Lee';dir:'brucelee';exec:'brucelee.img';ciclos:300;grafica:'cga_composite';extra_param:'-set joysticktype=2axis';mapper:'brucelee.map'),
   (nombre:'Lost Vikings, the';dir:'lostv';exec:'vikings.exe';setup:'setup.exe'),
@@ -541,7 +541,6 @@ const
   (nombre:'Druid';dir:'DRUID_A8';exec:'Druid.atr';motor:MATARI8),
   (nombre:'Head Over Heels';dir:'HOH_A8';exec:'Head over Heels.cas';motor:MATARI8),
   (nombre:'Tapper';dir:'TAPPER_A8';exec:'Tapper.atr';motor:MATARI8),
-  //
   (nombre:'F-15 Strike Eagle (CGA)';dir:'F15CGA';exec:'F-15_CGA.img';ciclos:450),
   (nombre:'F-15 Strike Eagle';dir:'F15';exec:'F-15.img';ciclos:1500),
   (nombre:'F-15 Strike Eagle';dir:'F15_A8';exec:'F15.atr';motor:MATARI8),
@@ -577,7 +576,20 @@ const
   (nombre:'MadTV';dir:'MADTV';exec:'mtv.exe';ciclos:6000),
   (nombre:'Leisure Suit Larry 6 - Shape Up (EN)';dir:'lsl6_en';exec:'sierra.exe';exec_pre:'LH ULTRAMID -C -M100';ciclos:1;gus:true;scumm:true;setup:'install.exe'),
   (nombre:'Leisure Suit Larry 5 - Passionate Patti Does a Little Undercover Work (ES)';dir:'lsl5_es';exec:'SCIDHUV.EXE';ciclos:1;scumm:true;setup:'install.exe'),
-  (nombre:'Leisure Suit Larry 5 - Passionate Patti Does a Little Undercover Work (EN)';dir:'lsl5_en';exec:'SCIDHUV.EXE';ciclos:1;scumm:true;setup:'install.exe')
+  (nombre:'Leisure Suit Larry 5 - Passionate Patti Does a Little Undercover Work (EN)';dir:'lsl5_en';exec:'SCIDHUV.EXE';ciclos:1;scumm:true;setup:'install.exe'),
+  //
+  (nombre:'Ghost''n Goblins';dir:'GNG_AMIGA';exec:'Ghosts''n Goblins.ipf';motor:MAMIGA),
+  (nombre:'Savage';dir:'SAVAGE_AMIGA';exec:'Savage_1.ipf';ciclos:200;motor:MAMIGA),
+  (nombre:'Ghouls ''n Ghosts';dir:'GNG2_AMIGA';exec:'Ghouls ''n Ghosts_A.ipf';ciclos:100;motor:MAMIGA),
+  (nombre:'After the War';dir:'AFTERWAR_AMIGA';exec:'After the War.ipf';motor:MAMIGA),
+  (nombre:'Nebulus';dir:'NEBULUS_AMIGA';exec:'Nebulus.ipf';ciclos:100;motor:MAMIGA),
+  (nombre:'Rainbow Islands';dir:'RISLANDS_AMIGA';exec:'RainbowIslands.ipf';motor:MAMIGA),
+  (nombre:'Speed Ball 2 - Brutal Deluxe';dir:'SBALL2_AMIGA';exec:'Speedball2.ipf';motor:MAMIGA),
+  (nombre:'Sentinel, the';dir:'SENTINEL_AMIGA';exec:'The Sentinel.ipf';motor:MAMIGA),
+  (nombre:'Space Quest Chapter I - The Sarien Encounter';dir:'SQ_AMIGA';exec:'Space Quest.adf';motor:MAMIGA),
+  (nombre:'Leisure Suir Larry in the Land of the Lounge Lizards';dir:'LARRY1_AMIGA';exec:'Leisure Suit Larry.adf';motor:MAMIGA),
+  (nombre:'Beach Volley';dir:'BEACHV_AMIGA';exec:'BeachVolley.ipf';ciclos:200;motor:MAMIGA),
+  (nombre:'Banshee';dir:'BANSHEE_AMIGA';exec:'Banshee_Disk1.ipf';ciclos:200;grafica:'aga';motor:MAMIGA)
 );
 
 implementation

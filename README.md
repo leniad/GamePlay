@@ -1,5 +1,25 @@
 # GamePlay status #
-![Main Screen](https://i.ibb.co/JWy6v0yY/gameplay-042-en.png)<br>
+![Main Screen](https://i.ibb.co/bg99MCW6/gameplay-050-en.png)<br>
+<b>20/02/26 - GamePlay updated to 0.50b
+<pre>
+-General
+    +Added Amiga engine
+    +Updated Dosbox-X engine
+-Amiga Games
+    +Added games
+        -Ghost'n Goblins
+        -Savage
+        -Ghouls 'n Ghosts
+        -After the War
+        -Nebulus
+        -Rainbow Islands
+        -Speed Ball 2 - Brutal Deluxe
+        -The Sentinel
+        -Space Quest Chapter I - The Sarien Encounter
+        -Leisure Suir Larry in the Land of the Lounge Lizards
+        -Beach Volley
+        -Banshee
+</pre>
 <b>14/02/26 - GamePlay updated to 0.42b
 <pre>
 -General

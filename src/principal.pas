@@ -62,6 +62,7 @@ type
     RadioButton2: TRadioButton;
     RadioButton9: TRadioButton;
     Image7: TImage;
+    RadioButton10: TRadioButton;
     procedure FormCreate(Sender: TObject);
     procedure StringGrid1Click(Sender: TObject);
     procedure StringGrid1DblClick(Sender: TObject);
@@ -91,6 +92,7 @@ type
     procedure RadioButton9Click(Sender: TObject);
     procedure RadioButton2Click(Sender: TObject);
     procedure Image7Click(Sender: TObject);
+    procedure RadioButton10Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -363,6 +365,31 @@ end;
 procedure TForm1.RadioButton9Click(Sender: TObject);
 begin
   main_config.apple2_joy:=true;
+end;
+
+procedure TForm1.RadioButton10Click(Sender: TObject);
+begin
+  main_config.motor:=MAMIGA;
+  form1.checkbox9.Enabled:=false;
+  form1.checkbox10.Enabled:=false;
+  form1.checkbox11.Enabled:=false;
+  form1.checkbox12.Enabled:=false;
+  form1.checkbox13.Enabled:=false;
+  form1.checkbox18.Enabled:=false;
+  form1.checkbox3.Enabled:=true;
+  form1.checkbox16.Enabled:=true;
+  form1.checkbox6.Enabled:=true;
+  form1.checkbox4.Enabled:=true;
+  form1.checkbox5.Enabled:=true;
+  form1.checkbox7.Enabled:=true;
+  form1.checkbox8.Enabled:=true;
+  form1.checkbox17.Enabled:=true;
+  form1.checkbox2.Enabled:=true;
+  form1.checkbox15.Enabled:=false;
+  form1.groupbox8.visible:=false;
+  if total_juegos=0 then exit;
+  form1.stringgrid1.Row:=0;
+  mostrar_juegos;
 end;
 
 procedure TForm1.StringGrid1Click(Sender: TObject);
