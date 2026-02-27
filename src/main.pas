@@ -92,12 +92,12 @@ const
   MDSP=255;
   MAX_GAMES=2000;
   TEMP_DIR='TEMP';
-  VERSION='v0.50β';
+  VERSION='v0.51β';
   {$IFDEF IS_DEBUG}
   {$ifndef windows}
   debug_base_dir='/home/leniad/abandon/GamePlayVol1/';
   {$else}
-  debug_base_dir='c:\datos\abandon\GamePlay_050\';
+  debug_base_dir='c:\datos\abandon\GamePlay_051\';
   {$ENDIF}
   {$endif}
 
@@ -1105,7 +1105,7 @@ case main_config.motor of
             temp_str:=main_config.dir_base+TEMP_DIR+'\'+games_final[ngame].dir;
             temp_str2:='c:\'+TEMP_DIR+'\'+games_final[ngame].dir;
         end else begin
-           temp_str:=main_config.dir_base+games_final[ngame].dir;
+            temp_str:=main_config.dir_base+games_final[ngame].dir;
             temp_str2:='c:\'+games_final[ngame].dir;
         end;
         exec_pre:=StringReplace(exec_pre,'[GAME_DIR]','"'+temp_str+'"',[]);
@@ -1179,14 +1179,21 @@ case main_config.motor of
   MAMIGA:begin
     if games_final[ngame].grafica='aga' then exec_video:='gameplay_aga.uae'
       else exec_video:='gameplay.uae';
-    if games_final[ngame].ciclos=0 then exec_ciclos:='-s floppy_speed=400'
-      else exec_ciclos:='-s floppy_speed='+inttostr(games_final[ngame].ciclos);
+    if games_final[ngame].ciclos=0 then exec_ciclos:='-s floppy_speed=400 '
+      else exec_ciclos:='-s floppy_speed='+inttostr(games_final[ngame].ciclos)+' ';
     cambiar_ini(MAMIGA,'WinUAE','FloppyPath','..\..\'+exec_dir);
-    if form1.checkbox1.Checked then exec_fullscreen:='-s gfx_fullscreen_amiga=true'
+    if form1.checkbox1.Checked then exec_fullscreen:='-s gfx_fullscreen_amiga=true '
       else exec_fullscreen:='';
-    if not(form1.checkbox14.Checked) then exec_sound:='-s sound_output=interrupts'
+    if not(form1.checkbox14.Checked) then exec_sound:='-s sound_output=interrupts '
       else exec_sound:='';
-    param_string:='-G -f "'+main_config.dir_base+'\extras\config\'+exec_video+'" -0 "'+main_config.dir_base+exec_dir+'\'+games_final[ngame].exec+'" '+exec_fullscreen+' '+exec_sound+' '+exec_ciclos;
+    if games_final[ngame].loadfix then temp_str2:='-s gfx_atari_palette_fix=3to8bit '
+      else temp_str2:='';
+    if ContainsText(lowercase(games_final[ngame].exec),'vhd') then temp_str:='-s hardfile2=rw,DH0:'+main_config.dir_base+exec_dir+'\'+games_final[ngame].exec+','+games_final[ngame].params+' '
+      else temp_str:='-0 "'+main_config.dir_base+exec_dir+'\'+games_final[ngame].exec+'" ';
+    if games_final[ngame].segundo_disco<>'' then temp_str:=temp_str+'-1 "'+main_config.dir_base+exec_dir+'\'+games_final[ngame].segundo_disco+'" -s nr_floppies=2 '
+      else temp_str:=temp_str+'-s floppy1type=-1 ';
+    if games_final[ngame].exec_pre<>'' then exec_pre:='-s joyport1='+games_final[ngame].exec_pre+' ';
+    param_string:='-G -f "'+main_config.dir_base+'extras\config\'+exec_video+'" '+temp_str+' '+exec_fullscreen+exec_sound+exec_ciclos+temp_str2+exec_pre;
     {$IFDEF WINDOWS}
     ShellExecute(form1.Handle,'open',pchar(main_config.amiga_exe),pchar(param_string),nil,SW_SHOWNORMAL);
     {$ENDIF}

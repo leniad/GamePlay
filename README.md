@@ -1,5 +1,93 @@
 # GamePlay status #
-![Main Screen](https://i.ibb.co/bg99MCW6/gameplay-050-en.png)<br>
+![Main Screen](https://i.ibb.co/LztCNNN7/gameplay-051-en.png)<br>
+Please read 'Most Wanted' games!<br>
+<b>27/02/26 - GamePlay updated to 0.51b
+<pre>
+-General
+    +Amiga engine
+        -Added harddisk option
+        -Added second disk option
+        -Added palette correction option
+-Amiga Games
+    +After the War: fixed palette
+    +Space Quest I: Changed cursor keys to keyboard emulation
+    +Leisure Suit Larry: Changed cursor keys to keyboard emulation
+    +Banshee: Changed to HDD version
+    +Added games
+  		-Space Quest Chapter II - Vohaul's Revenge
+        -Space Quest III - The Pirates of Pestulon
+  		-Hammer Boy
+  		-Grand Prix Master
+  		-Lotus Esprit Turbo Challenge
+  		-Lotus Turbo Challenge 2
+  		-Lotus III: The Ultimate Challenge
+  		-Turrican
+  		-Turrican II
+  		-Turrican 3
+  		-Hunter
+  		-Pang
+  		-Blood Money
+  		-Bubble Bobble
+  		-Cabal
+  		-Deflektor
+  		-Dungeon Master
+  		-Defender of the Crown
+  		-Three Stooges
+  		-Batman the Movie
+  		-The Chaos Engine
+		-The Chaos Engine 2
+  		-Chuck Rock
+  		-Chuck Rock 2, Son of Chuck
+  		-Dogs of War
+  		-Grand Monster Slam
+  		-The Great Giana Sisters
+  		-Hostages
+  		-Hybris
+  		-IK+
+  		-Mach 3
+  		-Menace
+  		-Navy Moves
+  		-Prehistorik
+  		-Renegade
+  		-Rick Dangerous
+  		-Rick Dangerous II
+  		-The Secret of Monkey Island (ES)
+  		-Shufflepuck Cafe
+  		-Silkworm
+  		-Battle Chess
+  		-Budokan - The Martial Spirit
+  		-Grand Prix Circuit
+  		-Hudson Hawk
+  		-Jaguar XJ220
+  		-James Pond - Underwater Agent
+  		-James Pond II - Codename RoboCod
+  		-Ninja Remix
+  		-Pinball Dreams
+  		-Rodland
+  		-R-Type
+  		-R-Type II
+  		-Risky Woods
+  		-Syndicate
+  		-Toki
+  		-Corsarios
+  		-Lemmings
+  		-Lemmings 2 - The tribes
+  		-Livingstone II
+  		-Satan
+  		-Stormlord
+  		-Thunder Cats
+  		-Viaje al Centro de la Tierra
+  		-King's Quest - Quest for the Crown
+  		-King's Quest II - Romancing the Throne
+  		-King's Quest III - To Heir is Human
+  		-King's Quest IV - The Perils of Rosella
+  		-Narco Police
+  		-Smash T.V.
+  		-SnowBros.
+  		-The Spy Who Loved Me
+  		-Sensible Soccer
+  		-Zynaps
+</pre>
 <b>20/02/26 - GamePlay updated to 0.50b
 <pre>
 -General
