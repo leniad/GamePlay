@@ -15,6 +15,10 @@ procedure save_game_show;
 procedure config_show;
 function seleccionar_directorio(inicial:string):string;
 procedure guardar_juegos_anadidos;
+procedure save_game_poner_cosas;
+{$IFDEF IS_DEBUG}
+procedure sacar_juegos;
+{$ENDIF}
 {$ifdef fpc}
 function cambiar_path(cadena:string):string;
 function comprobar_si_existe_fichero(directorio:string;var nombre:string;es_zip:boolean):boolean;
@@ -57,12 +61,11 @@ type
      config_dosbox:string;
      config_dosbox_x:string;
      config_scummvm:string;
+     config_dsp:string;
      config_atari800:string;
      config_apple:string;
      config_amiga:string;
      leer_fijos:boolean;
-     mostrar_todos:boolean;
-     mostrar_fallan:boolean;
      mostrar_anadidos:boolean;
      motor_msdos:byte;
      dir_base:string;
@@ -92,12 +95,12 @@ const
   MDSP=255;
   MAX_GAMES=2000;
   TEMP_DIR='TEMP';
-  VERSION='v0.51β';
+  VERSION='v0.60β';
   {$IFDEF IS_DEBUG}
   {$ifndef windows}
   debug_base_dir='/home/leniad/abandon/GamePlayVol1/';
   {$else}
-  debug_base_dir='c:\datos\abandon\GamePlay_051\';
+  debug_base_dir='c:\datos\abandon\GamePlay_060\';
   {$ENDIF}
   {$endif}
 
@@ -105,14 +108,15 @@ var
   orden_games:array[0..(MAX_GAMES-1)] of integer;
   games_final:array[0..(MAX_GAMES-1)] of tipo_final;
   main_config:tipo_config;
-  idioma_sel,juego_editado,total_juegos,total_scumm,total_apple,total_atari800,total_msdos,total_amiga:integer;
+  idioma_sel,juego_editado,total_juegos,total_scumm,total_apple,total_atari800,total_msdos,total_amiga,total_dsp:integer;
   ejecutar_setup,estoy_anadiendo,estoy_ejecutando:boolean;
   dir_dsp:string;
 
 implementation
 uses {$IFDEF WINDOWS}windows,shellapi,MMSystem{$ELSE}LCLIntf,process{$ENDIF},principal,
      inifiles,grids,sysutils,forms,idioma_info,games_data,games_info,strutils,dsp_data,
-     config,dialogs,save_game{$ifdef fpc},classes,zipper{$else},zip,uitypes{$endif};
+     config,dialogs,save_game{$ifdef fpc},classes,zipper{$else},zip,uitypes{$endif},
+     games_download,system.ioutils;
 
 const
  RETURN=chr(10);
@@ -223,7 +227,7 @@ end;
 procedure mostrar_juegos;
 var
   f,contador,mascara,idioma_masq:integer;
-  temp_str:string;
+  temps:string;
 
 procedure poner_juego_dsp(pos:integer);
 begin
@@ -258,39 +262,27 @@ for f:=0 to (total_juegos-1) do begin
   //DSP
   if (games_final[orden_games[f]].motor=MDSP) then begin
     if main_config.motor<>MDSP then continue;
-    if main_config.mostrar_todos then poner_juego_dsp(f)
-      else begin
-              if main_config.mostrar_fallan then begin
-                if games_final[orden_games[f]].mal then poner_juego_dsp(f);
-              end else if not(games_final[orden_games[f]].mal) then poner_juego_dsp(f);
-          end;
+    poner_juego_dsp(f);
   end else begin //Resto
     mascara:=AG*byte(form1.checkbox3.Checked)+ARCADE*byte(form1.checkbox16.Checked)+TRESD*byte(form1.checkbox6.Checked)+SIMULA*byte(form1.checkbox4.Checked)+SPORT*byte(form1.checkbox5.Checked)+PUZ*byte(form1.checkbox7.Checked)+RPG*byte(form1.checkbox8.Checked)+COCHES*byte(form1.checkbox17.Checked);
     if ((mascara=0) or (main_config.motor=MSCUMM)) then mascara:=$ffffff;
     idioma_masq:=ESP*byte(form1.CheckBox9.Checked)+ING*byte(form1.CheckBox12.Checked)+ALE*byte(form1.CheckBox10.Checked)+FRA*byte(form1.CheckBox11.Checked)+ITA*byte(form1.CheckBox13.Checked)+$400*byte(form1.CheckBox18.Checked);
     if ((idioma_masq=0) or (games_final[orden_games[f]].idioma=MUL)) then idioma_masq:=$ffffff;
-    if main_config.mostrar_todos then poner_juego_motor(f)
-      else begin
-        if main_config.mostrar_fallan then begin
-          if games_final[orden_games[f]].mal then poner_juego_motor(f)
-        end else if not(games_final[orden_games[f]].mal) then poner_juego_motor(f);
-      end;
+    poner_juego_motor(f);
   end;
 end;
-  case main_config.motor of
-    MMSDOS:temp_str:=inttostr(total_msdos);
-    MSCUMM:temp_str:=inttostr(total_scumm);
-    MAPPLE2:temp_str:=inttostr(total_apple);
-    MATARI8:temp_str:=inttostr(total_atari800);
-    MAMIGA:temp_str:=inttostr(total_amiga);
-    MDSP:temp_str:=inttostr(GAME_TOTAL_DSP);
-  end;
-  form1.Label5.Caption:='TOTAL: '+inttostr(contador)+'/'+temp_str;
-  //Si no hay nada, lo muestro todo y todos mal
-  if contador=0 then form1.stringgrid1.RowCount:=1
-    else form1.stringgrid1.RowCount:=contador;
-  form1.StringGrid1Click(nil);
-  if form1.Visible then form1.StringGrid1.SetFocus;
+case main_config.motor of
+    MMSDOS:temps:=inttostr(total_msdos);
+    MSCUMM:temps:=inttostr(total_scumm);
+    MAPPLE2:temps:=inttostr(total_apple);
+    MATARI8:temps:=inttostr(total_atari800);
+    MAMIGA:temps:=inttostr(total_amiga);
+    MDSP:temps:=inttostr(total_dsp);
+end;
+form1.Label5.Caption:='TOTAL: '+temps+'/'+inttostr(contador);
+form1.stringgrid1.RowCount:=contador;
+form1.StringGrid1Click(nil);
+if form1.Visible then form1.StringGrid1.SetFocus;
 end;
 
 function search_file_zip(nombre_zip,nombre_file:string):boolean;
@@ -388,6 +380,12 @@ var
   temps,juego:string;
   mal:boolean;
 begin
+total_msdos:=0;
+total_scumm:=0;
+total_apple:=0;
+total_atari800:=0;
+total_amiga:=0;
+total_dsp:=0;
 //Primero los fijos...
 for f:=0 to (GAME_TOTAL-1) do begin
   //Primero compruebo si existe el directorio y el fichero ejecutable
@@ -428,6 +426,18 @@ for f:=0 to (GAME_TOTAL-1) do begin
   games_final[f].tipo:=GAME_INFO[f].tipo;
   games_final[f].mensaje:=GAME_INFO[f].mensaje;
   games_final[f].interno:=true;
+  if not(mal) then begin
+    case games_final[f].motor of
+      MMSDOS:begin
+                total_msdos:=total_msdos+1;
+                if games_final[f].scumm then total_scumm:=total_scumm+1;
+             end;
+      MSCUMM:total_scumm:=total_scumm+1;
+      MAPPLE2:total_apple:=total_apple+1;
+      MATARI8:total_atari800:=total_atari800+1;
+      MAMIGA:total_amiga:=total_amiga+1;
+    end;
+  end;
 end;
 //Juegos DSP
 total_juegos:=GAME_TOTAL;
@@ -438,11 +448,13 @@ for f:=0 to (GAME_TOTAL_DSP-1) do begin
  games_final[total_juegos].ciclos:=GAME_DATA_DSP[f].ciclos;
  games_final[total_juegos].year:=GAME_DATA_DSP[f].extra_param;
  games_final[total_juegos].motor:=MDSP;
+ games_final[total_juegos].interno:=true;
  temps:=games_final[total_juegos].dir+'.zip';
  if temps<>'.zip' then begin
     games_final[total_juegos].mal:=not(comprobar_si_existe_fichero(dir_dsp+'roms',temps,false));
     games_final[total_juegos].dir:=StringReplace(temps,'.zip','',[]);
  end;
+ if not(mal) then total_dsp:=total_dsp+1;
  total_juegos:=total_juegos+1;
 end;
 //Y ahora los añadidos
@@ -489,6 +501,18 @@ if fileexists(main_config.dir_base+'extra_games.info') then begin
       if not(mal) then games_final[total_juegos].zip:=true;
     end;
     games_final[total_juegos].mal:=mal;
+    if not(mal) then begin
+      case games_final[total_juegos].motor of
+        MMSDOS:begin
+                  total_msdos:=total_msdos+1;
+                  if games_final[total_juegos].scumm then total_scumm:=total_scumm+1;
+               end;
+        MSCUMM:total_scumm:=total_scumm+1;
+        MAPPLE2:total_apple:=total_apple+1;
+        MATARI8:total_atari800:=total_atari800+1;
+        MAMIGA:total_amiga:=total_amiga+1;
+      end;
+    end;
     total_juegos:=total_juegos+1;
 end;
 closefile(games_file);
@@ -514,23 +538,6 @@ for f:=0 to (total_juegos-2) do begin
     end;
   end;
 end;
-total_scumm:=0;
-total_msdos:=0;
-total_apple:=0;
-total_atari800:=0;
-total_amiga:=0;
-for f:=0 to (total_juegos-1) do begin
-  case games_final[f].motor of
-    MMSDOS:begin
-        total_msdos:=total_msdos+1;
-        if games_final[f].scumm then total_scumm:=total_scumm+1;
-      end;
-    MSCUMM:total_scumm:=total_scumm+1;
-    MAPPLE2:total_apple:=total_apple+1;
-    MATARI8:total_atari800:=total_atari800+1;
-    MAMIGA:total_amiga:=total_amiga+1;
-  end;
-end;
 end;
 
 procedure cambiar_ini(motor:integer;section,identidad,valor:string);
@@ -543,7 +550,7 @@ begin
     MAPPLE2:fichero:=main_config.config_apple;
     MATARI8:fichero:=main_config.config_atari800;
     MAMIGA:fichero:=main_config.config_amiga;
-    MDSP:fichero:=dir_dsp+'dsp.ini';
+    MDSP:fichero:=main_config.config_dsp;
   end;
   {$I-}
   if fileexists(fichero) then begin
@@ -571,6 +578,7 @@ begin
   //Montar main_config, el orden es importante!!!
   {$IFDEF IS_DEBUG}
   main_config.dir_base:=debug_base_dir;
+  form1.button3.Visible:=true;
   {$ELSE}
   main_config.dir_base:=ExtractFilePath(application.ExeName);
   {$ENDIF}
@@ -613,12 +621,11 @@ begin
     main_config.config_dosbox:=fich_ini.ReadString('opciones','config_dosbox',main_config.dir_base+'extras\config\dosbox.conf');
     main_config.config_dosbox_x:=fich_ini.ReadString('opciones','config_dosbox_x',main_config.dir_base+'extras\config\dosbox-x.conf');
     main_config.config_scummvm:=fich_ini.ReadString('opciones','config_scummvm',main_config.dir_base+'extras\config\scummvm.ini');
+    main_config.config_dsp:=fich_ini.ReadString('opciones','config_dsp',main_config.dir_base+'dsp\dsp.ini');
     main_config.config_atari800:=fich_ini.ReadString('opciones','config_atari800',main_config.dir_base+'extras\config\altirra.ini');
     main_config.config_apple:=fich_ini.ReadString('opciones','config_apple',main_config.dir_base+'extras\config\apple2.ini');
     main_config.config_amiga:=fich_ini.ReadString('opciones','config_amiga',main_config.dir_base+'extras\winuae\winuae.ini');
     main_config.leer_fijos:=(fich_ini.readinteger('opciones','leer_fijos',0)<>0);
-    main_config.mostrar_todos:=(fich_ini.readinteger('opciones','mostrar_todos',0)<>0);
-    main_config.mostrar_fallan:=(fich_ini.readinteger('opciones','mostrar_fallan',0)<>0);
     main_config.mostrar_anadidos:=(fich_ini.readinteger('opciones','mostrar_anadidos',0)<>0);
     main_config.dosbox_exe:=fich_ini.ReadString('opciones','dosbox_exe','');
     main_config.dosbox_x_exe:=fich_ini.ReadString('opciones','dosbox_x_exe','');
@@ -627,6 +634,8 @@ begin
     main_config.apple2_exe:=fich_ini.ReadString('opciones','apple2_exe',main_config.dir_base+'extras\apple2\AppleWin.exe');
     main_config.amiga_exe:=fich_ini.ReadString('opciones','amiga_exe',main_config.dir_base+'extras\winuae\winuae.exe');
     main_config.apple2_joy:=(fich_ini.readinteger('opciones','apple2_joy',0)<>0);
+    form1.checkbox19.Checked:=(fich_ini.readinteger('opciones','amiga_vertical',0)<>0);
+    form1.checkbox20.Checked:=(fich_ini.readinteger('opciones','amiga_horizontal',0)<>0);
     main_config.atari800_exe:=fich_ini.ReadString('opciones','atari800_exe',main_config.dir_base+'extras\atari800\altirra.exe');
     main_config.scumm_exe:=fich_ini.ReadString('opciones','scumm_exe',main_config.dir_base+'extras\scummvm\scummvm.exe');
     main_config.dir_manual:=fich_ini.ReadString('opciones','dir_manual',main_config.dir_base+'extras\manual\');
@@ -642,8 +651,6 @@ begin
     form1.groupbox8.visible:=true;
     idioma_sel:=200;
     main_config.leer_fijos:=false;
-    main_config.mostrar_todos:=false;
-    main_config.mostrar_fallan:=false;
     main_config.mostrar_anadidos:=false;
     {$ifdef windows}
     main_config.dosbox_exe:=main_config.dir_base+'extras\dosbox\dosbox.exe';
@@ -670,10 +677,13 @@ begin
     main_config.config_dosbox:=main_config.dir_base+'extras\config\dosbox.conf';
     main_config.config_dosbox_x:=main_config.dir_base+'extras\config\dosbox-x.conf';
     main_config.config_scummvm:=main_config.dir_base+'extras\config\scummvm.ini';
+    main_config.config_dsp:=main_config.dir_base+'dsp\dsp.ini';
     main_config.config_atari800:=main_config.dir_base+'extras\config\altirra.ini';
     main_config.config_apple:=main_config.dir_base+'extras\config\apple2.ini';
     main_config.config_amiga:=main_config.dir_base+'extras\winuae\winuae.ini';
     main_config.apple2_joy:=false;
+    form1.checkbox19.Checked:=false;
+    form1.checkbox20.Checked:=false;
     main_config.dir_manual:=main_config.dir_base+'extras\manual\';
     main_config.dir_mapas:=main_config.dir_base+'extras\maps\';
     main_config.dir_guias:=main_config.dir_base+'extras\walk\';
@@ -692,6 +702,7 @@ begin
   main_config.config_dosbox:=cambiar_path(main_config.config_dosbox);
   main_config.config_dosbox_x:=cambiar_path(main_config.config_dosbox_x);
   main_config.config_scummvm:=cambiar_path(main_config.config_scummvm);
+  main_config.config_dsp:=cambiar_path(main_config.config_dsp);
   main_config.config_apple:=cambiar_path(main_config.config_apple);
   main_config.config_amiga:=cambiar_path(main_config.config_amiga);
   {$endif}
@@ -858,12 +869,11 @@ if DirectoryExists(main_config.dir_base) then begin
   fich_ini.WriteString('opciones','config_dosbox_x',main_config.config_dosbox_x);
   fich_ini.WriteInteger('opciones','motor_msdos',main_config.motor_msdos);
   fich_ini.WriteString('opciones','config_scummvm',main_config.config_scummvm);
+  fich_ini.WriteString('opciones','config_dsp',main_config.config_dsp);
   fich_ini.WriteString('opciones','config_atari800',main_config.config_atari800);
   fich_ini.WriteString('opciones','config_apple',main_config.config_apple);
   fich_ini.WriteString('opciones','config_amiga',main_config.config_amiga);
   fich_ini.WriteInteger('opciones','leer_fijos',byte(main_config.leer_fijos));
-  fich_ini.WriteInteger('opciones','mostrar_todos',byte(main_config.mostrar_todos));
-  fich_ini.WriteInteger('opciones','mostrar_fallan',byte(main_config.mostrar_fallan));
   fich_ini.WriteInteger('opciones','mostrar_anadidos',byte(main_config.mostrar_anadidos));
   fich_ini.WriteString('opciones','dosbox_exe',main_config.dosbox_exe);
   fich_ini.WriteString('opciones','dosbox_x_exe',main_config.dosbox_x_exe);
@@ -872,6 +882,8 @@ if DirectoryExists(main_config.dir_base) then begin
   fich_ini.WriteString('opciones','apple2_exe',main_config.apple2_exe);
   fich_ini.WriteString('opciones','amiga_exe',main_config.amiga_exe);
   fich_ini.WriteInteger('opciones','apple2_joy',byte(main_config.apple2_joy));
+  fich_ini.WriteInteger('opciones','amiga_vertical',byte(form1.checkbox19.Checked));
+  fich_ini.WriteInteger('opciones','amiga_horizontal',byte(form1.checkbox20.Checked));
   fich_ini.WriteString('opciones','atari800_exe',main_config.atari800_exe);
   fich_ini.WriteString('opciones','dir_manual',main_config.dir_manual);
   fich_ini.WriteString('opciones','dir_maps',main_config.dir_mapas);
@@ -928,9 +940,14 @@ var
 begin
 ngame:=numero_juego;
 if ngame=-1 then exit;
+estoy_ejecutando:=true;
 if games_final[ngame].mal then begin
-  MessageDlg(list_error[7],mtError,[mbOk],0);
-  exit;
+  if games_final[ngame].interno then begin
+    if not(descargar_juego(ngame)) then exit;
+  end else begin
+    MessageDlg(list_error[7],mtError,[mbOk],0);
+    exit;
+  end;
 end;
 //DSP Emulator
 if main_config.motor=MDSP then begin
@@ -961,7 +978,6 @@ end else exec_dir:=games_final[ngame].dir;
 //Mostrar mensaje de ayuda
 if (form1.checkbox2.Checked and (main_config.motor<>MSCUMM)) then begin
   if games_final[ngame].mensaje<>'' then begin
-    estoy_ejecutando:=true;
     temp_str:=games_final[ngame].mensaje;
     case main_config.motor of
       MMSDOS:begin
@@ -1194,6 +1210,8 @@ case main_config.motor of
       else temp_str:=temp_str+'-s floppy1type=-1 ';
     if games_final[ngame].exec_pre<>'' then exec_pre:='-s joyport1='+games_final[ngame].exec_pre+' ';
     param_string:='-G -f "'+main_config.dir_base+'extras\config\'+exec_video+'" '+temp_str+' '+exec_fullscreen+exec_sound+exec_ciclos+temp_str2+exec_pre;
+    if form1.checkbox19.Checked then param_string:=param_string+'-s gfx_center_vertical=smart ';
+    if form1.checkbox20.Checked then param_string:=param_string+'-s gfx_center_horizontal=smart ';
     {$IFDEF WINDOWS}
     ShellExecute(form1.Handle,'open',pchar(main_config.amiga_exe),pchar(param_string),nil,SW_SHOWNORMAL);
     {$ENDIF}
@@ -1233,11 +1251,23 @@ var
   es_zip:boolean;
 begin
   save_game_accept:=false;
-  if containstext(lowercase(form2.labelededit9.Text),'.zip') then es_zip:=true
-    else es_zip:=false;
+  //Si es un juego de ScummVM, el directorio/zip no puede estar vacio
+  if form2.pagecontrol1.ActivePageIndex=1 then begin
+    if (form2.labelededit9.Text='') then begin
+      MessageDlg(list_error[5],mtError,[mbOk],0);
+      exit;
+    end;
+  //El resto no pueden estar vacios ninguno de los dos...
+  end else if ((form2.labelededit9.Text='') or (form2.labelededit5.Text='')) then begin
+    MessageDlg(list_error[5],mtError,[mbOk],0);
+    exit;
+  end;
   games_final[juego_editado].nombre:=form2.labelededit1.Text;
   temps:=form2.labelededit9.Text;
-  if es_zip then temps:=stringreplace(temps,'.zip','',[rfIgnoreCase]);
+  if containstext(lowercase(temps),'.zip') then begin
+    es_zip:=true;
+    temps:=stringreplace(temps,'.zip','',[rfIgnoreCase]);
+  end else es_zip:=false;
   games_final[juego_editado].dir:=temps;
   games_final[juego_editado].exec:=form2.labelededit5.Text;
   games_final[juego_editado].loadfix:=form2.CheckBox3.Checked;
@@ -1246,16 +1276,43 @@ begin
   games_final[juego_editado].exec_post:=form2.labelededit8.Text;
   games_final[juego_editado].segundo_disco:=form2.labelededit10.Text;
   games_final[juego_editado].ciclos:=strtoint(form2.labelededit11.Text);
-  if games_final[juego_editado].ciclos=0 then games_final[juego_editado].ciclos:=-1;
-  if games_final[juego_editado].ciclos=12000 then games_final[juego_editado].ciclos:=0;
-  games_final[juego_editado].memoria:=strtoint(form2.labelededit12.Text);
-  case form2.combobox1.ItemIndex of
-    0:games_final[juego_editado].grafica:='';
-    1:games_final[juego_editado].grafica:='cga';
-    2:games_final[juego_editado].grafica:='tandy';
-    3:games_final[juego_editado].grafica:='pcjr';
-    4:games_final[juego_editado].grafica:='cga_composite';
-    5:games_final[juego_editado].grafica:='hercules';
+  case games_final[juego_editado].motor of
+    MMSDOS:begin
+              if games_final[juego_editado].ciclos=0 then games_final[juego_editado].ciclos:=-1;
+              if games_final[juego_editado].ciclos=12000 then games_final[juego_editado].ciclos:=0;
+              games_final[juego_editado].memoria:=strtoint(form2.labelededit12.Text);
+              case form2.combobox1.ItemIndex of
+                  0:games_final[juego_editado].grafica:='';
+                  1:games_final[juego_editado].grafica:='cga';
+                  2:games_final[juego_editado].grafica:='tandy';
+                  3:games_final[juego_editado].grafica:='pcjr';
+                  4:games_final[juego_editado].grafica:='cga_composite';
+                  5:games_final[juego_editado].grafica:='hercules';
+              end;
+           end;
+    MAPPLE2:begin
+              case form2.combobox6.ItemIndex of
+                  0:games_final[juego_editado].extra_param:='';
+                  1:games_final[juego_editado].extra_param:='e'
+              end;
+           end;
+    MATARI8:begin
+              case form2.combobox3.ItemIndex of
+                  0:games_final[juego_editado].extra_param:='';
+                  1:games_final[juego_editado].extra_param:='osb'
+              end;
+           end;
+    MAMIGA:begin
+              case form2.combobox2.ItemIndex of
+                  0:games_final[juego_editado].grafica:='';
+                  1:games_final[juego_editado].grafica:='aga'
+              end;
+              case form2.combobox7.ItemIndex of
+                  0:games_final[juego_editado].ciclos:=100;
+                  1:games_final[juego_editado].ciclos:=200;
+                  else games_final[juego_editado].ciclos:=0;
+              end;
+           end;
   end;
   games_final[juego_editado].extra_param:=form2.labelededit14.Text;
   games_final[juego_editado].mapper:=form2.labelededit13.Text;
@@ -1311,7 +1368,7 @@ begin
     exit;
   end;
   //Solo ScummVM
-  if form2.CheckBox4.Checked then begin
+  if form2.pagecontrol1.ActivePageIndex=1 then begin
     if es_zip then begin
       if not(comprobar_si_existe_fichero(directorio_final,games_final[juego_editado].exec,true)) then begin
         MessageDlg(list_error[5],mtError,[mbOk],0);
@@ -1323,7 +1380,7 @@ begin
         exit;
       end;
     end;
-    if form2.checkbox4.Checked then games_final[juego_editado].motor:=1;
+    games_final[juego_editado].motor:=1;
     games_final[juego_editado].exec:='';
   end else begin //Resto
     if not(comprobar_si_existe_fichero(directorio_final,games_final[juego_editado].exec,es_zip)) then begin
@@ -1341,20 +1398,68 @@ begin
   save_game_accept:=true;
 end;
 
+procedure save_game_poner_cosas;
+begin
+form2.LabeledEdit6.visible:=false;
+form2.LabeledEdit10.visible:=false;
+form2.LabeledEdit7.visible:=false;
+form2.LabeledEdit8.visible:=false;
+form2.LabeledEdit20.visible:=false;
+form2.LabeledEdit19.visible:=false;
+form2.checkbox3.visible:=false;
+form2.statictext4.visible:=false;
+form2.statictext5.visible:=false;
+form2.combobox2.visible:=false;
+form2.combobox3.visible:=false;
+form2.combobox6.visible:=false;
+form2.statictext6.visible:=false;
+form2.combobox7.visible:=false;
+form2.statictext7.visible:=false;
+case form2.PageControl1.ActivePageIndex of
+  MMSDOS:begin
+            form2.LabeledEdit6.visible:=true;
+            form2.LabeledEdit10.visible:=true;
+            form2.LabeledEdit7.visible:=true;
+            form2.LabeledEdit8.visible:=true;
+            form2.LabeledEdit20.visible:=true;
+            form2.LabeledEdit19.visible:=true;
+            form2.checkbox3.visible:=true;
+            form2.checkbox3.caption:='Loadfix';
+         end;
+  MAPPLE2:begin
+            form2.combobox6.visible:=true;
+            form2.statictext6.visible:=true;
+          end;
+  MATARI8:begin
+            form2.combobox3.visible:=true;
+            form2.statictext5.visible:=true;
+          end;
+  MAMIGA:begin
+            form2.LabeledEdit6.visible:=true;
+            form2.LabeledEdit10.visible:=true;
+            form2.checkbox3.visible:=true;
+            form2.checkbox3.caption:='Fix Palette';
+            form2.statictext4.visible:=true;
+            form2.combobox2.visible:=true;
+            form2.combobox7.visible:=true;
+            form2.statictext7.visible:=true;
+         end;
+end;
+end;
+
 procedure save_game_show;
 var
   r:trect;
   image_string:string;
 begin
 datos_cancel:=games_final[juego_editado];
+form2.PageControl1.ActivePageIndex:=games_final[juego_editado].motor;
 if not(estoy_anadiendo) then begin
   form2.labelededit1.Text:=games_final[juego_editado].nombre;
   if games_final[juego_editado].zip then form2.labelededit9.Text:=games_final[juego_editado].dir+'.zip'
     else form2.labelededit9.Text:=games_final[juego_editado].dir;
   form2.labelededit5.Text:=games_final[juego_editado].exec;
   form2.CheckBox3.Checked:=games_final[juego_editado].loadfix;
-  if ContainsText(form2.labelededit5.Text,'.img') then form2.labelededit10.Enabled:=true
-    else form2.labelededit10.Enabled:=false;
   form2.labelededit6.Text:=games_final[juego_editado].params;
   form2.labelededit7.Text:=games_final[juego_editado].exec_pre;
   form2.labelededit8.Text:=games_final[juego_editado].exec_post;
@@ -1362,18 +1467,37 @@ if not(estoy_anadiendo) then begin
   if games_final[juego_editado].ciclos=-1 then form2.labelededit11.Text:='0'
     else if games_final[juego_editado].ciclos=0 then form2.labelededit11.Text:='12000'
       else form2.labelededit11.Text:=inttostr(games_final[juego_editado].ciclos);
-  if games_final[juego_editado].grafica='cga' then form2.combobox1.ItemIndex:=1
-    else if games_final[juego_editado].grafica='tandy' then form2.combobox1.ItemIndex:=2
-      else if games_final[juego_editado].grafica='pcjr' then form2.combobox1.ItemIndex:=3
-        else if games_final[juego_editado].grafica='cga_composite' then form2.combobox1.ItemIndex:=4
-          else if games_final[juego_editado].grafica='hercules' then form2.combobox1.ItemIndex:=5
-            else form2.combobox1.ItemIndex:=0;
+  case games_final[juego_editado].motor of
+    MMSDOS:begin
+            form2.combobox1.ItemIndex:=0;
+            if games_final[juego_editado].grafica='cga' then form2.combobox1.ItemIndex:=1
+              else if games_final[juego_editado].grafica='tandy' then form2.combobox1.ItemIndex:=2
+                else if games_final[juego_editado].grafica='pcjr' then form2.combobox1.ItemIndex:=3
+                  else if games_final[juego_editado].grafica='cga_composite' then form2.combobox1.ItemIndex:=4
+                    else if games_final[juego_editado].grafica='hercules' then form2.combobox1.ItemIndex:=5;
+           end;
+    MAPPLE2:begin
+              form2.combobox6.ItemIndex:=0;
+              if games_final[juego_editado].extra_param='e' then form2.combobox6.ItemIndex:=1;
+            end;
+    MATARI8:begin
+              form2.combobox3.ItemIndex:=0;
+              if games_final[juego_editado].extra_param='osb' then form2.combobox3.ItemIndex:=1;
+            end;
+    MAMIGA:begin
+              form2.combobox2.ItemIndex:=0;
+              if games_final[juego_editado].grafica='aga' then form2.combobox2.ItemIndex:=1;
+              case games_final[juego_editado].ciclos of
+                100:form2.combobox7.ItemIndex:=0;
+                200:form2.combobox7.ItemIndex:=1;
+                  else form2.combobox7.ItemIndex:=2;
+              end;
+           end;
+  end;
   form2.labelededit14.Text:=games_final[juego_editado].extra_param;
   form2.labelededit13.Text:=games_final[juego_editado].mapper;
   form2.checkbox1.Checked:=games_final[juego_editado].gus;
   form2.checkbox2.Checked:=games_final[juego_editado].scumm;
-  form2.CheckBox4.Checked:=(games_final[juego_editado].motor=1);
-  form2.checkbox4click(nil);
   form2.labelededit2.Text:=games_final[juego_editado].year;
   form2.labelededit3.Text:=games_final[juego_editado].company;
   form2.labelededit15.Text:=games_final[juego_editado].mensaje;
@@ -1385,7 +1509,10 @@ if not(estoy_anadiendo) then begin
   form2.labelededit19.Text:=games_final[juego_editado].cdrom;
   if games_final[juego_editado].memoria=0 then form2.labelededit12.Text:='16'
     else form2.labelededit12.Text:=inttostr(games_final[juego_editado].memoria);
-  form2.combobox4.ItemIndex:=games_final[juego_editado].idioma;
+  if games_final[juego_editado].idioma>1 then begin
+    if (games_final[juego_editado].idioma mod 2)<>0 then form2.combobox4.ItemIndex:=0
+      else form2.combobox4.ItemIndex:=games_final[juego_editado].idioma;
+  end else form2.combobox4.ItemIndex:=games_final[juego_editado].idioma;
   if (games_final[juego_editado].tipo and 2)<>0 then form2.combobox5.ItemIndex:=1
     else if (games_final[juego_editado].tipo and 4)<>0 then form2.combobox5.ItemIndex:=2
       else if (games_final[juego_editado].tipo and 8)<>0 then form2.combobox5.ItemIndex:=3
@@ -1411,7 +1538,6 @@ end else begin
   form2.labelededit9.Text:='';
   form2.checkbox1.Checked:=false;
   form2.checkbox2.Checked:=false;
-  form2.CheckBox4.Checked:=false;
   form2.labelededit10.Text:='';
   form2.labelededit13.Text:='';
   form2.labelededit14.Text:='';
@@ -1421,7 +1547,6 @@ end else begin
   form2.labelededit20.Text:='';
   form2.combobox4.ItemIndex:=0;
   form2.combobox5.ItemIndex:=1;
-  form2.labelededit10.Enabled:=false;
   form2.button3.visible:=false;
 end;
 image_string:=main_config.dir_imgs+form2.labelededit4.text+'_000.png';
@@ -1438,6 +1563,7 @@ end else begin
     form2.image1.Canvas.Brush.Color:=0;
     form2.image1.Canvas.FillRect(r);
 end;
+save_game_poner_cosas;
 end;
 
 procedure config_show;
@@ -1445,10 +1571,17 @@ begin
   form4.labelededit4.Text:=main_config.config_dosbox;
   form4.labelededit5.Text:=main_config.config_dosbox_x;
   form4.labelededit12.Text:=main_config.config_scummvm;
+  form4.labelededit20.Text:=main_config.config_dsp;
+  form4.labelededit17.Text:=main_config.config_apple;
+  form4.labelededit18.Text:=main_config.config_atari800;
+  form4.labelededit19.Text:=main_config.config_amiga;
   form4.labelededit1.Text:=main_config.dosbox_exe;
   form4.labelededit2.Text:=main_config.dosbox_x_exe;
   form4.labelededit3.Text:=main_config.scumm_exe;
   form4.labelededit13.Text:=main_config.dsp_exe;
+  form4.labelededit14.Text:=main_config.apple2_exe;
+  form4.labelededit15.Text:=main_config.atari800_exe;
+  form4.labelededit16.Text:=main_config.amiga_exe;
   //Dirs misc
   form4.labelededit6.Text:=main_config.dir_manual;
   form4.labelededit7.Text:=main_config.dir_mapas;
@@ -1465,8 +1598,6 @@ begin
     4:form4.radiobutton6.Checked:=true;
   end;
   form4.checkbox10.Checked:=main_config.leer_fijos;
-  form4.checkbox11.Checked:=main_config.mostrar_todos;
-  form4.checkbox1.Checked:=main_config.mostrar_fallan;
   form4.checkbox2.Checked:=main_config.mostrar_anadidos;
 end;
 

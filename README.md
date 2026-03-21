@@ -1,6 +1,43 @@
 # GamePlay status #
-![Main Screen](https://i.ibb.co/LztCNNN7/gameplay-051-en.png)<br>
+![Main Screen](https://i.ibb.co/rRTktLCS/gameplay-060-en.png)<br>
 Please read 'Most Wanted' games!<br>
+<b>21/03/26 - GamePlay updated to 0.60b
+<pre>
+-General
+    +Added a new download system: you can now download a game if it is not present. You can also download extra information (images, manuals, etc.)
+    +Rewrote the configuration menu: you can now configure options per system
+    +Rewrote the add game menu: much clearer and easier to use
+    +MSDOS engine
+        -Changed to 4:3 screen format
+    +Amiga engine
+        -Added vertical/horizontal center options
+-MSDOS Games
+    +Eye of the Beholder (EN)
+    +Eye of the Beholder (ES)
+    +Eye of the Beholder II - Legend of the Dark Moon (EN)
+    +Eye of the Beholder II - Legend of the Dark Moon (ES)
+    +Eye of the Beholder III - Assault on Myth Drannor (EN)
+    +Eye of the Beholder III - Assault on Myth Drannor (ES)
+-Amiga Games
+    +A.M.C. - Astro Marine Corps
+    +Angel Nieto Pole 500
+    +Chichen Itza
+    +La Diosa de Cozumel
+    +Los Templos Sagrados
+    +Wonderboy in Monsterland
+    +Deliverance
+    +Eye of the Beholder
+    +Eye of the Beholder II - Legend of the Dark Moon
+    +Rise of the Robots
+    +Rambo III
+    +Red Heat
+    +RoboCop
+    +RoboCop 2
+    +RoboCop 3
+    +Sly Spy Secret Agent
+    +Bionic Commando
+    +Renegade III
+</pre>
 <b>27/02/26 - GamePlay updated to 0.51b
 <pre>
 -General

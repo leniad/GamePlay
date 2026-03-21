@@ -5,35 +5,46 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls,strutils,
-  Vcl.Mask,uitypes,main;
+  Vcl.Mask,uitypes,main, Vcl.ComCtrls;
 
 type
   TForm2 = class(TForm)
-    GroupBox1: TGroupBox;
-    GroupBox3: TGroupBox;
-    GroupBox10: TGroupBox;
-    GroupBox12: TGroupBox;
     Button1: TButton;
     Button2: TButton;
     Button3: TButton;
+    Timer1: TTimer;
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    GroupBox10: TGroupBox;
+    LabeledEdit11: TLabeledEdit;
+    StaticText1: TStaticText;
+    ComboBox1: TComboBox;
+    LabeledEdit12: TLabeledEdit;
+    CheckBox1: TCheckBox;
+    LabeledEdit13: TLabeledEdit;
+    LabeledEdit14: TLabeledEdit;
+    TabSheet2: TTabSheet;
+    TabSheet3: TTabSheet;
+    TabSheet4: TTabSheet;
+    TabSheet5: TTabSheet;
+    CheckBox2: TCheckBox;
+    GroupBox1: TGroupBox;
+    Image1: TImage;
     LabeledEdit1: TLabeledEdit;
     LabeledEdit2: TLabeledEdit;
     LabeledEdit3: TLabeledEdit;
     LabeledEdit4: TLabeledEdit;
+    GroupBox3: TGroupBox;
     LabeledEdit5: TLabeledEdit;
     LabeledEdit6: TLabeledEdit;
     LabeledEdit7: TLabeledEdit;
     LabeledEdit8: TLabeledEdit;
     LabeledEdit9: TLabeledEdit;
     LabeledEdit10: TLabeledEdit;
-    LabeledEdit11: TLabeledEdit;
-    ComboBox1: TComboBox;
-    StaticText1: TStaticText;
-    LabeledEdit12: TLabeledEdit;
-    CheckBox1: TCheckBox;
-    LabeledEdit13: TLabeledEdit;
-    LabeledEdit14: TLabeledEdit;
-    LabeledEdit15: TLabeledEdit;
+    LabeledEdit19: TLabeledEdit;
+    LabeledEdit20: TLabeledEdit;
+    CheckBox3: TCheckBox;
+    GroupBox12: TGroupBox;
     LabeledEdit16: TLabeledEdit;
     LabeledEdit17: TLabeledEdit;
     LabeledEdit18: TLabeledEdit;
@@ -41,13 +52,15 @@ type
     ComboBox4: TComboBox;
     StaticText3: TStaticText;
     ComboBox5: TComboBox;
-    LabeledEdit19: TLabeledEdit;
-    Image1: TImage;
-    Timer1: TTimer;
-    LabeledEdit20: TLabeledEdit;
-    CheckBox2: TCheckBox;
-    CheckBox4: TCheckBox;
-    CheckBox3: TCheckBox;
+    LabeledEdit15: TLabeledEdit;
+    ComboBox2: TComboBox;
+    StaticText4: TStaticText;
+    ComboBox3: TComboBox;
+    StaticText5: TStaticText;
+    ComboBox6: TComboBox;
+    StaticText6: TStaticText;
+    ComboBox7: TComboBox;
+    StaticText7: TStaticText;
     procedure FormCreate(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure Button1Click(Sender: TObject);
@@ -57,7 +70,7 @@ type
     procedure Timer1Timer(Sender: TObject);
     procedure LabeledEdit4KeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
-    procedure CheckBox4Click(Sender: TObject);
+    procedure PageControl1Change(Sender: TObject);
   private
     { Private declarations }
   public
@@ -101,35 +114,6 @@ begin
   form2.close;
 end;
 
-procedure TForm2.CheckBox4Click(Sender: TObject);
-begin
-  if checkbox4.Checked then begin
-    checkbox2.enabled:=false;
-    groupbox10.visible:=false;
-    labelededit5.visible:=false;
-    labelededit6.visible:=false;
-    labelededit7.visible:=false;
-    labelededit8.visible:=false;
-    labelededit10.visible:=false;
-    labelededit19.visible:=false;
-    labelededit20.visible:=false;
-    combobox5.visible:=false;
-    statictext3.Visible:=false;
-  end else begin
-    checkbox2.enabled:=true;
-    groupbox10.visible:=true;
-    labelededit5.visible:=true;
-    labelededit6.visible:=true;
-    labelededit7.visible:=true;
-    labelededit8.visible:=true;
-    labelededit10.visible:=true;
-    labelededit19.visible:=true;
-    labelededit20.visible:=true;
-    combobox5.visible:=true;
-    statictext3.Visible:=true;
-  end;
-end;
-
 procedure TForm2.FormCreate(Sender: TObject);
 begin
   cambiar_idioma_grabar;
@@ -140,6 +124,19 @@ begin
   combobox1.Items.Add('PC-Jr');
   combobox1.Items.Add('CGA Composite');
   combobox1.Items.Add('Hercules');
+  combobox2.Items.Clear;
+  combobox2.Items.Add('OCE');
+  combobox2.Items.Add('AGA');
+  combobox3.Items.Clear;
+  combobox3.Items.Add('ROM Standard');
+  combobox3.Items.Add('ROM B');
+  combobox6.Items.Clear;
+  combobox6.Items.Add('Apple II');
+  combobox6.Items.Add('Apple II enhanced');
+  combobox7.Items.Clear;
+  combobox7.Items.Add('100%');
+  combobox7.Items.Add('200%');
+  combobox7.Items.Add('400%');
 end;
 
 
@@ -188,6 +185,11 @@ procedure TForm2.LabeledEdit5KeyUp(Sender: TObject; var Key: Word; Shift: TShift
 begin
   if ContainsText(labelededit5.Text,'.img') then labelededit10.Enabled:=true
     else labelededit10.Enabled:=false;
+end;
+
+procedure TForm2.PageControl1Change(Sender: TObject);
+begin
+  save_game_poner_cosas;
 end;
 
 procedure TForm2.Timer1Timer(Sender: TObject);

@@ -63,6 +63,10 @@ type
     RadioButton9: TRadioButton;
     Image7: TImage;
     RadioButton10: TRadioButton;
+    GroupBox10: TGroupBox;
+    CheckBox20: TCheckBox;
+    CheckBox19: TCheckBox;
+    Button3: TButton;
     procedure FormCreate(Sender: TObject);
     procedure StringGrid1Click(Sender: TObject);
     procedure StringGrid1DblClick(Sender: TObject);
@@ -93,6 +97,7 @@ type
     procedure RadioButton2Click(Sender: TObject);
     procedure Image7Click(Sender: TObject);
     procedure RadioButton10Click(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -127,6 +132,11 @@ begin
   form2.showmodal;
   ordena_juegos;
   mostrar_juegos;
+end;
+
+procedure TForm1.Button3Click(Sender: TObject);
+begin
+  //sacar_juegos;
 end;
 
 procedure TForm1.CheckBox15Click(Sender: TObject);
@@ -202,15 +212,6 @@ begin
   if form1.Visible then groupbox7.SetFocus;
 end;
 
-procedure opciones_avanzadas_msdos;
-begin
-  form1.checkbox15.Enabled:=true;
-  form1.button1.Visible:=true;
-  form1.button2.Visible:=true;
-  form1.groupbox2.visible:=false;
-  form1.groupbox8.visible:=form1.checkbox15.Checked;
-end;
-
 procedure TForm1.RadioButton1Click(Sender: TObject);
 begin
   main_config.motor:=MMSDOS;
@@ -229,9 +230,16 @@ begin
   checkbox8.Enabled:=true;
   checkbox17.Enabled:=true;
   checkbox2.Enabled:=true;
+  groupbox8.Height:=148;
+  checkbox15.Enabled:=true;
+  button1.Visible:=true;
+  button2.Visible:=true;
+  button1.top:=99;
+  button2.top:=99;
+  groupbox2.visible:=false;
+  groupbox10.visible:=false;
   groupbox9.visible:=true;
-  form1.groupbox8.Height:=148;
-  opciones_avanzadas_msdos;
+  groupbox8.visible:=form1.checkbox15.Checked;
   if stringgrid1.Cells[1,0]<>'' then button2.Enabled:=not(games_final[strtoint(stringgrid1.Cells[1,0])].interno) or main_config.leer_fijos;
   if total_juegos=0 then exit;
   stringgrid1.Row:=0;
@@ -261,9 +269,16 @@ begin
   checkbox8.Enabled:=false;
   checkbox17.Enabled:=false;
   checkbox2.Enabled:=false;
+  groupbox8.Height:=90;
+  checkbox15.Enabled:=true;
+  button1.Visible:=true;
+  button2.Visible:=true;
+  button1.top:=30;
+  button2.top:=30;
+  groupbox2.visible:=false;
+  groupbox10.visible:=false;
   groupbox9.visible:=false;
-  form1.groupbox8.Height:=90;
-  opciones_avanzadas_msdos;
+  groupbox8.visible:=form1.checkbox15.Checked;
   if stringgrid1.Cells[1,0]<>'' then button2.Enabled:=not(games_final[strtoint(stringgrid1.Cells[1,0])].interno) or main_config.leer_fijos;
   if total_juegos=0 then exit;
   stringgrid1.Row:=0;
@@ -314,11 +329,14 @@ begin
   checkbox17.Enabled:=true;
   checkbox2.Enabled:=true;
   checkbox15.Enabled:=true;
-  button1.Visible:=false;
-  button2.Visible:=false;
-  form1.groupbox8.Height:=90;
+  button1.Visible:=true;
+  button2.Visible:=true;
+  form1.groupbox8.Height:=148;
+  button1.top:=99;
+  button2.top:=99;
   groupbox9.visible:=false;
   groupbox2.visible:=true;
+  groupbox10.visible:=false;
   groupbox8.visible:=checkbox15.Checked;
   if total_juegos=0 then exit;
   stringgrid1.Row:=0;
@@ -328,25 +346,33 @@ end;
 procedure TForm1.RadioButton6Click(Sender: TObject);
 begin
   main_config.motor:=MATARI8;
-  form1.checkbox9.Enabled:=false;
-  form1.checkbox10.Enabled:=false;
-  form1.checkbox11.Enabled:=false;
-  form1.checkbox12.Enabled:=false;
-  form1.checkbox13.Enabled:=false;
-  form1.checkbox18.Enabled:=false;
-  form1.checkbox3.Enabled:=true;
-  form1.checkbox16.Enabled:=true;
-  form1.checkbox6.Enabled:=true;
-  form1.checkbox4.Enabled:=true;
-  form1.checkbox5.Enabled:=true;
-  form1.checkbox7.Enabled:=true;
-  form1.checkbox8.Enabled:=true;
-  form1.checkbox17.Enabled:=true;
-  form1.checkbox2.Enabled:=true;
-  form1.checkbox15.Enabled:=false;
-  form1.groupbox8.visible:=false;
+  checkbox9.Enabled:=false;
+  checkbox10.Enabled:=false;
+  checkbox11.Enabled:=false;
+  checkbox12.Enabled:=false;
+  checkbox13.Enabled:=false;
+  checkbox18.Enabled:=false;
+  checkbox3.Enabled:=true;
+  checkbox16.Enabled:=true;
+  checkbox6.Enabled:=true;
+  checkbox4.Enabled:=true;
+  checkbox5.Enabled:=true;
+  checkbox7.Enabled:=true;
+  checkbox8.Enabled:=true;
+  checkbox17.Enabled:=true;
+  checkbox2.Enabled:=true;
+  checkbox15.Enabled:=true;
+  button1.Visible:=true;
+  button2.Visible:=true;
+  button1.top:=30;
+  button2.top:=30;
+  groupbox8.Height:=90;
+  groupbox2.visible:=false;
+  groupbox10.visible:=false;
+  groupbox9.visible:=false;
+  groupbox8.visible:=form1.checkbox15.Checked;
   if total_juegos=0 then exit;
-  form1.stringgrid1.Row:=0;
+  stringgrid1.Row:=0;
   mostrar_juegos;
 end;
 
@@ -370,25 +396,33 @@ end;
 procedure TForm1.RadioButton10Click(Sender: TObject);
 begin
   main_config.motor:=MAMIGA;
-  form1.checkbox9.Enabled:=false;
-  form1.checkbox10.Enabled:=false;
-  form1.checkbox11.Enabled:=false;
-  form1.checkbox12.Enabled:=false;
-  form1.checkbox13.Enabled:=false;
-  form1.checkbox18.Enabled:=false;
-  form1.checkbox3.Enabled:=true;
-  form1.checkbox16.Enabled:=true;
-  form1.checkbox6.Enabled:=true;
-  form1.checkbox4.Enabled:=true;
-  form1.checkbox5.Enabled:=true;
-  form1.checkbox7.Enabled:=true;
-  form1.checkbox8.Enabled:=true;
-  form1.checkbox17.Enabled:=true;
-  form1.checkbox2.Enabled:=true;
-  form1.checkbox15.Enabled:=false;
-  form1.groupbox8.visible:=false;
+  checkbox9.Enabled:=false;
+  checkbox10.Enabled:=false;
+  checkbox11.Enabled:=false;
+  checkbox12.Enabled:=false;
+  checkbox13.Enabled:=false;
+  checkbox18.Enabled:=false;
+  checkbox3.Enabled:=true;
+  checkbox16.Enabled:=true;
+  checkbox6.Enabled:=true;
+  checkbox4.Enabled:=true;
+  checkbox5.Enabled:=true;
+  checkbox7.Enabled:=true;
+  checkbox8.Enabled:=true;
+  checkbox17.Enabled:=true;
+  checkbox2.Enabled:=true;
+  checkbox15.Enabled:=true;
+  groupbox8.visible:=form1.checkbox15.Checked;
+  groupbox2.visible:=false;
+  groupbox9.visible:=false;
+  groupbox10.visible:=true;
+  button1.visible:=true;
+  button2.visible:=true;
+  button1.top:=99;
+  button2.top:=99;
+  groupbox8.Height:=148;
   if total_juegos=0 then exit;
-  form1.stringgrid1.Row:=0;
+  stringgrid1.Row:=0;
   mostrar_juegos;
 end;
 
@@ -422,6 +456,7 @@ begin
     image_string:=dir_dsp+'preview\'+games_final[ngame].dir+'.png';
     if FileExists(image_string) then Image1.Picture.LoadFromFile(image_string)
       else poner_en_blanco;
+
   end else begin
     //Muestro las imagenes si las hay y pongo en marcha el timer
     image_string:=main_config.dir_imgs+games_final[ngame].image_name+'_000.png';
@@ -435,9 +470,10 @@ begin
   image4.visible:=games_final[ngame].manual<>'';
   image3.visible:=games_final[ngame].guia<>'';
   image5.visible:=games_final[ngame].map<>'';
-  image7.visible:=games_final[ngame].setup<>'';
   label3.Caption:=games_final[ngame].company;
   label4.Caption:=games_final[ngame].year;
+  if main_config.motor=MMSDOS then image7.visible:=games_final[ngame].setup<>''
+    else image7.visible:=false;
   button2.Enabled:=not(games_final[ngame].interno) or main_config.leer_fijos;
 end;
 

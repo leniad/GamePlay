@@ -1,16 +1,18 @@
 # GAMEPLAY
 ### What is Gameplay?
 Gameplay is a frontend for MS-DOS, ScummVM, Apple II, Atari 800, Amiga and DSP Emulator. It lets you play games easily and quickly — no complications, no configuration needed. Just choose a game from the list and play. Everything is preconfigured (best audio, best graphics, extra parameters, etc.).<br>
-![Main Screen](https://i.ibb.co/bg99MCW6/gameplay-050-en.png)
+![Main Screen](https://i.ibb.co/rRTktLCS/gameplay-060-en.png)
 ### Which games can I play?
-Initially, there's a list of 403 MS-DOS, 71 ScummVM (2 exclusive), 109 Apple II, 35 Atari 800 and 12 Amiga ready-to-play games. They include preview images, manuals, maps, and guides so you can enjoy the full game experience. There are also more than 400 Arcade games, Console, 8bits Computer emulator ready-to-play. No need to configure anything—not audio, not video—just enjoy.
+Initially, there's a list of 409 MS-DOS, 71 ScummVM (2 exclusive), 109 Apple II, 35 Atari 800 and 103 Amiga ready-to-play games. They include preview images, manuals, maps, and guides so you can enjoy the full game experience. There are also more than 400 Arcade games, Console, 8bits Computer emulator ready-to-play. No need to configure anything—not audio, not video—just enjoy.<br>
+If a game is not available, GamePlay provides an option to download it.
 ### Can I add more games?
 Of course! If you have MS-DOS favorite games that aren't on the list, you can easily and quickly add your own. In the advanced options, you can choose ZIP format, add a CD-ROM, change memory settings, video card, attach manuals, guides, maps, and more.
 ### What language is Gameplay in?
 The language is detected automatically, and it selects between Spanish, English, German, French, and Italian. If none of these are detected, English is selected by default.
 ### Where can I download it?
 There are two versions: the "executables only" version, which is the executable and the source code, which you can download right here by searching for the latest release. <br>
-There's a full version, with all the games, images, manuals, maps, guides, and also the Windows and Linux executables for the emulators. The link is also in the release information.
+A full version is available, including all required emulators and components, except for the games.<br>
+Games are automatically downloaded if they are not available.
 ### Can I contribute?
 Yes of course! If you find a bug, just open an issue so it can be reviewed.
 If you have games you’d like to add, better manuals, improved versions, etc., feel free to send them to me.<br>

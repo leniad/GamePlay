@@ -21,7 +21,9 @@ uses
   config in 'config.pas' {Form4},
   idioma_info in 'idioma_info.pas',
   main in 'main.pas',
-  dsp_data in 'dsp_data.pas';
+  dsp_data in 'dsp_data.pas',
+  download_game in 'download_game.pas',
+  games_download in 'games_download.pas' {Form5};
 
 {$R *.res}
 
@@ -33,5 +35,6 @@ begin
   Application.CreateForm(TForm2, Form2);
   Application.CreateForm(TForm3, Form3);
   Application.CreateForm(TForm4, Form4);
+  Application.CreateForm(TForm5, Form5);
   Application.Run;
 end.

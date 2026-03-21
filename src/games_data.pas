@@ -26,7 +26,7 @@ type
     motor:byte;
   end;
 const
-  GAME_TOTAL=634;
+  GAME_TOTAL=658;
   GAME_DATA:array[0..(GAME_TOTAL-1)] of tipo_games=(
   (nombre:'Bruce Lee';dir:'brucelee';exec:'brucelee.img';ciclos:300;grafica:'cga_composite';extra_param:'-set joysticktype=2axis';mapper:'brucelee.map'),
   (nombre:'Lost Vikings, the';dir:'lostv';exec:'vikings.exe';setup:'setup.exe'),
@@ -58,7 +58,7 @@ const
   (nombre:'Gods';dir:'gods';exec:'gods.exe';setup:'install.exe'),
   (nombre:'Alley Cat';dir:'alleycat';exec:'alleycat.img';ciclos:450),
   (nombre:'Rescate en el Golfo';dir:'rgolfo';exec:'rgolfo.img'),
-  (nombre:'Leisure Suir Larry in the Land of the Lounge Lizards';dir:'lsl1';exec:'sierra.com';grafica:'tandy';scumm:true),
+  (nombre:'Leisure Suit Larry in the Land of the Lounge Lizards';dir:'lsl1';exec:'sierra.com';grafica:'tandy';scumm:true),
   (nombre:'Street Rod';dir:'streetr';exec:'sr.exe'),
   (nombre:'Street Rod II';dir:'streetr2';exec:'sr.exe'),
   (nombre:'Wrath of the Demon';dir:'wrathd';exec:'wrath.exe'),
@@ -245,8 +245,8 @@ const
   (nombre:'F40 Pursuit Simulator';dir:'f40psega';exec:'f40ptl.exe';ciclos:1500),
   (nombre:'F40 Pursuit Simulator (CGA)';dir:'f40pscga';exec:'f40.exe';ciclos:1500),
   (nombre:'Crazy Cars III';dir:'ccars3';exec:'cc3.com'),
-  (nombre:'Leisure Suir Larry 1 in the Land of the Lounge Lizards (EN/VGA)';dir:'lsl1_en';exec:'scidhuv.exe';ciclos:6000;scumm:true;setup:'install.exe'),
-  (nombre:'Leisure Suir Larry 1 in the Land of the Lounge Lizards (ES/VGA)';dir:'lsl1_es';exec:'scidhuv.exe';ciclos:6000;scumm:true;setup:'install.exe'),
+  (nombre:'Leisure Suit Larry 1 in the Land of the Lounge Lizards (EN/VGA)';dir:'lsl1_en';exec:'scidhuv.exe';ciclos:6000;scumm:true;setup:'install.exe'),
+  (nombre:'Leisure Suit Larry 1 in the Land of the Lounge Lizards (ES/VGA)';dir:'lsl1_es';exec:'scidhuv.exe';ciclos:6000;scumm:true;setup:'install.exe'),
   (nombre:'F29 Retaliator';dir:'f29retal';exec:'retal.exe';ciclos:1),
   (nombre:'Bad Dudes';dir:'baddudes';exec:'disk01.img';segundo_disco:'disk02.img';ciclos:1000),
   (nombre:'Karateka';dir:'karateka';exec:'karateka.exe';ciclos:450),
@@ -397,7 +397,7 @@ const
   (nombre:'Castle Wolfenstein';dir:'CWOLF_APPLE';exec:'Castle Wolfenstein.woz';motor:MAPPLE2),
   (nombre:'Donkey Kong';dir:'DKONG_APPLE';exec:'DonkeyKong.dsk';motor:MAPPLE2),
   (nombre:'Gremlins';dir:'GREMLINS_APPLE';exec:'Gremlins.woz';motor:MAPPLE2),
-  (nombre:'Leisure Suir Larry in the Land of the Lounge Lizards';dir:'LARRY_APPLE';exec:'Larry1_1A.woz';segundo_disco:'Larry1_1B.woz';motor:MAPPLE2),
+  (nombre:'Leisure Suit Larry in the Land of the Lounge Lizards';dir:'LARRY_APPLE';exec:'Larry1_1A.woz';segundo_disco:'Larry1_1B.woz';motor:MAPPLE2),
   (nombre:'Lode Runner';dir:'LODERUN_APPLE';exec:'Lode_Runner.do';motor:MAPPLE2),
   (nombre:'Maniac Mansion';dir:'MMANSION_APPLE';exec:'Maniac Mansion_1A.dsk';segundo_disco:'Maniac Mansion_1B.dsk';motor:MAPPLE2),
   (nombre:'Prince of Persia';dir:'POP_APPLE';exec:'Prince of Persia_A.woz';segundo_disco:'Prince of Persia_B.woz';motor:MAPPLE2),
@@ -586,10 +586,9 @@ const
   (nombre:'Speed Ball 2 - Brutal Deluxe';dir:'SBALL2_AMIGA';exec:'Speedball2.ipf';motor:MAMIGA),
   (nombre:'Sentinel, the';dir:'SENTINEL_AMIGA';exec:'The Sentinel.ipf';motor:MAMIGA),
   (nombre:'Space Quest Chapter I - The Sarien Encounter';dir:'SQ_AMIGA';exec:'Space Quest.adf';exec_pre:'kbd1';motor:MAMIGA),
-  (nombre:'Leisure Suir Larry in the Land of the Lounge Lizards';dir:'LARRY1_AMIGA';exec:'Leisure Suit Larry.adf';exec_pre:'kbd1';motor:MAMIGA),
+  (nombre:'Leisure Suit Larry in the Land of the Lounge Lizards';dir:'LARRY1_AMIGA';exec:'Leisure Suit Larry.adf';exec_pre:'kbd1';motor:MAMIGA),
   (nombre:'Beach Volley';dir:'BEACHV_AMIGA';exec:'BeachVolley.ipf';ciclos:200;motor:MAMIGA),
   (nombre:'Banshee';dir:'BANSHEE_AMIGA';exec:'banshee.vhd';params:'32,1,2,512,6,,uae0';segundo_disco:'Banshee_Disk1.ipf';ciclos:200;grafica:'aga';motor:MAMIGA),
-  //
   (nombre:'Space Quest III - The Pirates of Pestulon';dir:'SQ3_AMIGA';exec:'sq3.vhd';params:'32,1,2,512,0';exec_pre:'kbd1';grafica:'aga';motor:MAMIGA),
   (nombre:'Hammer Boy';dir:'HAMMERBOY_AMIGA';exec:'HammerBoy.ipf';loadfix:true;motor:MAMIGA),
   (nombre:'Grand Prix Master';dir:'ASPAR_AMIGA';exec:'GrandPrixMaster.ipf';loadfix:true;motor:MAMIGA),
@@ -662,7 +661,32 @@ const
   (nombre:'Spy Who Loved Me, the';dir:'SPYLOVED_AMIGA';exec:'SpyWhoLovedMe.ipf';motor:MAMIGA),
   (nombre:'Sensible Soccer';dir:'SSOCCER_AMIGA';exec:'SensibleSoccer_Disc1.ipf';segundo_disco:'SensibleSoccer_Disc2.ipf';ciclos:200;motor:MAMIGA),
   (nombre:'Zynaps';dir:'ZYNAPS_AMIGA';exec:'Zynaps.ipf';ciclos:100;motor:MAMIGA),
-  (nombre:'Space Quest Chapter II - Vohaul''s Revenge';dir:'SQ2_AMIGA';exec:'Space Quest II.adf';exec_pre:'kbd1';motor:MAMIGA)
+  (nombre:'Space Quest Chapter II - Vohaul''s Revenge';dir:'SQ2_AMIGA';exec:'Space Quest II.adf';exec_pre:'kbd1';motor:MAMIGA),
+  //
+  (nombre:'A.M.C. - Astro Marine Corps';dir:'AMC_AMIGA';exec:'AMC_disk1.adf';motor:MAMIGA),
+  (nombre:'Angel Nieto Pole 500';dir:'ANIETO_AMIGA';exec:'Angel Nieto Pole 500.adf';motor:MAMIGA),
+  (nombre:'Chichen Itza';dir:'CHICHEN_AMIGA';exec:'Chichen Itza.ipf';motor:MAMIGA),
+  (nombre:'Diosa de Cozumel, la';dir:'COZUMEL_AMIGA';exec:'Diosa de Cozumel.ipf';motor:MAMIGA),
+  (nombre:'Templos Sagrados, los';dir:'TEMPLOS_AMIGA';exec:'Templos Sagrados.ipf';motor:MAMIGA),
+  (nombre:'Wonderboy in Monsterland';dir:'WBOY_AMIGA';exec:'Wonderboy in Monsterland.ipf';ciclos:100;motor:MAMIGA),
+  (nombre:'Eye of the Beholder (EN)';dir:'EOB_EN';exec:'start1.exe'),
+  (nombre:'Eye of the Beholder (ES)';dir:'EOB_ES';exec:'start1.exe'),
+  (nombre:'Eye of the Beholder II - Legend of the Dark Moon (EN)';dir:'EOB2_EN';exec:'start.exe';ciclos:6000;setup:'setup.exe'),
+  (nombre:'Eye of the Beholder II - Legend of the Dark Moon (ES)';dir:'EOB2_ES';exec:'start.exe';ciclos:6000;setup:'setup.exe'),
+  (nombre:'Eye of the Beholder III - Assault on Myth Drannor (EN)';dir:'EOB3_EN';exec:'aesop.exe';params:'eye start';ciclos:12000;setup:'sound.exe'),
+  (nombre:'Eye of the Beholder III - Assault on Myth Drannor (ES)';dir:'EOB3_ES';exec:'aesop.exe';params:'eye start';ciclos:12000;setup:'setup.exe'),
+  (nombre:'Deliverance';dir:'DELIVERANCE_AMIGA';exec:'Deliverance_Disk1.ipf';segundo_disco:'Deliverance_Disk2.ipf';motor:MAMIGA),
+  (nombre:'Eye of the Beholder';dir:'EOB_AMIGA';exec:'eob.vhd';params:'32,1,2,512,0';exec_pre:'kbd1';grafica:'aga';motor:MAMIGA),
+  (nombre:'Eye of the Beholder II - Legend of the Dark Moon';dir:'EOB2_AMIGA';exec:'eob2.vhd';params:'32,1,2,512,0';exec_pre:'kbd1';grafica:'aga';motor:MAMIGA),
+  (nombre:'Rise of the Robots';dir:'RISEROBOT_AMIGA';exec:'riserobot.vhd';params:'32,1,2,512,0';grafica:'aga';motor:MAMIGA),
+  (nombre:'Rambo III';dir:'RAMBO3_AMIGA';exec:'RamboIII.ipf';motor:MAMIGA),
+  (nombre:'Red Heat';dir:'REDHEAT_AMIGA';exec:'RedHeat.ipf';motor:MAMIGA),
+  (nombre:'RoboCop';dir:'ROBOCOP_AMIGA';exec:'RoboCop.ipf';motor:MAMIGA),
+  (nombre:'RoboCop 2';dir:'ROBOCOP2_AMIGA';exec:'RoboCop2_Disk1.ipf';segundo_disco:'RoboCop2_Disk2.ipf';motor:MAMIGA),
+  (nombre:'RoboCop 3';dir:'ROBOCOP3_AMIGA';exec:'robocop3.vhd';params:'32,1,2,512,0';grafica:'aga';motor:MAMIGA),
+  (nombre:'Sly Spy Secret Agent';dir:'SLYSPY_AMIGA';exec:'SlySpySecretAgent_Disk1.ipf';segundo_disco:'SlySpySecretAgent_Disk2.ipf';ciclos:100;motor:MAMIGA),
+  (nombre:'Bionic Commando';dir:'BIONICC_AMIGA';exec:'Bionic Commando.ipf';motor:MAMIGA),
+  (nombre:'Renegade III';dir:'RENEGADE3_AMIGA';exec:'Renegade3.adf';motor:MAMIGA)
 );
 
 implementation

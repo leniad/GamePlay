@@ -3,7 +3,7 @@
 **Gameplay** is divided into several sections.
 If you just want to play, **no initial configuration is needed**.
 
-![Main Screen](https://i.ibb.co/7JTdbBSz/gameplay-040-en.png)
+![Main Screen](https://i.ibb.co/rRTktLCS/gameplay-060-en.png)
 
 ---
 
@@ -24,6 +24,7 @@ You can choose:
 - **DSP Emulator**: Arcade, 8bits Computers and Consoles emulator.
 - **Apple II**: Games for the Apple II computer series
 - **Atari 800**: Games for the Atari 800 computer series
+- **Amiga**: Games for Amiga computer
 
 > The emulator is configured automatically, you don't need to do anything.
 
@@ -32,41 +33,34 @@ You can choose:
 - **Fullscreen**: The game will start in fullscreen mode
 - **Sound**: Enable or disable the sound of the running game
 - **Show info/help message**: When a game is launched, a message can be configured to display information such as optimal settings for graphics, sound, keys, etc. This option disables that message.
-- **Advanced Options**: Show advanced options, meaning buttons to add, edit or delete games.
+- **Advanced Options**: Show advanced options.
 
-### 1.4 Search Game
-If you type the name of the game you're looking for, the game will be selected from the list.
-
-### 1.5 Game List
+### 1.4 Game List
 
 Color codes:
 - **Blue**: Game from the default list and available.
 - **Yellow**: Manually added game and available.
-- **Gray**: Listed game, but with errors and not available.
+- **Gray**: Listed game, but not available locally.
 - **Purple**: A game that only works with the ScummVM engine.
 
 Play using `ENTER`, double-click, or the _Play_ button.
-> If you type a name, it will be searched among the list.
+> If the game is not available, an option to download it will appear.
 
-### 1.6 Available Games / Total Games
+### 1.5 Available Games / Total Games
 This counter shows how many games are available / total games including default and manually added ones.<br>
-If a game has data issues, it won’t appear unless forced through advanced settings (explained later).
 
-### 1.7 Game Images
+### 1.6 Game Images
 Shows one or more rotating images every second.
 
-### 1.8 Play
-Click this button to run the selected game, or double-click a game in the list.
-
-### 1.9 Game Info
+### 1.7 Game Info
 Shows the **company** and **year** of release.
 
-### 1.10 Manual, Guide or Maps
+### 1.8 Manual, Guide or Maps
 If a game has associated documents (PDF, TXT, images), they can be opened from here.<br>
 If there are many files, a folder might open instead.<br>
 If the button is disabled, no documents are available.<br>
 
-### 1.11 Advanced Configuration
+### 1.9 Advanced Configuration
 Access the advanced menu where you can change:
 - Directories
 - Executables
@@ -77,42 +71,38 @@ Access the advanced menu where you can change:
 
 ## 2. Advanced Configuration
 
-![Configuration](https://i.ibb.co/YTDQ32sn/config-en.png)
+![Configuration](https://i.ibb.co/QyJTtYP/config-060-en.png)
 
-### 2.1 Executable Files
-To run games, Gameplay needs three emulators: *DosBox, DosBox-X, ScummVM and DSP Emulator*.
-Here you can change the executable files to use other versions or emulator updates.
+### 2.1 Executable and Config Files
+To run games, GamePlay requires the emulators *DOSBox, DOSBox-X, ScummVM, DSP Emulator, AppleWin, and Altirra*.
+By switching tabs, you can change the executable and configuration files to use different versions or updated releases of the emulators.
 
 ### 2.2 Main Directories
 Select directories for manuals, maps, guides, and images.
 You can also change the root directory for ZIP-compressed games, or the ROMs directory for the MT32.
 
-### 2.3 Configuration Files
-You can select custom config files for the three emulators.
-
-### 2.4 Language
+### 2.3 Language
 Gameplay auto-selects the language, but you can choose a different one here.
 
-### 2.5 Game Display Options
+### 2.4 Game Display Options
 Modify how games appear in the main list:
 - Read default game values: If enabled and ‘advanced options’ are active on the main screen, you'll be able to edit/delete default games (changes are temporary).
-- Show all games: Displays all recognized games, whether they work or not.
-- Show only broken games: Displays only the games that don’t work.
 - Show only added games: Shows only manually added games.
 
-### 2.6 Default Values
+### 2.5 Default Values
 Restores original settings. (_Panic button_)
 
 ---
 
 ## 3. Add / Edit / Delete Games (Advanced Options)
 
-![Edit Games](https://i.ibb.co/B2Rsbxch/add-game-040-en.png)
+![Edit Games](https://i.ibb.co/TD7XRkcW/add-060-en.png)
 
 If you enable 'Advanced Options' on the main screen, two more buttons will appear: 'Add Games' and 'Edit/Delete Games'.<br>
 In this menu, you can add new games to the main list or edit existing manually added games.<br>
 By default, you can't edit default games. To change them, enable 'Read default game values' in 'Advanced Configuration'. These changes are temporary.<br>
-However, manually added games can be edited permanently.
+However, manually added games can be edited permanently.<br>
+The available options will vary depending on the selected tab.
 
 ### Configurable Parameters
 - **Full Name**: Name shown in the list
@@ -141,21 +131,4 @@ However, manually added games can be edited permanently.
 ---
 
 ## 4. Play on Linux
-If you have any problem running Gameplay after unzipping the file, you should run the following command in the same folder where you unzipped it (this will add the executable attribute)<br>
-<pre>
-bash fix_linux_exec.sh
-</pre>
-To add the engines and later configure them in Gameplay on Linux, the easiest way is to use the 'snap' tool.<br>
-Once you have it installed (check Google for how to install it on your specific distro), run the following commands:<br>
-<pre>
-sudo snap install dosbox-x
-sudo snap install dosbox-staging
-sudo snap install scummvm
-</pre>
-After installing the three engines, you should run the following commands to locate the executables and add them to the Gameplay configuration:<br>
-<pre>
-whereis dosbox-x
-whereis dosbox-staging
-whereis scummvm
-</pre>
-*DSP Emulator* engine, is ready to work.
+Due big changes, the Linux and Mac versions are currently a work in progress.
