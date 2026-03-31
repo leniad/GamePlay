@@ -26,7 +26,7 @@ type
     motor:byte;
   end;
 const
-  GAME_TOTAL=658;
+  GAME_TOTAL=680;
   GAME_DATA:array[0..(GAME_TOTAL-1)] of tipo_games=(
   (nombre:'Bruce Lee';dir:'brucelee';exec:'brucelee.img';ciclos:300;grafica:'cga_composite';extra_param:'-set joysticktype=2axis';mapper:'brucelee.map'),
   (nombre:'Lost Vikings, the';dir:'lostv';exec:'vikings.exe';setup:'setup.exe'),
@@ -347,7 +347,7 @@ const
   (nombre:'King''s Quest - Quest for the Crown (PcJr-PCBooter)';dir:'kq1pcjr';exec:'kq1pcjr.img';ciclos:300;grafica:'pcjr'),
   (nombre:'Rampage';dir:'RAMPAGE';exec:'rampage.exe';ciclos:1500),
   (nombre:'Xenon';dir:'XENON';exec:'xenon.exe';ciclos:1500),
-  (nombre:'Xenon 2 Megablast';dir:'XENON2';exec:'xenon2.exe'),
+  (nombre:'Xenon 2 - Megablast';dir:'XENON2';exec:'xenon2.exe'),
   (nombre:'Space Ace';dir:'SPACEACE';exec:'spaceace.exe'),
   (nombre:'Space Ace: II Borf''s Revenge';dir:'SPACEA2';exec:'sa2.exe'),
   (nombre:'StarQuake';dir:'STARQUAK';exec:'quake.exe';ciclos:750;grafica:'cga'),
@@ -662,7 +662,6 @@ const
   (nombre:'Sensible Soccer';dir:'SSOCCER_AMIGA';exec:'SensibleSoccer_Disc1.ipf';segundo_disco:'SensibleSoccer_Disc2.ipf';ciclos:200;motor:MAMIGA),
   (nombre:'Zynaps';dir:'ZYNAPS_AMIGA';exec:'Zynaps.ipf';ciclos:100;motor:MAMIGA),
   (nombre:'Space Quest Chapter II - Vohaul''s Revenge';dir:'SQ2_AMIGA';exec:'Space Quest II.adf';exec_pre:'kbd1';motor:MAMIGA),
-  //
   (nombre:'A.M.C. - Astro Marine Corps';dir:'AMC_AMIGA';exec:'AMC_disk1.adf';motor:MAMIGA),
   (nombre:'Angel Nieto Pole 500';dir:'ANIETO_AMIGA';exec:'Angel Nieto Pole 500.adf';motor:MAMIGA),
   (nombre:'Chichen Itza';dir:'CHICHEN_AMIGA';exec:'Chichen Itza.ipf';motor:MAMIGA),
@@ -686,7 +685,30 @@ const
   (nombre:'RoboCop 3';dir:'ROBOCOP3_AMIGA';exec:'robocop3.vhd';params:'32,1,2,512,0';grafica:'aga';motor:MAMIGA),
   (nombre:'Sly Spy Secret Agent';dir:'SLYSPY_AMIGA';exec:'SlySpySecretAgent_Disk1.ipf';segundo_disco:'SlySpySecretAgent_Disk2.ipf';ciclos:100;motor:MAMIGA),
   (nombre:'Bionic Commando';dir:'BIONICC_AMIGA';exec:'Bionic Commando.ipf';motor:MAMIGA),
-  (nombre:'Renegade III';dir:'RENEGADE3_AMIGA';exec:'Renegade3.adf';motor:MAMIGA)
+  (nombre:'Renegade III';dir:'RENEGADE3_AMIGA';exec:'Renegade3.adf';motor:MAMIGA),
+  //
+  (nombre:'Bubble Bobble';dir:'BUBBLEB_ST';exec:'Bubble Bobble.stx';motor:MATARIST),
+  (nombre:'Leisure Suit Larry in the Land of the Lounge Lizards';dir:'LARRY_ST';exec:'larry1.stx';loadfix:true;params:'larry1';exec_post:'c:\sierra.prg';motor:MATARIST),
+  (nombre:'Altered Beast';dir:'ABEAST_ST';exec:'Altered Beast_disk1.stx';motor:MATARIST),
+  (nombre:'Defender of the Crown';dir:'DOC_ST';exec:'Defender of the Crown.st';grafica:'st';motor:MATARIST),
+  (nombre:'Gauntlet II';dir:'GAUNT2_ST';exec:'Gauntlet II_disk1.stx';motor:MATARIST),
+  (nombre:'Rick Dangerous';dir:'RICKD_ST';exec:'Rick Dangerous.stx';motor:MATARIST),
+  (nombre:'Rick Dangerous II';dir:'RICKD2_ST';exec:'Rick Dangerous II.stx';motor:MATARIST),
+  (nombre:'Xenon II - Megablast';dir:'XENON2_ST';exec:'Xenon II - Megablast_Disk1.stx';motor:MATARIST),
+  (nombre:'Lorna';dir:'LORNA_ST';exec:'Lorna_Disk1.stx';motor:MATARIST),
+  (nombre:'Robocop';dir:'ROBOCOP_ST';exec:'Robocop.stx';motor:MATARIST),
+  (nombre:'Super Street Fighter II Turbo';dir:'SF2T';exec:'SSF2T.BAT';ciclos:1;setup:'setup.exe'),
+  (nombre:'Summer Challenge';dir:'SUMMERCH';exec:'summer.com'),
+  (nombre:'Games: Winter Challenge, the';dir:'WINTERCH';exec:'winter.com'),
+  (nombre:'Syndicate (Plus)';dir:'SYND';exec:'synd.exe';ciclos:1;memoria:4;setup:'del synd.inf'),
+  (nombre:'Out Run';dir:'OUTRUN_AMIGA';exec:'OutRun.ipf';motor:MAMIGA),
+  (nombre:'Out Run Europa';dir:'OUTRUNEU_AMIGA';exec:'OutRunEuropa_Disk1.ipf';motor:MAMIGA),
+  (nombre:'Turbo Outrun';dir:'TOUTRUN_AMIGA';exec:'TurboOutrun_Disk1.ipf';motor:MAMIGA),
+  (nombre:'Out Run';dir:'OUTRUN_ST';exec:'OutRun.STX';motor:MATARIST),
+  (nombre:'Out Run Europa';dir:'OUTRUNEU_ST';exec:'Out Run Europa disk1.STX';motor:MATARIST),
+  (nombre:'Turbo Outrun';dir:'TOUTRUN_ST';exec:'Turbo Out Run.ipf';motor:MATARIST),
+  (nombre:'Satan';dir:'SATAN_ST';exec:'satan disk1.stx';motor:MATARIST),
+  (nombre:'Livingstone II';dir:'LIVIN2_ST';exec:'Livingstone II.stx';motor:MATARIST)
 );
 
 implementation

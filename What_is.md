@@ -1,10 +1,10 @@
 # GAMEPLAY
 ### What is Gameplay?
-Gameplay is a frontend for MS-DOS, ScummVM, Apple II, Atari 800, Amiga and DSP Emulator. It lets you play games easily and quickly — no complications, no configuration needed. Just choose a game from the list and play. Everything is preconfigured (best audio, best graphics, extra parameters, etc.).<br>
+Gameplay is a frontend for MS-DOS, ScummVM, Apple II, Atari 800, Atari ST, Amiga and DSP Emulator. It lets you play games easily and quickly — no complications, no configuration needed. Just choose a game from the list and play. Everything is preconfigured (best audio, best graphics, extra parameters, etc.).<br>
 ![Main Screen](https://i.ibb.co/rRTktLCS/gameplay-060-en.png)
 ### Which games can I play?
-Initially, there's a list of 409 MS-DOS, 71 ScummVM (2 exclusive), 109 Apple II, 35 Atari 800 and 103 Amiga ready-to-play games. They include preview images, manuals, maps, and guides so you can enjoy the full game experience. There are also more than 400 Arcade games, Console, 8bits Computer emulator ready-to-play. No need to configure anything—not audio, not video—just enjoy.<br>
-If a game is not available, GamePlay provides an option to download it.
+Initially, there's a list of 413 MS-DOS, 71 ScummVM (2 exclusive), 109 Apple II, 35 Atari 800, 15 Atari ST and 106 Amiga ready-to-play games. They include preview images, manuals, maps, and guides so you can enjoy the full game experience. There are also more than 400 Arcade games, Console, 8bits Computer emulator ready-to-play. No need to configure anything—not audio, not video—just enjoy.<br>
+If a game is not available, GamePlay provides a button to download it.
 ### Can I add more games?
 Of course! If you have MS-DOS favorite games that aren't on the list, you can easily and quickly add your own. In the advanced options, you can choose ZIP format, add a CD-ROM, change memory settings, video card, attach manuals, guides, maps, and more.
 ### What language is Gameplay in?

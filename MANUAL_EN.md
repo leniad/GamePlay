@@ -24,6 +24,7 @@ You can choose:
 - **DSP Emulator**: Arcade, 8bits Computers and Consoles emulator.
 - **Apple II**: Games for the Apple II computer series
 - **Atari 800**: Games for the Atari 800 computer series
+- **Atari ST**: Games for the Atari ST computer series
 - **Amiga**: Games for Amiga computer
 
 > The emulator is configured automatically, you don't need to do anything.
@@ -43,8 +44,8 @@ Color codes:
 - **Gray**: Listed game, but not available locally.
 - **Purple**: A game that only works with the ScummVM engine.
 
-Play using `ENTER`, double-click, or the _Play_ button.
-> If the game is not available, an option to download it will appear.
+Play using `ENTER` or double-click.
+> If the game is not available, a button to download it will appear.
 
 ### 1.5 Available Games / Total Games
 This counter shows how many games are available / total games including default and manually added ones.<br>

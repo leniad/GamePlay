@@ -1,9 +1,10 @@
 object Form5: TForm5
   Left = 41
   Top = 68
+  BorderIcons = []
   Caption = 'Descargar Juego'
-  ClientHeight = 189
-  ClientWidth = 465
+  ClientHeight = 155
+  ClientWidth = 453
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -58,21 +59,5 @@ object Form5: TForm5
     ParentFont = False
     TabOrder = 1
     OnClick = Button2Click
-  end
-  object CheckBox1: TCheckBox
-    Left = 152
-    Top = 143
-    Width = 153
-    Height = 38
-    Caption = 'Descargar Extras'
-    Checked = True
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clWindowText
-    Font.Height = -15
-    Font.Name = 'Segoe UI'
-    Font.Style = []
-    ParentFont = False
-    State = cbChecked
-    TabOrder = 2
   end
 end

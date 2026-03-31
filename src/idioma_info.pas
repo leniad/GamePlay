@@ -10,7 +10,7 @@ procedure cambiar_idioma_descarga;
 
 var
   idioma_ind:byte;
-  list_error:array[0..8] of string;
+  list_error:array[0..9] of string;
   list_zip:array[0..3] of string;
 
 implementation
@@ -19,8 +19,8 @@ uses principal,games_download,save_game,config,sysutils,main{$ifdef WINDOWS},win
 type
   tipo_idioma=record
     principal:array[0..27] of string;
-    grabar:array[0..34] of string;
-    error:array[0..8] of string;
+    grabar:array[0..35] of string;
+    error:array[0..9] of string;
     avanzado:array[0..12] of string;
     descarga:array[0..1] of string;
   end;
@@ -31,44 +31,44 @@ const
   idioma_fijo:array[0..MAX_IDIOMAS] of tipo_idioma=(
   //Castellano
   (principal:('Filtros del Juego','Idioma','Tipo','Español','Inglés','Alemán','Francés','Italiano','Aventura Gráfica','Simulador','Deportes','Carreras','Opciones Generales','Sistema','Pantalla Completa','Sonido','Mensaje info/ayuda','Opciones Avanzadas','Añadir Juego','Editar/Borrar Juego','Buscar Juego','Imágenes del Juego','Información del Juego','Compañía:','Año:','Acerca de','Motor MS-DOS','Genérico');
-  grabar:('Añadir Juego','Juego','Nombre Completo','Año Publicación','Compañía','Nombre de la Imagen','Ejecutable','Directorio/ZIP','Fichero Ejecutable','Parámetros','Imagen Segundo Disco','Ejecutar ANTES','Ejecutar DESPUES','Programa de Instalación','Ciclos CPU','Tipo Ordenador','Memoria RAM','Activar GUS','Compatible con ScummVM','Fichero Mapa Teclado','Mensaje de información/ayuda','Parámetros Extra DOSBox','Información Extra','Manual(es)','Mapa(s)','Guia(s)','Idioma','Tipo','ACEPTAR','CANCELAR','BORRAR','Fichero ZIP','Nombre ZIP','Fichero comprimido en ZIP','Sólo funciona con ScummVM');
+  grabar:('Añadir Juego','Juego','Nombre Completo','Año Publicación','Compañía','Nombre de la Imagen','Ejecutable','Directorio/ZIP','Fichero Ejecutable','Parámetros','Imagen Segundo Disco','Ejecutar ANTES','Ejecutar DESPUES','Programa de Instalación','Ciclos CPU','Tipo Ordenador','Memoria RAM','Activar GUS','Compatible con ScummVM','Fichero Mapa Teclado','Mensaje de información/ayuda','Parámetros Extra DOSBox','Información Extra','Manual(es)','Mapa(s)','Guia(s)','Idioma','Tipo','ACEPTAR','CANCELAR','BORRAR','Fichero ZIP','Nombre ZIP','Fichero comprimido en ZIP','Sólo funciona con ScummVM','Mostar en la lista principal');
   error:('Error en la sección de manuales. Revisa que:'+FULL_RET+'  - Si es una carpeta debe terminar en ''\'' y debe existir dentro de [DIR_BASE]extras\manual'+FULL_RET+'  - Si es un fichero debe existir en [DIR_BASE]extras\manual'+FULL_RET+'  - Si son varios ficheros deben estar separados por el simbolo ''$'' y deben existir todos en [DIR_BASE]extras\manual','Error en la sección de mapas. Revisa que:'+FULL_RET+'  - Si es una carpeta debe terminar en ''\'' y debe existir dentro de [DIR_BASE]extras\maps'+FULL_RET+'  - Si es un fichero debe existir en [DIR_BASE]extras\maps'+FULL_RET+'  - Si son varios ficheros deben estar separados por el simbolo ''$'' y deben existir todos en [DIR_BASE]extras\maps',
   'Error en la sección de guías. Revisa que:'+FULL_RET+'  - Si es una carpeta debe terminar en ''\'' y debe existir dentro de [DIR_BASE]extras\walk'+FULL_RET+'  - Si es un fichero debe existir en [DIR_BASE]extras\walk'+FULL_RET+'  - Si son varios ficheros deben estar separados por el simbolo ''$'' y deben existir todos en [DIR_BASE]extras\walk','Error: no se puede localizar el CDROM del juego','Error: no se puede localizar el setup del juego'+FULL_RET+'Revisa el nombre del fichero o el directorio del juego!','Error: no se puede localizar el ejecutable del juego'+FULL_RET+'Revisa el nombre del fichero o el directorio del juego!','Precaución: El juego se va a borrar!'+FULL_RET+'¿Deseas continuar?',
-  'El juego seleccionado no se puede ejecutar, por favor revisa la configuración','El juego seleccionado sólo se puede ejecutar con el motor ScummVM');
+  'El juego seleccionado no se puede ejecutar, por favor revisa la configuración','El juego seleccionado sólo se puede ejecutar con el motor ScummVM','El juego no se borra, sólo se deja de ver en el listado por defecto. Para volverlo a mostrar, edita la configuración del juego');
   avanzado:('Abrir','Configuración Avanzada','Ficheros Ejecutables','Ficheros de Configuración','Directorios Principales','Imagenes','Leer valores de los juegos fijos','Mostrar todos los juegos','VALORES POR DEFECTO','Mostrar solo los juegos que no funcionan','Mostrar solo los juegos añadidos','Emular Joystick','Teclado');
-  descarga:('Este juego no esta disponible. ¿Deseas descargarlo?','Descargar Extras')),
+  descarga:('Este juego no esta disponible. ¿Deseas descargarlo?','')),
   //Ingles
   (principal:('Game Filters','Languaje','Type','Spanish','English','German','French','Italian','Graphic Adventure','Simulator','Sports','Racing','Main Options','System','Full Screen','Sound','Info/help message','Advanced Options','Add Game','Edit/Delete Game','Game Search','Game Images','Game Info','Company:','Year:','About','MS-DOS engine','Generic');
-  grabar:('Add Game','Game','Full Name','Publication Year','Company','Image Name','Executable','Folder/ZIP','Executable File','Parameters','Secondary Disk Image','Execute BEFORE','Execute AFTER','Setup file','CPU Cycles','Computer Type','RAM Memory','Enable GUS','Compatible with ScummVM','Keyboard Map File','Help/Info Message','DOSBox Extra Parameters','Extra Info','Manual(s)','Map(s)','Walk Through','Languaje','Type','ACCEPT','CANCEL','DELETE','ZIP File','ZIP file name','ZIP compressed file','Only works with ScummVM');
+  grabar:('Add Game','Game','Full Name','Publication Year','Company','Image Name','Executable','Folder/ZIP','Executable File','Parameters','Secondary Disk Image','Execute BEFORE','Execute AFTER','Setup file','CPU Cycles','Computer Type','RAM Memory','Enable GUS','Compatible with ScummVM','Keyboard Map File','Help/Info Message','DOSBox Extra Parameters','Extra Info','Manual(s)','Map(s)','Walk Through','Languaje','Type','ACCEPT','CANCEL','DELETE','ZIP File','ZIP file name','ZIP compressed file','Only works with ScummVM','Show in main list');
   error:('Error in the manuals section. Check that:'+FULL_RET+'  - If it is a folder, it must end with ''\'' and exist within [DIR_BASE]extras\manual'+FULL_RET+'  - If it is a file, it must exist in [DIR_BASE]extras\manual'+FULL_RET+'  - If there are multiple files, they must be separated by the ''$'' symbol and all must exist in [DIR_BASE]extras\manual','Error in the maps section. Check that:'+FULL_RET+'  - If it is a folder, it must end with ''\'' and exist within [DIR_BASE]extras\maps'+FULL_RET+'  - If it is a file, it must exist in [DIR_BASE]extras\maps'+FULL_RET+'  - If there are multiple files, they must be separated by the ''$'' symbol and all must exist in [DIR_BASE]extras\maps',
   'Error in the Walk Through section. Check that:'+FULL_RET+'  - If it is a folder, it must end with ''\'' and exist within [DIR_BASE]extras\walk'+FULL_RET+'  - If it is a file, it must exist in [DIR_BASE]extras\walk'+FULL_RET+'  - If there are multiple files, they must be separated by the ''$'' symbol and all must exist in [DIR_BASE]extras\walk','Error: cannot locate the game''s CD-ROM','Error: cannot locate the game''s setup.'+FULL_RET+'Check the file name or the game directory!','Error: cannot locate the game''s executable'+FULL_RET+'Check the file name or the game directory!','Warning: The game is going to be deleted!'+FULL_RET+'Do you want to continue?',
-  'The selected game cannot be run, please check the settings','The selected game can only be run with the ScummVM engine');
+  'The selected game cannot be run, please check the settings','The selected game can only be run with the ScummVM engine','The game isn''t deleted, it''s just removed from the default list. To make it appear again, edit the game settings');
   avanzado:('Open','Advanced Configuration','Executable Files','Configuration Files','Main Directories','Images','Read fixed games values','Show all games','DEFAULT VALUES','Show only the games that don''t work','Show only the added games','Emulate Joystick','Keyboard');
-  descarga:('This game is not available. Do you want to download it?','Download Extras')),
+  descarga:('This game is not available. Do you want to download it?','')),
   //Aleman
   (principal:('Spielfilter','Sprache','Typ','Spanisch','Englisch','Deutsch','Französisch','Italienisch','Grafik-Adventure','Simulator','Sport','Rennen','Hauptoptionen','System','Vollbild','Sound','Info-/Hilfemeldung','Erweiterte Optionen','Hinzufügen Spiel','Bearbeiten/Löschen Spiel','Spielsuche','Spielbilder','Spielinfo','Firma:','Jahr:','Über','MS-DOS-Engine','Generisch');
-  grabar:('Spiel hinzufügen','Spiel','Vollständiger Name','Erscheinungsjahr','Firma','Image-Name','Ausführbare Datei','Ordner/ZIP','Name der ausführbaren Datei','Parameter','Sekundäres Disk-Image','Ausführen VORHER','Ausführen NACHHER','Setup-Datei','CPU-Zyklen','Computertyp','RAM-Speicher','GUS aktivieren','Kompatibel mit ScummVM','Tastaturbelegungsdatei','Hilfe-/Info-Meldung','Zusätzliche DOSBox-Parameter','Zusätzliche Informationen','Handbuch(e)','Karte(n)','Anleitung','Sprache','Typ','AKZEPTIEREN','ABBRECHEN','LÖSCHEN','ZIP-Datei','ZIP-Dateiname','ZIP-komprimierte Datei','Funktioniert nur mit ScummVM');
+  grabar:('Spiel hinzufügen','Spiel','Vollständiger Name','Erscheinungsjahr','Firma','Image-Name','Ausführbare Datei','Ordner/ZIP','Name der ausführbaren Datei','Parameter','Sekundäres Disk-Image','Ausführen VORHER','Ausführen NACHHER','Setup-Datei','CPU-Zyklen','Computertyp','RAM-Speicher','GUS aktivieren','Kompatibel mit ScummVM','Tastaturbelegungsdatei','Hilfe-/Info-Meldung','Zusätzliche DOSBox-Parameter','Zusätzliche Informationen','Handbuch(e)','Karte(n)','Anleitung','Sprache','Typ','AKZEPTIEREN','ABBRECHEN','LÖSCHEN','ZIP-Datei','ZIP-Dateiname','ZIP-komprimierte Datei','Funktioniert nur mit ScummVM','In der Hauptliste anzeigen');
   error:('Fehler im Handbuch-Bereich. Überprüfe folgendes:'+FULL_RET+'  - Wenn es ein Ordner ist, muss er mit ''\'' enden und innerhalb von [DIR_BASE]extras\manual existieren.'+FULL_RET+'  - Wenn es eine Datei ist, muss sie in [DIR_BASE]extras\manual existieren.'+FULL_RET+'  - Wenn es mehrere Dateien sind, müssen sie durch das ''$''-Symbol getrennt sein und alle in [DIR_BASE]extras\manual existieren','Fehler im Kartenbereich. Überprüfe folgendes:'+FULL_RET+'  - Wenn es ein Ordner ist, muss er mit ''\'' enden und innerhalb von [DIR_BASE]extras\maps existieren.'+FULL_RET+'  - Wenn es eine Datei ist, muss sie in [DIR_BASE]extras\maps existieren.'+FULL_RET+'  - Wenn es mehrere Dateien sind, müssen sie durch das ''$''-Symbol getrennt sein und alle in [DIR_BASE]extras\maps existieren',
   'Fehler im Walkthrough-Bereich. Überprüfe folgendes:'+FULL_RET+'  - Wenn es ein Ordner ist, muss er mit ''\'' enden und innerhalb von [DIR_BASE]extras\walk existieren.'+FULL_RET+'  - Wenn es eine Datei ist, muss sie in [DIR_BASE]extras\walk existieren.'+FULL_RET+'  - Wenn es mehrere Dateien sind, müssen sie durch das ''$''-Symbol getrennt sein und alle in [DIR_BASE]extras\walk existieren','Fehler: ich kann das CD-ROM des Spiels nicht finden','Fehler: ich kann das Setup des Spiels nicht finden.'+FULL_RET+'Überprüfe den Dateinamen oder das Spielverzeichnis!','Fehler: ich kann die ausführbare Datei des Spiels nicht finden.'+FULL_RET+'Überprüfe den Dateinamen oder das Spielverzeichnis!','Warnung: Das Spiel wird gelöscht!'+FULL_RET+'Möchtest du fortfahren?',
-  'Das ausgewählte Spiel kann nicht gestartet werden, bitte überprüfe die Einstellungen','Das ausgewählte Spiel kann nur mit der ScummVM-Engine ausgeführt werden');
+  'Das ausgewählte Spiel kann nicht gestartet werden, bitte überprüfe die Einstellungen','Das ausgewählte Spiel kann nur mit der ScummVM-Engine ausgeführt werden','Das Spiel wird nicht gelöscht, sondern nur aus der Standardliste entfernt. Um es wieder anzuzeigen, bearbeiten Sie die Spieleinstellungen');
   avanzado:('Offen','Erweiterte Konfiguration','Ausführbare Dateien','Konfigurationsdateien','Hauptverzeichnisse','Bilder','Lesen Sie feste Spielwerte','Alle Spiele anzeigen','STANDARDWERTE','Nur die Spiele anzeigen, die nicht funktionieren','Nur die hinzugefügten Spiele anzeigen','Joystick emulieren','Tastatur');
-  descarga:('Dieses Spiel ist nicht verfügbar. Möchten Sie es herunterladen?','Extras herunterladen')),
+  descarga:('Dieses Spiel ist nicht verfügbar. Möchten Sie es herunterladen?','')),
   //Frances
   (principal:('Filtres du jeu','Langue','Type','Espagnol','Anglais','Allemand','Français','Italien','Aventure graphique','Simulateur','Sports','Courses','Options générales','Système','Plein écran','Son','Message info/aide','Options avancées','Ajouter Jeu','Modifier/Supprimer Jeu','Rechercher un jeu','Images du jeu','Informations sur le jeu','Entreprise :','Année :','À propos','Moteur MS-DOS','Générique');
-  grabar:('Ajouter un jeu','Jeu','Nom complet','Année de publication','Entreprise','Nom de l''image','Exécutable','Répertoire/ZIP','Nom de l''exécutable','Paramètres','Image du deuxième disque','Exécuter AVANT','Exécuter APRÈS','Programme d''installation','Cycles CPU','Type d''ordinateur','Mémoire RAM','Activer GUS','Compatible avec ScummVM','Fichier de mappage du clavier','Message d''information/aide','Paramètres supplémentaires DOSBox','Informations supplémentaires','Manuel(s)','Carte(s)','Guide(s)','Langue','Type','ACCEPTER','ANNULER','SUPPRIMER','Fichier ZIP','Nom du fichier ZIP','Fichier compressé ZIP','Fonctionne uniquement avec ScummVM');
+  grabar:('Ajouter un jeu','Jeu','Nom complet','Année de publication','Entreprise','Nom de l''image','Exécutable','Répertoire/ZIP','Nom de l''exécutable','Paramètres','Image du deuxième disque','Exécuter AVANT','Exécuter APRÈS','Programme d''installation','Cycles CPU','Type d''ordinateur','Mémoire RAM','Activer GUS','Compatible avec ScummVM','Fichier de mappage du clavier','Message d''information/aide','Paramètres supplémentaires DOSBox','Informations supplémentaires','Manuel(s)','Carte(s)','Guide(s)','Langue','Type','ACCEPTER','ANNULER','SUPPRIMER','Fichier ZIP','Nom du fichier ZIP','Fichier compressé ZIP','Fonctionne uniquement avec ScummVM','Afficher dans la liste principale');
   error:('Erreur dans la section des manuels. Vérifiez que :'+FULL_RET+'  - Si c''est un dossier, il doit se terminer par ''\'' et exister dans [DIR_BASE]extras\manual'+FULL_RET+'  - Si c''est un fichier, il doit exister dans [DIR_BASE]extras\manual'+FULL_RET+'  - Si ce sont plusieurs fichiers, ils doivent être séparés par le symbole ''$'' et tous doivent exister dans [DIR_BASE]extras\manual.','Erreur dans la section des cartes. Vérifiez que :'+FULL_RET+'  - Si c''est un dossier, il doit se terminer par '''' et exister dans [DIR_BASE]extras\maps'+FULL_RET+'  - Si c''est un fichier, il doit exister dans [DIR_BASE]extras\maps'+FULL_RET+'  - Si ce sont plusieurs fichiers, ils doivent être séparés par le symbole ''$'' et tous doivent exister dans [DIR_BASE]extras\maps.',
   'Erreur dans la section des guides. Vérifiez que :'+FULL_RET+'  - Si c''est un dossier, il doit se terminer par ''\'' et exister dans [DIR_BASE]extras\walk'+FULL_RET+'  - Si c''est un fichier, il doit exister dans [DIR_BASE]extras\walk'+FULL_RET+'  - Si ce sont plusieurs fichiers, ils doivent être séparés par le symbole ''$'' et tous doivent exister dans [DIR_BASE]extras\walk.','Erreur : je ne peux pas localiser le CD-ROM du jeu','Erreur: je ne peux pas localiser le setup du jeu.'+FULL_RET+'Vérifiez le nom du fichier ou le répertoire du jeu!','Erreur : je ne peux pas localiser l''exécutable du jeu.'+FULL_RET+'Vérifiez le nom du fichier ou le répertoire du jeu!','Avertissement: Le jeu va être supprimé!'+FULL_RET+'Souhaitez-vous continuer?',
-  'Le jeu sélectionné ne peut pas être lancé, veuillez vérifier la configuration','Le jeu sélectionné ne peut être exécuté qu''avec le moteur ScummVM');
+  'Le jeu sélectionné ne peut pas être lancé, veuillez vérifier la configuration','Le jeu sélectionné ne peut être exécuté qu''avec le moteur ScummVM','Le jeu n''est pas supprimé, il a simplement été retiré de la liste par défaut. Pour le faire réapparaître, modifiez les paramètres du jeu');
   avanzado:('Ouvrir','Configuration Avancée','Fichiers exécutables','Fichiers de configuration','Répertoires Principaux','Images','Lire les valeurs de jeux fixes','Afficher tous les jeux','VALEURS PAR DÉFAUT','Afficher uniquement les jeux qui ne fonctionnent pas','Afficher uniquement les jeux ajoutés','Émuler le joystick','Clavier');
-  descarga:('Ce jeu n''est pas disponible. Voulez-vous le télécharger ?','Télécharger les suppléments')),
+  descarga:('Ce jeu n''est pas disponible. Voulez-vous le télécharger ?','')),
   //Italiano
   (principal:('Filtri del gioco','Lingua','Tipo','Spagnolo','Inglese','Tedesco','Francese','Italiano','Avventura grafica','Simulatore','Sport','Corse','Opzioni generali','Sistema','Schermo intero','Suono','Messaggio info/aiuto','Opzioni avanzate','Aggiungi Gioco','Modifica/Elimina Gioco','Cerca gioco','Immagini del gioco','Informazioni sul gioco','Azienda:','Anno:','Informazioni','Motore MS-DOS','Generico');
-  grabar:('Aggiungi gioco','Gioco','Nome completo','Anno di pubblicazione','Azienda','Nome immagine','Eseguibile','Directory/ZIP','Nome eseguibile','Parametri','Immagine secondo disco','Esegui PRIMA','Esegui DOPO','Programma di installazione','Cicli CPU','Tipo di computer','Memoria RAM','Attiva GUS','Compatibile con ScummVM','File mappa tastiera','Messaggio di informazioni/aiuto','Parametri extra DOSBox','Informazioni extra','Manuale(i)','Mappa(e)','Guida(e)','Lingua','Tipo','ACCETTA','ANNULLA','ELIMINA','ZIP','Nome del file ZIP','File compresso ZIP','Funziona solo con ScummVM');
+  grabar:('Aggiungi gioco','Gioco','Nome completo','Anno di pubblicazione','Azienda','Nome immagine','Eseguibile','Directory/ZIP','Nome eseguibile','Parametri','Immagine secondo disco','Esegui PRIMA','Esegui DOPO','Programma di installazione','Cicli CPU','Tipo di computer','Memoria RAM','Attiva GUS','Compatibile con ScummVM','File mappa tastiera','Messaggio di informazioni/aiuto','Parametri extra DOSBox','Informazioni extra','Manuale(i)','Mappa(e)','Guida(e)','Lingua','Tipo','ACCETTA','ANNULLA','ELIMINA','ZIP','Nome del file ZIP','File compresso ZIP','Funziona solo con ScummVM','Mostra nell''elenco principale');
   error:('Errore nella sezione dei manuali. Verifica che:'+FULL_RET+'  - Se è una cartella, deve terminare con ''\'' ed esistere all''interno di [DIR_BASE]extras\manual'+FULL_RET+'  - Se è un file, deve esistere in [DIR_BASE]extras\manual'+FULL_RET+'  - Se sono più file, devono essere separati dal simbolo ''$'' e devono esistere tutti in [DIR_BASE]extras\manual','Errore nella sezione delle mappe. Verifica che:'+FULL_RET+'  - Se è una cartella, deve terminare con ''\'' ed esistere all''interno di [DIR_BASE]extras\maps'+FULL_RET+'  - Se è un file, deve esistere in [DIR_BASE]extras\maps'+FULL_RET+'  - Se sono più file, devono essere separati dal simbolo ''$'' e devono esistere tutti in [DIR_BASE]extras\maps',
   'Errore nella sezione delle guide. Verifica che:'+FULL_RET+'  - Se è una cartella, deve terminare con ''\'' ed esistere all''interno di [DIR_BASE]extras\walk'+FULL_RET+'  - Se è un file, deve esistere in [DIR_BASE]extras\walk'+FULL_RET+'  - Se sono più file, devono essere separati dal simbolo ''$'' e devono esistere tutti in [DIR_BASE]extras\walk','Errore: non riesco a localizzare il CD-ROM del gioco','Errore: non riesco a localizzare il setup del gioco'+FULL_RET+'Controlla il nome del file o la directory del gioco!','Errore: non riesco a localizzare l''eseguibile del gioco'+FULL_RET+'Controlla il nome del file o la directory del gioco!','Attenzione: il gioco verrà eliminato!'+FULL_RET+'Vuoi continuare?',
-  'Il gioco selezionato non può essere avviato, per favore controlla le impostazioni','Il gioco selezionato può essere eseguito solo con il motore ScummVM');
+  'Il gioco selezionato non può essere avviato, per favore controlla le impostazioni','Il gioco selezionato può essere eseguito solo con il motore ScummVM','Il gioco non viene eliminato, viene semplicemente rimosso dall''elenco predefinito. Per farlo ricomparire, modifica le impostazioni del gioco.');
   avanzado:('Apri','Configurazione Avanzata','File Eseguibili','File di configurazione','Directory principali','Immagini','Leggi i valori fissi dei giochi','Mostra tutti i giochi','VALORI PREDEFINITI','Mostra solo i giochi che non funzionano','Mostra solo i giochi aggiunti','Emula joystick','Tastiera');
-  descarga:('Questo gioco non è disponibile. Vuoi scaricarlo?','Scarica Extra'))
+  descarga:('Questo gioco non è disponibile. Vuoi scaricarlo?',''))
   );
 
 procedure seleccionar_idioma;
@@ -172,6 +172,7 @@ begin
   list_error[4]:=idioma_fijo[idioma_ind].error[4];
   list_error[5]:=idioma_fijo[idioma_ind].error[5];
   list_error[6]:=idioma_fijo[idioma_ind].error[6];
+  list_error[9]:=idioma_fijo[idioma_ind].error[9];
   list_zip[0]:=idioma_fijo[idioma_ind].grabar[6];
   list_zip[1]:=idioma_fijo[idioma_ind].grabar[31];
   list_zip[2]:=idioma_fijo[idioma_ind].grabar[7];
@@ -205,6 +206,7 @@ begin
   form2.LabeledEdit18.EditLabel.Caption:=idioma_fijo[idioma_ind].grabar[25];
   form2.StaticText2.Caption:=idioma_fijo[idioma_ind].grabar[26];
   form2.StaticText3.Caption:=idioma_fijo[idioma_ind].grabar[27];
+  form2.CheckBox4.Caption:=idioma_fijo[idioma_ind].grabar[35];
   form2.Button1.Caption:=idioma_fijo[idioma_ind].grabar[28];
   form2.Button2.Caption:=idioma_fijo[idioma_ind].grabar[29];
   form2.Button3.Caption:=idioma_fijo[idioma_ind].grabar[30];
@@ -264,14 +266,13 @@ begin
   form4.CheckBox10.Caption:=idioma_fijo[idioma_ind].avanzado[6];
   //form4.CheckBox11.Caption:=idioma_fijo[idioma_ind].avanzado[7];
   form4.Button14.Caption:=idioma_fijo[idioma_ind].avanzado[8];
-  //form4.CheckBox1.Caption:=idioma_fijo[idioma_ind].avanzado[9];
+  form4.CheckBox1.Caption:=idioma_fijo[idioma_ind].avanzado[7];
   form4.Checkbox2.Caption:=idioma_fijo[idioma_ind].avanzado[10];
 end;
 
 procedure cambiar_idioma_descarga;
 begin
   form5.Label1.Caption:=idioma_fijo[idioma_ind].descarga[0];
-  form5.CheckBox1.Caption:=idioma_fijo[idioma_ind].descarga[1];
   form5.Button1.Caption:=idioma_fijo[idioma_ind].grabar[28];
   form5.Button2.Caption:=idioma_fijo[idioma_ind].grabar[29];
 end;

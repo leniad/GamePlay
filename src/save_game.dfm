@@ -53,7 +53,7 @@ object Form2: TForm2
     Top = 8
     Width = 769
     Height = 585
-    ActivePage = TabSheet4
+    ActivePage = TabSheet6
     TabOrder = 3
     StyleName = 'Windows'
     OnChange = PageControl1Change
@@ -180,6 +180,14 @@ object Form2: TForm2
       Caption = 'Amiga'
       ImageIndex = 4
     end
+    object TabSheet6: TTabSheet
+      Margins.Left = 5
+      Margins.Top = 5
+      Margins.Right = 5
+      Margins.Bottom = 5
+      Caption = 'Atari ST'
+      ImageIndex = 5
+    end
   end
   object GroupBox1: TGroupBox
     Left = 22
@@ -244,7 +252,7 @@ object Form2: TForm2
     end
     object LabeledEdit4: TLabeledEdit
       Left = 323
-      Top = 120
+      Top = 122
       Width = 166
       Height = 23
       EditLabel.Width = 115
@@ -255,6 +263,17 @@ object Form2: TForm2
       Text = ''
       StyleName = 'Windows'
       OnKeyUp = LabeledEdit4KeyUp
+    end
+    object CheckBox4: TCheckBox
+      Left = 17
+      Top = 118
+      Width = 252
+      Height = 27
+      Caption = 'Mostrar Juego'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 4
+      StyleName = 'Windows'
     end
   end
   object GroupBox3: TGroupBox

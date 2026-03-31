@@ -618,7 +618,7 @@ object Form4: TForm4
     Left = 641
     Top = 390
     Width = 211
-    Height = 83
+    Height = 116
     Margins.Left = 5
     Margins.Top = 5
     Margins.Right = 5
@@ -635,13 +635,23 @@ object Form4: TForm4
     end
     object CheckBox2: TCheckBox
       Left = 15
-      Top = 40
+      Top = 73
       Width = 195
       Height = 40
       Caption = 'Mostrar solo juegos a'#241'adidos'
       TabOrder = 1
       WordWrap = True
       OnClick = CheckBox2Click
+    end
+    object CheckBox1: TCheckBox
+      Left = 15
+      Top = 40
+      Width = 195
+      Height = 40
+      Caption = 'Mostrar todos los juegos'
+      TabOrder = 2
+      WordWrap = True
+      OnClick = CheckBox1Click
     end
   end
   object OpenDialog1: TOpenDialog

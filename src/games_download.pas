@@ -1,4 +1,4 @@
-unit games_download;
+﻿unit games_download;
 
 interface
 
@@ -12,7 +12,6 @@ type
     Label1: TLabel;
     Button1: TButton;
     Button2: TButton;
-    CheckBox1: TCheckBox;
     procedure Button1Click(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -24,6 +23,7 @@ type
     { Public declarations }
   end;
   function descargar_juego(ngame:integer):boolean;
+  procedure descargar_juego_sin_confirmar(ngame:integer);
 
 var
   Form5:TForm5;
@@ -42,6 +42,13 @@ const
   URL='url';
 
 {$R *.dfm}
+
+procedure descargar_juego_sin_confirmar(ngame:integer);
+begin
+  game_number:=ngame;
+  form5.Button1Click(nil);
+end;
+
 
 function descargar_juego(ngame:integer):boolean;
 begin
@@ -82,25 +89,23 @@ begin
         exit;
       end;
       //Descargar extras
-      if checkbox1.Checked then begin
-        temps:=main_config.dir_base+'\extras\'+games_final[game_number].dir+'_extra.zip';
-        if not(FApi.DownloadFile(games_final[game_number].dir+'_extra.zip',temps,LMsg)) then begin
-          MessageDlg('Error descargando '+lmsg,mtError,[mbOk],0);
-          exit;
-        end;
+      temps:=main_config.dir_base+'\extras\'+games_final[game_number].dir+'_extra.zip';
+      if FApi.DownloadFile(games_final[game_number].dir+'_extra.zip',temps,LMsg) then begin
         ZipFile:=TZipFile.Create;
-        if not(Zipfile.IsValid(temps)) then exit;
-        ZipFile.Open(temps,zmRead);
-        ZipFIle.ExtractAll(main_config.dir_base+'\extras');
-        ZipFile.Close;
+        if Zipfile.IsValid(temps) then begin
+            ZipFile.Open(temps,zmRead);
+            ZipFIle.ExtractAll(main_config.dir_base+'\extras');
+            ZipFile.Close;
+        end;
         ZipFile.Free;
+        deletefile(temps);
       end;
     end;
-    deletefile(temps);
     pillar_juegos;
     ordena_juegos;
     mostrar_juegos;
     juego_descargado:=true;
+    games_final[game_number].mostrar:=true;
   except
     on E: Exception do begin
       MessageDlg('Error incontrolado download',mtError,[mbOk],0);

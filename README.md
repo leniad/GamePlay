@@ -1,6 +1,45 @@
 # GamePlay status #
-![Main Screen](https://i.ibb.co/rRTktLCS/gameplay-060-en.png)<br>
+![Main Screen](https://i.ibb.co/Z6q3Lc1r/gameplay-061-en.png)<br>
 Please read 'Most Wanted' games!<br>
+<b>31/03/26 - GamePlay updated to 0.61b
+<pre>
+-General
+    +Atari ST: Added a new emulation engine
+    +Ability to remove games from the main list (and restore them later)
+    +If a game is not available, its images are shown with a blur effect
+     that disappears once it’s downloaded, indicating it’s not present
+    +A new download button is shown for manual download
+-MSDOS
+    +Added games
+        -Super Street Fighter II Turbo
+        -Summer Challenge
+        -Games: Winter Challenge, the
+        -Syndicate (Plus)
+-Amiga
+    +Added floppy drive sound
+    +Available floppy drives fixed
+    +Games added
+        -Out Run
+        -Out Run Europa
+        -Turbo Outrun
+-Atari ST
+    +Added games
+        -Bubble Bobble
+        -Leisure Suit Larry in the Land of the Lounge Lizards
+        -Altered Beast
+        -Defender of the Crown
+        -Gauntlet II
+        -Rick Dangerous
+        -Rick Dangerous II
+        -Xenon II - Megablast
+        -Lorna
+        -Robocop
+        -Out Run
+        -Out Run Europa
+        -Turbo Outrun
+        -Satan
+        -Livingstone II
+</pre>
 <b>21/03/26 - GamePlay updated to 0.60b
 <pre>
 -General

@@ -22,6 +22,7 @@ Puedes elegir entre:
 - **DSP Emulator**: Emulador para Arcade, Ordenadores 8bits y Consolas
 - **Apple II**: Juegos para la serie de ordenadores Apple II
 - **Atari 800**: Juegos para la serie de ordenadores Atari 800
+- **Atari ST**: Juegos para la serie de ordenadores Atari ST
 - **Amiga**: Juegos para el ordenador Amiga
 
 > El emulador se configura automáticamente, no necesitas hacer nada.

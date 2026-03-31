@@ -67,6 +67,8 @@ type
     CheckBox20: TCheckBox;
     CheckBox19: TCheckBox;
     Button3: TButton;
+    RadioButton11: TRadioButton;
+    Image8: TImage;
     procedure FormCreate(Sender: TObject);
     procedure StringGrid1Click(Sender: TObject);
     procedure StringGrid1DblClick(Sender: TObject);
@@ -98,6 +100,8 @@ type
     procedure Image7Click(Sender: TObject);
     procedure RadioButton10Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
+    procedure RadioButton11Click(Sender: TObject);
+    procedure Image8Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -109,7 +113,7 @@ var
 
 implementation
 {$R *.dfm}
-uses shellapi,strutils,save_game,acercade,config,idioma_info,main,dsp_data;
+uses shellapi,strutils,save_game,acercade,config,idioma_info,main,dsp_data,games_download;
 
 var
   image_num:integer;
@@ -178,22 +182,20 @@ end;
 procedure TForm1.Image2Click(Sender: TObject);
 begin
   form4.showmodal;
-  pillar_juegos;
-  ordena_juegos;
   mostrar_juegos;
 end;
 
-procedure TForm1.Image3Click(Sender: TObject);
+procedure TForm1.Image3Click(Sender:TObject);
 begin
 abrir_ficheros_separados(games_final[numero_juego].guia,main_config.dir_guias);
 end;
 
-procedure TForm1.Image4Click(Sender: TObject);
+procedure TForm1.Image4Click(Sender:TObject);
 begin
-  abrir_ficheros_separados(games_final[numero_juego].manual,main_config.dir_manual);
+abrir_ficheros_separados(games_final[numero_juego].manual,main_config.dir_manual);
 end;
 
-procedure TForm1.Image5Click(Sender: TObject);
+procedure TForm1.Image5Click(Sender:TObject);
 begin
 abrir_ficheros_separados(games_final[numero_juego].map,main_config.dir_mapas);
 end;
@@ -210,6 +212,14 @@ begin
   form_principal_execute;
   ejecutar_setup:=false;
   if form1.Visible then groupbox7.SetFocus;
+end;
+
+procedure TForm1.Image8Click(Sender: TObject);
+var
+  ngame:integer;
+begin
+  ngame:=numero_juego;
+  if ngame<>-1 then descargar_juego_sin_confirmar(ngame);
 end;
 
 procedure TForm1.RadioButton1Click(Sender: TObject);
@@ -426,6 +436,40 @@ begin
   mostrar_juegos;
 end;
 
+procedure TForm1.RadioButton11Click(Sender: TObject);
+begin
+  main_config.motor:=MATARIST;
+  checkbox9.Enabled:=true;
+  checkbox10.Enabled:=true;
+  checkbox11.Enabled:=true;
+  checkbox12.Enabled:=true;
+  checkbox13.Enabled:=true;
+  checkbox18.Enabled:=true;
+  checkbox3.Enabled:=true;
+  checkbox16.Enabled:=true;
+  checkbox6.Enabled:=true;
+  checkbox4.Enabled:=true;
+  checkbox5.Enabled:=true;
+  checkbox7.Enabled:=true;
+  checkbox8.Enabled:=true;
+  checkbox17.Enabled:=true;
+  checkbox2.Enabled:=true;
+  groupbox8.Height:=90;
+  checkbox15.Enabled:=true;
+  button1.Visible:=true;
+  button2.Visible:=true;
+  button1.top:=30;
+  button2.top:=30;
+  groupbox2.visible:=false;
+  groupbox10.visible:=false;
+  groupbox9.visible:=false;
+  groupbox8.visible:=form1.checkbox15.Checked;
+  if stringgrid1.Cells[1,0]<>'' then button2.Enabled:=not(games_final[strtoint(stringgrid1.Cells[1,0])].interno) or main_config.leer_fijos;
+  if total_juegos=0 then exit;
+  stringgrid1.Row:=0;
+  mostrar_juegos;
+end;
+
 procedure TForm1.StringGrid1Click(Sender: TObject);
 var
   image_string:string;
@@ -454,14 +498,16 @@ begin
   if main_config.motor=MDSP then begin
     //Imagenes DSP
     image_string:=dir_dsp+'preview\'+games_final[ngame].dir+'.png';
-    if FileExists(image_string) then Image1.Picture.LoadFromFile(image_string)
-      else poner_en_blanco;
-
+    if FileExists(image_string) then begin
+      if games_final[ngame].mal then PNGBlurEnImage(Image1,image_string) //oscurecerbitmap(Image1,image_string,IMAGE_FADE)
+        else Image1.Picture.LoadFromFile(image_string)
+    end else poner_en_blanco;
   end else begin
     //Muestro las imagenes si las hay y pongo en marcha el timer
     image_string:=main_config.dir_imgs+games_final[ngame].image_name+'_000.png';
     if FileExists(image_string) then begin
-      Image1.Picture.LoadFromFile(image_string);
+      if games_final[ngame].mal then PNGBlurEnImage(Image1,image_string) //oscurecerbitmap(Image1,image_string,IMAGE_FADE)
+        else Image1.Picture.LoadFromFile(image_string);
       image_num:=0;
       timer1.Enabled:=true;
     end else poner_en_blanco;
@@ -494,16 +540,20 @@ var
 begin
   ngame:=numero_juego;
   if ngame=-1 then exit;
-  if ((state=[gdSelected,gdFocused]) or (state=[gdSelected])) then
+  if ((state=[gdSelected,gdFocused]) or (state=[gdSelected])) then begin
+    image8.Visible:=false;
     with TStringGrid(Sender),Canvas do begin
       font.Color:=0;
-      if games_final[ngame].mal then Brush.Color:=BadColor
-        else if (games_final[ngame].motor=MSCUMM) then Brush.Color:=ScummColor
+      if games_final[ngame].mal then begin
+        Brush.Color:=BadColor;
+        image8.Visible:=true;
+      end else if (games_final[ngame].motor=MSCUMM) then Brush.Color:=ScummColor
           else if (games_final[ngame].interno or (games_final[ngame].motor=MDSP)) then Brush.Color:=SelectedColor
             else Brush.Color:=AddedColor;
       FillRect(Rect);
       TextRect(Rect,Rect.Left+2,Rect.Top+2,Cells[aCol,aRow]);
     end;
+  end;
 end;
 
 procedure TForm1.StringGrid1KeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
@@ -514,6 +564,16 @@ begin
 case key of
   13:if not(estoy_ejecutando) then StringGrid1DblClick(nil)
         else estoy_ejecutando:=false;
+  46:begin //Borrar!
+        estoy_ejecutando:=true;
+        f:=numero_juego;
+        if f=-1 then exit;
+        if games_final[f].interno then begin
+          if MessageDlg(list_error[9],mtWarning,[mbOK]+[mbCancel],0)=2 then exit;
+          games_final[f].mostrar:=false;
+          mostrar_juegos;
+        end else form2.Button3Click(nil);
+     end;
   48..57,65..90:begin
             typed:=typed+lowercase(char(key));
             timer2.Enabled:=false;
@@ -550,7 +610,10 @@ begin
     image_num:=0;
     image_string:=main_config.dir_imgs+games_final[ngame].image_name+'_000.png';
   end;
-  if FileExists(image_string) then Image1.Picture.LoadFromFile(image_string);
+  if FileExists(image_string) then begin
+    if games_final[ngame].mal then PNGBlurEnImage(Image1,image_string) //oscurecerbitmap(Image1,image_string,IMAGE_FADE)
+        else Image1.Picture.LoadFromFile(image_string);
+  end;
 end;
 
 procedure TForm1.Timer2Timer(Sender: TObject);

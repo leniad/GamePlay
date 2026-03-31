@@ -72,6 +72,7 @@ type
     Button4: TButton;
     LabeledEdit20: TLabeledEdit;
     Button23: TButton;
+    CheckBox1: TCheckBox;
     procedure Button1Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure Button2Click(Sender: TObject);
@@ -105,6 +106,7 @@ type
     procedure Button20Click(Sender: TObject);
     procedure Button21Click(Sender: TObject);
     procedure Button22Click(Sender: TObject);
+    procedure CheckBox1Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -336,6 +338,11 @@ end;
 procedure TForm4.CheckBox10Click(Sender: TObject);
 begin
   main_config.leer_fijos:=checkbox10.Checked;
+end;
+
+procedure TForm4.CheckBox1Click(Sender: TObject);
+begin
+  main_config.mostrar_todos:=checkbox1.Checked;
 end;
 
 procedure TForm4.CheckBox2Click(Sender: TObject);

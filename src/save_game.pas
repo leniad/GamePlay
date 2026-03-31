@@ -61,6 +61,8 @@ type
     StaticText6: TStaticText;
     ComboBox7: TComboBox;
     StaticText7: TStaticText;
+    CheckBox4: TCheckBox;
+    TabSheet6: TTabSheet;
     procedure FormCreate(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure Button1Click(Sender: TObject);
@@ -97,7 +99,7 @@ begin
   form2.close;
 end;
 
-procedure TForm2.Button3Click(Sender: TObject);
+procedure TForm2.Button3Click(Sender:TObject);
 var
   f:integer;
 begin
