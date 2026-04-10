@@ -5,9 +5,12 @@ Please read 'Most Wanted' games!<br>
 <pre>
 -General
     +Many corrections when the default settings are restored
-    +To make launching games even easier, a new dropdown list has been added to include different versions of the same game or unofficial translations. This keeps the main list cleaner and avoids having multiple entries for the same game. To select a different version, simply choose it from the dropdown list.
+    +To make launching games even easier, a new dropdown list has been added to include different versions
+    of the same game or unofficial translations. This keeps the main list cleaner and avoids having
+    multiple entries for the same game. To select a different version, simply choose it from the dropdown list.
     +Temporary files are now correctly removed after downloading additional content
-    +The option to download extra game content (manuals, maps, and guides) can be configured from the download window or the general settings
+    +The option to download extra game content (manuals, maps, and guides) can be configured from
+    the download window or the general settings
 -MSDOS
     +Added games
         -Ultima VII: The Black Gate
@@ -24,7 +27,7 @@ Please read 'Most Wanted' games!<br>
         -River Raid
 -Apple II
     +Added games
-    	    -The Bard's Tale
+        -The Bard's Tale
         -Burger Time
         -Jumpman
         -Boulderdash
