@@ -12,11 +12,13 @@ type
     Label1: TLabel;
     Button1: TButton;
     Button2: TButton;
+    CheckBox1: TCheckBox;
     procedure Button1Click(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure CheckBox1Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -60,7 +62,7 @@ end;
 
 procedure TForm5.Button1Click(Sender:TObject);
 var
-  lmsg:string;
+  lmsg,trad_dir:string;
   ZipFile:TZipFile;
   temps:string;
 begin
@@ -84,21 +86,26 @@ begin
         exit;
       end;
     end else begin
-      if not(FApi.DownloadFile(games_final[game_number].dir+'.zip',main_config.dir_zip+games_final[game_number].dir+'.zip',LMsg)) then begin
+      trad_dir:=juego_dir(game_number);
+      if not(FApi.DownloadFile(trad_dir+'.zip',main_config.dir_zip+trad_dir+'.zip',LMsg)) then begin
         MessageDlg('Error descargando '+lmsg,mtError,[mbOk],0);
         exit;
       end;
       //Descargar extras
-      temps:=main_config.dir_base+'\extras\'+games_final[game_number].dir+'_extra.zip';
-      if FApi.DownloadFile(games_final[game_number].dir+'_extra.zip',temps,LMsg) then begin
-        ZipFile:=TZipFile.Create;
-        if Zipfile.IsValid(temps) then begin
-            ZipFile.Open(temps,zmRead);
-            ZipFIle.ExtractAll(main_config.dir_base+'\extras');
-            ZipFile.Close;
+      if main_config.descargar_extra then begin
+        temps:=main_config.dir_base+'\extras\'+trad_dir+'_extra.zip';
+        if FApi.DownloadFile(trad_dir+'_extra.zip',temps,LMsg) then begin
+          ZipFile:=TZipFile.Create;
+          if Zipfile.IsValid(temps) then begin
+              ZipFile.Open(temps,zmRead);
+              ZipFIle.ExtractAll(main_config.dir_base+'\extras');
+              ZipFile.Close;
+          end;
+          ZipFile.Free;
         end;
-        ZipFile.Free;
+        {$I-}
         deletefile(temps);
+        {$I+}
       end;
     end;
     pillar_juegos;
@@ -132,6 +139,11 @@ begin
   close;
 end;
 
+procedure TForm5.CheckBox1Click(Sender: TObject);
+begin
+  main_config.descargar_extra:=checkbox1.Checked;
+end;
+
 procedure TForm5.FormCreate(Sender: TObject);
 begin
   cambiar_idioma_descarga;
@@ -151,6 +163,7 @@ begin
   if f>0 then form5.Left:=f;
   f:=(screen.Height-form5.Height) div 2;
   if f>0 then form5.Top:=f;
+  checkbox1.Checked:=main_config.descargar_extra;
 end;
 
 end.

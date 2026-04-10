@@ -23,7 +23,8 @@ uses
   main in 'main.pas',
   dsp_data in 'dsp_data.pas',
   download_game in 'download_game.pas',
-  games_download in 'games_download.pas' {Form5};
+  games_download in 'games_download.pas' {Form5},
+  games_ref in 'games_ref.pas';
 
 {$R *.res}
 

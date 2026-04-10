@@ -66,11 +66,10 @@ type
     GroupBox10: TGroupBox;
     CheckBox20: TCheckBox;
     CheckBox19: TCheckBox;
-    Button3: TButton;
     RadioButton11: TRadioButton;
     Image8: TImage;
+    ComboBox1: TComboBox;
     procedure FormCreate(Sender: TObject);
-    procedure StringGrid1Click(Sender: TObject);
     procedure StringGrid1DblClick(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
     procedure StringGrid1DrawCell(Sender:TObject;ACol,ARow:LongInt;Rect:TRect;State:TGridDrawState);
@@ -102,6 +101,8 @@ type
     procedure Button3Click(Sender: TObject);
     procedure RadioButton11Click(Sender: TObject);
     procedure Image8Click(Sender: TObject);
+    procedure ComboBox1Change(Sender: TObject);
+    procedure StringGrid1Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -110,10 +111,12 @@ type
 
 var
   Form1:TForm1;
+  old_game:integer;
 
 implementation
 {$R *.dfm}
-uses shellapi,strutils,save_game,acercade,config,idioma_info,main,dsp_data,games_download;
+uses shellapi,strutils,save_game,acercade,config,idioma_info,main,dsp_data,
+     games_download,games_ref;
 
 var
   image_num:integer;
@@ -157,6 +160,17 @@ end;
 procedure TForm1.CheckBox3Click(Sender: TObject);
 begin
   mostrar_juegos;
+end;
+
+procedure TForm1.ComboBox1Change(Sender: TObject);
+begin
+  timer1.Enabled:=false;
+  timer1.Enabled:=true;
+  image_num:=-1;
+  Timer1Timer(nil);
+  StringGrid1.Refresh;
+  image7.visible:=juego_setup(numero_juego)<>'';
+  if form1.Visible then groupbox7.SetFocus;
 end;
 
 procedure TForm1.FormClose(Sender: TObject; var Action: TCloseAction);
@@ -240,7 +254,6 @@ begin
   checkbox8.Enabled:=true;
   checkbox17.Enabled:=true;
   checkbox2.Enabled:=true;
-  groupbox8.Height:=148;
   checkbox15.Enabled:=true;
   button1.Visible:=true;
   button2.Visible:=true;
@@ -264,6 +277,7 @@ end;
 procedure TForm1.RadioButton3Click(Sender: TObject);
 begin
   main_config.motor:=MSCUMM;
+  combobox1.Visible:=false;
   checkbox9.Enabled:=true;
   checkbox10.Enabled:=true;
   checkbox11.Enabled:=true;
@@ -298,6 +312,7 @@ end;
 procedure TForm1.RadioButton4Click(Sender: TObject);
 begin
   main_config.motor:=MDSP;
+  combobox1.Visible:=false;
   checkbox9.Enabled:=false;
   checkbox10.Enabled:=false;
   checkbox11.Enabled:=false;
@@ -323,6 +338,7 @@ end;
 procedure TForm1.RadioButton5Click(Sender: TObject);
 begin
   main_config.motor:=MAPPLE2;
+  combobox1.Visible:=false;
   checkbox9.Enabled:=false;
   checkbox10.Enabled:=false;
   checkbox11.Enabled:=false;
@@ -341,7 +357,7 @@ begin
   checkbox15.Enabled:=true;
   button1.Visible:=true;
   button2.Visible:=true;
-  form1.groupbox8.Height:=148;
+  form1.groupbox8.Height:=150;
   button1.top:=99;
   button2.top:=99;
   groupbox9.visible:=false;
@@ -356,6 +372,7 @@ end;
 procedure TForm1.RadioButton6Click(Sender: TObject);
 begin
   main_config.motor:=MATARI8;
+  combobox1.Visible:=false;
   checkbox9.Enabled:=false;
   checkbox10.Enabled:=false;
   checkbox11.Enabled:=false;
@@ -406,6 +423,7 @@ end;
 procedure TForm1.RadioButton10Click(Sender: TObject);
 begin
   main_config.motor:=MAMIGA;
+  combobox1.Visible:=false;
   checkbox9.Enabled:=false;
   checkbox10.Enabled:=false;
   checkbox11.Enabled:=false;
@@ -430,7 +448,7 @@ begin
   button2.visible:=true;
   button1.top:=99;
   button2.top:=99;
-  groupbox8.Height:=148;
+  groupbox8.Height:=150;
   if total_juegos=0 then exit;
   stringgrid1.Row:=0;
   mostrar_juegos;
@@ -439,6 +457,7 @@ end;
 procedure TForm1.RadioButton11Click(Sender: TObject);
 begin
   main_config.motor:=MATARIST;
+  combobox1.Visible:=false;
   checkbox9.Enabled:=true;
   checkbox10.Enabled:=true;
   checkbox11.Enabled:=true;
@@ -473,7 +492,7 @@ end;
 procedure TForm1.StringGrid1Click(Sender: TObject);
 var
   image_string:string;
-  ngame:integer;
+  ngame,f:integer;
 
 procedure poner_en_blanco;
 var
@@ -492,35 +511,52 @@ begin
   timer1.Enabled:=false;
   ngame:=numero_juego;
   if ((total_juegos=0) or (ngame=-1)) then begin
-    poner_en_blanco;
-    exit;
+      poner_en_blanco;
+      exit;
   end;
+  if (old_game<>ngame) then begin
+    //Compruebo si hay manuales, mapas o guia y activo los botones
+    image4.visible:=games_final[ngame].manual<>'';
+    image3.visible:=games_final[ngame].guia<>'';
+    image5.visible:=games_final[ngame].map<>'';
+    label3.Caption:=games_final[ngame].company;
+    label4.Caption:=games_final[ngame].year;
+    if main_config.motor=MMSDOS then begin
+        combobox1.Visible:=false;
+        if (games_final[ngame].ref[0].nref<>0) then begin
+          combobox1.Items.Clear;
+          combobox1.Items.Add(GAME_DATA_REF[games_final[ngame].ref[0].nref].nombre_original);
+          combobox1.ItemIndex:=0;
+          for f:=0 to NREFS do begin
+            if (games_final[ngame].ref[f].nref<>0) then begin
+              combobox1.Items.Add(GAME_DATA_REF[games_final[ngame].ref[f].nref].nombre);
+              combobox1.Visible:=true;
+            end;
+          end;
+        end;
+        image7.visible:=juego_setup(ngame)<>'';
+    end else image7.visible:=false;
+    button2.Enabled:=not(games_final[ngame].interno) or main_config.leer_fijos;
+  end;
+  old_game:=ngame;
+  //Importante el orden!!
   if main_config.motor=MDSP then begin
-    //Imagenes DSP
-    image_string:=dir_dsp+'preview\'+games_final[ngame].dir+'.png';
-    if FileExists(image_string) then begin
-      if games_final[ngame].mal then PNGBlurEnImage(Image1,image_string) //oscurecerbitmap(Image1,image_string,IMAGE_FADE)
-        else Image1.Picture.LoadFromFile(image_string)
-    end else poner_en_blanco;
+      //Imagenes DSP
+      image_string:=dir_dsp+'preview\'+games_final[ngame].dir+'.png';
+      if FileExists(image_string) then begin
+        if games_final[ngame].mal then PNGBlurEnImage(Image1,image_string) //oscurecerbitmap(Image1,image_string,IMAGE_FADE)
+          else Image1.Picture.LoadFromFile(image_string)
+      end else poner_en_blanco;
   end else begin
-    //Muestro las imagenes si las hay y pongo en marcha el timer
-    image_string:=main_config.dir_imgs+games_final[ngame].image_name+'_000.png';
-    if FileExists(image_string) then begin
-      if games_final[ngame].mal then PNGBlurEnImage(Image1,image_string) //oscurecerbitmap(Image1,image_string,IMAGE_FADE)
-        else Image1.Picture.LoadFromFile(image_string);
-      image_num:=0;
-      timer1.Enabled:=true;
-    end else poner_en_blanco;
+      //Muestro las imagenes si las hay y pongo en marcha el timer
+      image_string:=main_config.dir_imgs+juego_imagen(ngame)+'_000.png';
+      if FileExists(image_string) then begin
+        if juego_mal(ngame) then PNGBlurEnImage(Image1,image_string) //oscurecerbitmap(Image1,image_string,IMAGE_FADE)
+          else Image1.Picture.LoadFromFile(image_string);
+        image_num:=0;
+        timer1.Enabled:=true;
+      end else poner_en_blanco;
   end;
-  //Compruebo si hay manuales, mapas o guia y activo los botones
-  image4.visible:=games_final[ngame].manual<>'';
-  image3.visible:=games_final[ngame].guia<>'';
-  image5.visible:=games_final[ngame].map<>'';
-  label3.Caption:=games_final[ngame].company;
-  label4.Caption:=games_final[ngame].year;
-  if main_config.motor=MMSDOS then image7.visible:=games_final[ngame].setup<>''
-    else image7.visible:=false;
-  button2.Enabled:=not(games_final[ngame].interno) or main_config.leer_fijos;
 end;
 
 procedure TForm1.StringGrid1DblClick(Sender: TObject);
@@ -544,7 +580,7 @@ begin
     image8.Visible:=false;
     with TStringGrid(Sender),Canvas do begin
       font.Color:=0;
-      if games_final[ngame].mal then begin
+      if juego_mal(ngame) then begin
         Brush.Color:=BadColor;
         image8.Visible:=true;
       end else if (games_final[ngame].motor=MSCUMM) then Brush.Color:=ScummColor
@@ -605,13 +641,13 @@ var
 begin
   ngame:=numero_juego;
   image_num:=image_num+1;
-  image_string:=main_config.dir_imgs+games_final[ngame].image_name+'_'+calc_image_num(image_num)+'.png';
+  image_string:=main_config.dir_imgs+juego_imagen(ngame)+'_'+calc_image_num(image_num)+'.png';
   if not(FileExists(image_string)) then begin
     image_num:=0;
-    image_string:=main_config.dir_imgs+games_final[ngame].image_name+'_000.png';
+    image_string:=main_config.dir_imgs+juego_imagen(ngame)+'_000.png';
   end;
   if FileExists(image_string) then begin
-    if games_final[ngame].mal then PNGBlurEnImage(Image1,image_string) //oscurecerbitmap(Image1,image_string,IMAGE_FADE)
+    if juego_mal(ngame) then PNGBlurEnImage(Image1,image_string) //oscurecerbitmap(Image1,image_string,IMAGE_FADE)
         else Image1.Picture.LoadFromFile(image_string);
   end;
 end;

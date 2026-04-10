@@ -73,6 +73,12 @@ type
     LabeledEdit20: TLabeledEdit;
     Button23: TButton;
     CheckBox1: TCheckBox;
+    TabSheet7: TTabSheet;
+    LabeledEdit21: TLabeledEdit;
+    LabeledEdit22: TLabeledEdit;
+    Button24: TButton;
+    Button25: TButton;
+    CheckBox3: TCheckBox;
     procedure Button1Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure Button2Click(Sender: TObject);
@@ -107,6 +113,8 @@ type
     procedure Button21Click(Sender: TObject);
     procedure Button22Click(Sender: TObject);
     procedure CheckBox1Click(Sender: TObject);
+    procedure Button24Click(Sender: TObject);
+    procedure Button25Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -174,6 +182,9 @@ begin
   labelededit17.Text:=main_config.dir_base+'extras\config\apple2.ini';
   labelededit18.Text:=main_config.dir_base+'extras\config\altirra.ini';
   labelededit19.Text:=main_config.dir_base+'extras\winuae\winuae.ini';
+  labelededit21.Text:=main_config.dir_base+'extras\hatari\hatari.exe';
+  labelededit22.Text:=main_config.dir_base+'extras\config\hatari.cfg';
+  labelededit20.Text:=main_config.dir_base+'dsp\dsp.ini';
 end;
 
 procedure TForm4.Button15Click(Sender: TObject);
@@ -225,6 +236,8 @@ begin
   main_config.config_atari800:=labelededit18.Text;
   main_config.config_amiga:=labelededit19.Text;
   main_config.config_dsp:=labelededit20.Text;
+  main_config.atarise_exe:=labelededit21.Text;
+  main_config.config_atarise:=labelededit22.Text;
   form1.button2.Enabled:=main_config.leer_fijos;
   main_config.dosbox_exe:=labelededit1.Text;
   main_config.dosbox_x_exe:=labelededit2.Text;
@@ -239,6 +252,7 @@ begin
   main_config.dir_zip:=labelededit9.Text;
   main_config.dir_imgs:=labelededit10.Text;
   main_config.dir_mt32:=labelededit11.Text;
+  main_config.descargar_extra:=checkbox3.Checked;
   form4.close;
 end;
 
@@ -272,6 +286,22 @@ begin
   openDialog1.Options:=[ofFileMustExist];
   Opendialog1.Filter:='Config file (*.ini)|*.ini';
   if Opendialog1.Execute then labelededit20.Text:=opendialog1.FileName;
+end;
+
+procedure TForm4.Button24Click(Sender: TObject);
+begin
+  openDialog1.InitialDir:=extractfilepath(main_config.atarise_exe);
+  openDialog1.Options:=[ofFileMustExist];
+  Opendialog1.Filter:='EXE file (*.exe)|*.exe';
+  if Opendialog1.Execute then labelededit21.Text:=opendialog1.FileName;
+end;
+
+procedure TForm4.Button25Click(Sender: TObject);
+begin
+  openDialog1.InitialDir:=extractfilepath(main_config.config_atarise);
+  openDialog1.Options:=[ofFileMustExist];
+  Opendialog1.Filter:='Config file (*.cng)|*.cng';
+  if Opendialog1.Execute then labelededit22.Text:=opendialog1.FileName;
 end;
 
 procedure TForm4.Button2Click(Sender: TObject);

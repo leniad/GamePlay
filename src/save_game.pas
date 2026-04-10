@@ -141,7 +141,6 @@ begin
   combobox7.Items.Add('400%');
 end;
 
-
 procedure TForm2.FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
 begin
   if key=27 then begin

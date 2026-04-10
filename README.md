@@ -1,44 +1,83 @@
 # GamePlay status #
-![Main Screen](https://i.ibb.co/Z6q3Lc1r/gameplay-061-en.png)<br>
+![Main Screen](https://i.ibb.co/7xVTscqV/gameplay-070-en.png)<br>
 Please read 'Most Wanted' games!<br>
-<b>31/03/26 - GamePlay updated to 0.61b
+<b>10/04/26 - GamePlay updated to 0.70b
 <pre>
 -General
-    +Atari ST: Added a new emulation engine
-    +Ability to remove games from the main list (and restore them later)
-    +If a game is not available, its images are shown with a blur effect
-     that disappears once it’s downloaded, indicating it’s not present
-    +A new download button is shown for manual download
+    +Many corrections when the default settings are restored
+    +To make launching games even easier, a new dropdown list has been added to include different versions of the same game or unofficial translations. This keeps the main list cleaner and avoids having multiple entries for the same game. To select a different version, simply choose it from the dropdown list.
+    +Temporary files are now correctly removed after downloading additional content
+    +The option to download extra game content (manuals, maps, and guides) can be configured from the download window or the general settings
 -MSDOS
     +Added games
-        -Super Street Fighter II Turbo
-        -Summer Challenge
-        -Games: Winter Challenge, the
-        -Syndicate (Plus)
+        -Ultima VII: The Black Gate
+            +Original
+            +Unofficial translation into Spanish
+        -Wing Commander series: Unofficial translation into Spanish
+-Atari 800
+    +Added games
+        -Eastern Front 1941
+        -Rescue on Fractalus!
+        -Ballblazer
+        -Boulderdash
+        -Boulderdash II
+        -River Raid
+-Apple II
+    +Added games
+    	    -The Bard's Tale
+        -Burger Time
+        -Jumpman
+        -Boulderdash
+        -Boulderdash II
+        -Ultima I: The Beginning
+        -Ultima II: The Revenge of the Enchantress
+        -Ultima III: Exodus';dir:'ULTIMAIII_APPLE
+        -Ultima IV: Quest of the Avatar
+        -Zaxxon';dir:'ZAXXON_APPLE
 -Amiga
-    +Added floppy drive sound
-    +Available floppy drives fixed
     +Games added
-        -Out Run
-        -Out Run Europa
-        -Turbo Outrun
+        -Shadow of the Beast
+	    -Shadow of the Beast II
+        -Shadow of the Beast III
+        -Test Drive
+        -Test Drive II: The Duel
+        -Theme Park
+        -Motörhead
+        -Obliterator
+        -Midnight Resistance
+        -Street Fighter II - The World Warrior
+        -Exolon
+        -Agony
+        -Apidya
+        -Disposable Hero
+        -Fire and Ice - Cool Coyote
+        -Superfrog
+        -Wings
 -Atari ST
     +Added games
-        -Bubble Bobble
-        -Leisure Suit Larry in the Land of the Lounge Lizards
-        -Altered Beast
-        -Defender of the Crown
-        -Gauntlet II
-        -Rick Dangerous
-        -Rick Dangerous II
-        -Xenon II - Megablast
-        -Lorna
-        -Robocop
-        -Out Run
-        -Out Run Europa
-        -Turbo Outrun
-        -Satan
-        -Livingstone II
+        -Zero-5
+        -3D Breakthru
+        -10th Frame
+        -IK+
+        -Karateka
+        -Road Runner
+        -Solomon's Key
+        -Mega Phoenix
+        -Harrier Strike Mission
+        -Macadam Bumper
+        -Afterburner
+        -After the War
+        -Test Drive
+        -Test Drive II: The Duel
+        -Midnight Resistance
+        -Obliterator
+        -Motörhead
+        -Renegade
+        -Ghosts'n Goblins
+        -Astaroth - The Angel of Death
+        -Exolon
+        -5th Gear
+        -Oids
 </pre>
 <b>21/03/26 - GamePlay updated to 0.60b
 <pre>

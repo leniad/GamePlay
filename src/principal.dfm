@@ -4,7 +4,7 @@ object Form1: TForm1
   Anchors = []
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
-  Caption = 'Opciones Avanzadas'
+  Caption = #186
   ClientHeight = 635
   ClientWidth = 1050
   Color = clBtnFace
@@ -7015,8 +7015,6 @@ object Form1: TForm1
       Height = 19
       TabStop = False
       Caption = 'Opciones Avanzadas'
-      Checked = True
-      State = cbChecked
       TabOrder = 4
       OnClick = CheckBox15Click
     end
@@ -7257,10 +7255,10 @@ object Form1: TForm1
     end
   end
   object GroupBox8: TGroupBox
-    Left = 673
-    Top = 440
-    Width = 280
-    Height = 148
+    Left = 684
+    Top = 477
+    Width = 272
+    Height = 150
     Caption = 'Opciones Avanzadas'
     TabOrder = 4
     object Button1: TButton
@@ -7388,31 +7386,32 @@ object Form1: TForm1
       end
     end
   end
-  object Button3: TButton
-    Left = 690
-    Top = 374
-    Width = 87
-    Height = 39
+  object ComboBox1: TComboBox
+    Left = 684
+    Top = 438
+    Width = 239
+    Height = 28
     Margins.Left = 5
     Margins.Top = 5
     Margins.Right = 5
     Margins.Bottom = 5
-    Caption = 'Export'
+    Style = csDropDownList
     TabOrder = 5
+    TabStop = False
     Visible = False
-    OnClick = Button3Click
+    OnChange = ComboBox1Change
   end
   object Timer1: TTimer
     Enabled = False
     Interval = 2000
     OnTimer = Timer1Timer
-    Left = 752
-    Top = 590
+    Left = 512
+    Top = 606
   end
   object Timer2: TTimer
     Interval = 500
     OnTimer = Timer2Timer
-    Left = 808
-    Top = 592
+    Left = 560
+    Top = 608
   end
 end

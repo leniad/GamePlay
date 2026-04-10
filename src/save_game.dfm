@@ -53,7 +53,7 @@ object Form2: TForm2
     Top = 8
     Width = 769
     Height = 585
-    ActivePage = TabSheet6
+    ActivePage = TabSheet1
     TabOrder = 3
     StyleName = 'Windows'
     OnChange = PageControl1Change
@@ -97,6 +97,7 @@ object Form2: TForm2
           Top = 32
           Width = 126
           Height = 23
+          Style = csDropDownList
           TabOrder = 1
           StyleName = 'Windows'
         end
@@ -425,6 +426,7 @@ object Form2: TForm2
       Top = 74
       Width = 126
       Height = 23
+      Style = csDropDownList
       TabOrder = 9
       StyleName = 'Windows'
     end
@@ -433,6 +435,7 @@ object Form2: TForm2
       Top = 74
       Width = 126
       Height = 23
+      Style = csDropDownList
       TabOrder = 11
       StyleName = 'Windows'
     end
@@ -450,6 +453,7 @@ object Form2: TForm2
       Top = 74
       Width = 126
       Height = 23
+      Style = csDropDownList
       TabOrder = 13
       StyleName = 'Windows'
     end
@@ -467,6 +471,7 @@ object Form2: TForm2
       Top = 74
       Width = 126
       Height = 23
+      Style = csDropDownList
       TabOrder = 15
       StyleName = 'Windows'
     end
@@ -534,6 +539,7 @@ object Form2: TForm2
       Top = 71
       Width = 145
       Height = 23
+      Style = csDropDownList
       TabOrder = 4
       StyleName = 'Windows'
     end
@@ -551,6 +557,7 @@ object Form2: TForm2
       Top = 71
       Width = 145
       Height = 23
+      Style = csDropDownList
       TabOrder = 6
       StyleName = 'Windows'
     end

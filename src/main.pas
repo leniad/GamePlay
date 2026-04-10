@@ -19,15 +19,42 @@ procedure guardar_juegos_anadidos;
 procedure save_game_poner_cosas;
 procedure oscurecerbitmap(image:TImage;image_string:string;factor:single);
 procedure PNGBlurEnImage(image:TImage;image_string:string);
-{$IFDEF IS_DEBUG}
-procedure sacar_juegos;
-{$ENDIF}
-{$ifdef fpc}
 function cambiar_path(cadena:string):string;
+function juego_mal(ngame:integer):boolean;
+function juego_dir(ngame:integer):string;
+function juego_imagen(ngame:integer):string;
+function juego_setup(ngame:integer):string;
+{$ifdef fpc}
 function comprobar_si_existe_fichero(directorio:string;var nombre:string;es_zip:boolean):boolean;
 {$endif}
 
+const
+  MMSDOS=0;
+  MSCUMM=1;
+  MAPPLE2=2;
+  MATARI8=3;
+  MAMIGA=4;
+  MATARIST=5;
+  MDSP=255;
+  MAX_GAMES=2000;
+  TEMP_DIR='TEMP';
+  VERSION='v0.70β';
+  IMAGE_FADE=0.3;
+  {$IFDEF IS_DEBUG}
+  {$ifndef windows}
+  debug_base_dir='/home/leniad/abandon/GamePlayVol1/';
+  {$else}
+  debug_base_dir='c:\datos\abandon\GamePlay_070\';
+  {$ENDIF}
+  {$endif}
+  NREFS=2;
+
 type
+  tipo_ref=record
+    nref:integer;
+    mal:boolean;
+    zip:boolean;
+  end;
   tipo_final=record
     nombre:string;
     dir:string;
@@ -37,6 +64,8 @@ type
     exec_pre:string;
     exec_post:string;
     segundo_disco:string;
+    tercer_disco:string;
+    cuarto_disco:string;
     ciclos:integer;
     grafica:string;
     extra_param:string;
@@ -58,6 +87,7 @@ type
     mensaje:string;
     interno:boolean;
     mal:boolean;
+    ref:array[0..NREFS] of tipo_ref;
     motor:byte;
     mostrar:boolean;
   end;
@@ -91,27 +121,8 @@ type
      dir_zip:string;
      motor:integer;
      apple2_joy:boolean;
+     descargar_extra:boolean;
   end;
-
-const
-  MMSDOS=0;
-  MSCUMM=1;
-  MAPPLE2=2;
-  MATARI8=3;
-  MAMIGA=4;
-  MATARIST=5;
-  MDSP=255;
-  MAX_GAMES=2000;
-  TEMP_DIR='TEMP';
-  VERSION='v0.61β';
-  IMAGE_FADE=0.3;
-  {$IFDEF IS_DEBUG}
-  {$ifndef windows}
-  debug_base_dir='/home/leniad/abandon/GamePlayVol1/';
-  {$else}
-  debug_base_dir='c:\datos\abandon\GamePlay_061\';
-  {$ENDIF}
-  {$endif}
 
 var
   orden_games:array[0..(MAX_GAMES-1)] of integer;
@@ -126,7 +137,7 @@ implementation
 uses {$IFDEF WINDOWS}windows,shellapi,MMSystem{$ELSE}LCLIntf,process{$ENDIF},principal,
      inifiles,grids,sysutils,forms,idioma_info,games_data,games_info,strutils,dsp_data,
      config,dialogs,save_game{$ifdef fpc},classes,zipper{$else},zip,uitypes{$endif},
-     games_download,system.ioutils,Vcl.Imaging.pngimage,math,types;
+     games_download,system.ioutils,Vcl.Imaging.pngimage,math,types,games_ref;
 
 const
  RETURN=chr(10);
@@ -135,20 +146,13 @@ type
   TRGBQuadArray=array[0..$400] of TRGBQuad;
   PRGBQuadArray=^TRGBQuadArray;
 
-{uses
-  System.SysUtils,
-  System.Math,
-  Vcl.Graphics,
-  Vcl.ExtCtrls,
-  Vcl.Imaging.pngimage;}
-
   TRGBTripleArray = array[0..$400] of TRGBTriple;
   PRGBTripleArray = ^TRGBTripleArray;
 
 procedure PNGBlurEnImage(image:TImage;image_string:string);
 var
   PNG:TPngImage;
-  Src,temp,small,blurbmp,finalbmp:graphics.tbitmap;
+  src,temp,small,blurbmp,finalbmp:graphics.tbitmap;
   x,y,xx,yy,r,g,b,count,smallw,smallh,reduce:integer;
   RowSrc,RowTemp,RowDst:PRGBTripleArray;
   Re:trect;
@@ -262,6 +266,56 @@ begin
   bmp.free;
 end;
 
+function juego_mal(ngame:integer):boolean;
+begin
+  juego_mal:=games_final[ngame].mal;
+  if ((games_final[ngame].ref[0].nref<>0) and (form1.ComboBox1.ItemIndex<>-1)) then begin
+      if form1.ComboBox1.ItemIndex>0 then juego_mal:=games_final[ngame].ref[form1.ComboBox1.ItemIndex-1].mal;
+  end;
+end;
+
+function juego_dir(ngame:integer):string;
+begin
+  juego_dir:=games_final[ngame].dir;
+  if (games_final[ngame].ref[0].nref<>0) then begin
+      if form1.ComboBox1.ItemIndex>0 then juego_dir:=GAME_DATA_REF[games_final[ngame].ref[form1.ComboBox1.ItemIndex-1].nref].dir;
+  end;
+end;
+
+function juego_exec(ngame,pos:integer):string;
+var
+  res:string;
+begin
+  juego_exec:=games_final[ngame].exec;
+  if (games_final[ngame].ref[0].nref<>0) then begin
+      if pos>0 then begin
+        res:=GAME_DATA_REF[games_final[ngame].ref[pos-1].nref].exec;
+        if res<>'' then juego_exec:=res;
+      end;
+  end;
+end;
+
+function juego_setup(ngame:integer):string;
+begin
+  juego_setup:=games_final[ngame].setup;
+  if (games_final[ngame].ref[0].nref<>0) then begin
+      if form1.ComboBox1.ItemIndex>0 then juego_setup:=GAME_DATA_REF[games_final[ngame].ref[form1.ComboBox1.ItemIndex-1].nref].setup;
+  end;
+end;
+
+function juego_imagen(ngame:integer):string;
+var
+  res:string;
+begin
+  juego_imagen:=games_final[ngame].image_name;
+  if (games_final[ngame].ref[0].nref<>0) then begin
+      if form1.ComboBox1.ItemIndex>0 then begin
+        res:=GAME_DATA_REF[games_final[ngame].ref[form1.ComboBox1.ItemIndex-1].nref].image_alt;
+        if res<>'' then juego_imagen:=res;
+      end;
+  end;
+end;
+
 function tamano_fichero(nombre_fichero:string):integer;
 var
   fichero:file of byte;
@@ -282,7 +336,7 @@ end;
 function cambiar_path(cadena:string):string;
 begin
  {$IFDEF WINDOWS}
- cambiar_path:=cadena;
+ cambiar_path:=stringreplace(cadena,'/','\',[rfReplaceAll]);
  {$ELSE}
  cambiar_path:=stringreplace(cadena,'\','/',[rfReplaceAll]);
  {$ENDIF}
@@ -448,7 +502,7 @@ search_file_zip:=false;
   ZipFile:=TZipFile.Create;
   ZipFile.Open(nombre_zip,zmRead);
   for f:=0 to (ZipFile.FileCount-1) do begin
-    if ContainsText(lowercase(ZipFile.FileNames[f]),lowercase(nombre_file)) then begin
+    if ContainsText(lowercase(cambiar_path(ZipFile.FileNames[f])),lowercase(cambiar_path(nombre_file))) then begin
       search_file_zip:=true;
       break;
     end;
@@ -521,8 +575,24 @@ end;
 end;
 
 procedure pillar_juegos;
+function comprobar_si_existe(ngame:integer;dir:string;var es_zip:boolean;pos:integer):boolean;
 var
-  f:integer;
+  juego:string;
+  res:boolean;
+begin
+es_zip:=false;
+//Primero compruebo si existe el directorio y el fichero ejecutable
+juego:=juego_exec(ngame,pos);
+res:=not(comprobar_si_existe_fichero(main_config.dir_base+dir,juego,false));
+//No existe, pruebo si es un ZIP
+if res then begin
+  res:=not(comprobar_si_existe_fichero(main_config.dir_zip+dir,juego,true));
+  if not(res) then es_zip:=true;
+end;
+comprobar_si_existe:=res;
+end;
+var
+  f,h:integer;
   games_file:textfile;
   temps,juego:string;
   mal:boolean;
@@ -536,15 +606,6 @@ total_dsp:=0;
 total_atarise:=0;
 //Primero los fijos...
 for f:=0 to (GAME_TOTAL-1) do begin
-  //Primero compruebo si existe el directorio y el fichero ejecutable
-  juego:=GAME_DATA[f].exec;
-  mal:=not(comprobar_si_existe_fichero(main_config.dir_base+GAME_DATA[f].dir,juego,false));
-  //No existe, pruebo si es un ZIP
-  if mal then begin
-    mal:=not(comprobar_si_existe_fichero(main_config.dir_zip+GAME_DATA[f].dir,juego,true));
-    if not(mal) then games_final[f].zip:=true;
-  end;
-  games_final[f].mal:=mal;
   games_final[f].nombre:=GAME_DATA[f].nombre;
   games_final[f].dir:=GAME_DATA[f].dir;
   games_final[f].exec:=GAME_DATA[f].exec;
@@ -553,6 +614,8 @@ for f:=0 to (GAME_TOTAL-1) do begin
   games_final[f].exec_pre:=GAME_DATA[f].exec_pre;
   games_final[f].exec_post:=GAME_DATA[f].exec_post;
   games_final[f].segundo_disco:=GAME_DATA[f].segundo_disco;
+  games_final[f].tercer_disco:=GAME_DATA[f].tercer_disco;
+  games_final[f].cuarto_disco:=GAME_DATA[f].cuarto_disco;
   games_final[f].ciclos:=GAME_DATA[f].ciclos;
   games_final[f].grafica:=GAME_DATA[f].grafica;
   games_final[f].extra_param:=GAME_DATA[f].extra_param;
@@ -562,7 +625,15 @@ for f:=0 to (GAME_TOTAL-1) do begin
   games_final[f].cdrom:=GAME_DATA[f].cdrom;
   games_final[f].memoria:=GAME_DATA[f].memoria;
   games_final[f].setup:=GAME_DATA[f].setup;
-  //games_final[f].zip:=GAME_DATA[f].zip;
+  //ES IMPORTANTE ESTE ORDEN!!!
+  for h:=0 to NREFS do begin
+    if (GAME_DATA[f].refs[h]<>0) then begin
+      games_final[f].ref[h].nref:=GAME_DATA[f].refs[h];
+      games_final[f].ref[h].mal:=comprobar_si_existe(f,GAME_DATA_REF[GAME_DATA[f].refs[h]].dir,games_final[f].ref[h].zip,h+1);
+    end;
+  end;
+  mal:=comprobar_si_existe(f,GAME_DATA[f].dir,games_final[f].zip,0);
+  games_final[f].mal:=mal;
   games_final[f].motor:=GAME_DATA[f].motor;
   games_final[f].year:=GAME_INFO[f].year;
   games_final[f].company:=GAME_INFO[f].company;
@@ -600,8 +671,10 @@ for f:=0 to (GAME_TOTAL_DSP-1) do begin
  games_final[total_juegos].motor:=MDSP;
  games_final[total_juegos].interno:=true;
  temps:=games_final[total_juegos].dir+'.zip';
+ mal:=true;
  if temps<>'.zip' then begin
-    games_final[total_juegos].mal:=not(comprobar_si_existe_fichero(dir_dsp+'roms',temps,false));
+    mal:=not(comprobar_si_existe_fichero(dir_dsp+'roms',temps,false));
+    games_final[total_juegos].mal:=mal;
     games_final[total_juegos].dir:=StringReplace(temps,'.zip','',[]);
  end;
  if not(mal) then total_dsp:=total_dsp+1;
@@ -740,6 +813,7 @@ var
   fich_ini:Tinifile;
   joyInfo:TJoyInfo;
 begin
+  old_game:=-1;
   form1.Caption:='GamePlay '+VERSION;
   joysticks:=0;
   for f:=0 to (joyGetNumDevs-1) do begin
@@ -749,7 +823,6 @@ begin
   //Montar main_config, el orden es importante!!!
   {$IFDEF IS_DEBUG}
   main_config.dir_base:=debug_base_dir;
-  form1.button3.Visible:=true;
   {$ELSE}
   main_config.dir_base:=ExtractFilePath(application.ExeName);
   {$ENDIF}
@@ -809,8 +882,8 @@ begin
     main_config.amiga_exe:=fich_ini.ReadString('opciones','amiga_exe',main_config.dir_base+'extras\winuae\winuae.exe');
     main_config.atarise_exe:=fich_ini.ReadString('opciones','atarise_exe',main_config.dir_base+'extras\hatari\hatari.exe');
     main_config.apple2_joy:=(fich_ini.readinteger('opciones','apple2_joy',0)<>0);
-    form1.checkbox19.Checked:=(fich_ini.readinteger('opciones','amiga_vertical',0)<>0);
-    form1.checkbox20.Checked:=(fich_ini.readinteger('opciones','amiga_horizontal',0)<>0);
+    form1.checkbox19.Checked:=fich_ini.readinteger('opciones','amiga_vertical',0)<>0;
+    form1.checkbox20.Checked:=fich_ini.readinteger('opciones','amiga_horizontal',0)<>0;
     main_config.atari800_exe:=fich_ini.ReadString('opciones','atari800_exe',main_config.dir_base+'extras\atari800\altirra.exe');
     main_config.scumm_exe:=fich_ini.ReadString('opciones','scumm_exe',main_config.dir_base+'extras\scummvm\scummvm.exe');
     main_config.dir_manual:=fich_ini.ReadString('opciones','dir_manual',main_config.dir_base+'extras\manual\');
@@ -819,11 +892,13 @@ begin
     main_config.dir_imgs:=fich_ini.ReadString('opciones','dir_imgs',main_config.dir_base+'extras\imgs\');
     main_config.dir_mt32:=fich_ini.ReadString('opciones','dir_mt32',main_config.dir_base+'extras\mt32');
     main_config.dir_zip:=fich_ini.ReadString('opciones','dir_zips',main_config.dir_base+'zip_games\');
+    main_config.descargar_extra:=fich_ini.readinteger('opciones','descargar_extras',1)<>0;
     fich_ini.Free;
   end else begin
     main_config.motor:=MMSDOS;
     form1.radiobutton1.Checked:=true;
-    form1.groupbox8.visible:=true;
+    form1.groupbox8.visible:=false;
+    form1.checkbox15.Checked:=false;
     idioma_sel:=200;
     main_config.leer_fijos:=false;
     main_config.mostrar_todos:=false;
@@ -862,6 +937,8 @@ begin
     main_config.apple2_joy:=false;
     form1.checkbox19.Checked:=false;
     form1.checkbox20.Checked:=false;
+    form1.checkbox15.Checked:=false;
+    main_config.descargar_extra:=true;
     main_config.dir_manual:=main_config.dir_base+'extras\manual\';
     main_config.dir_mapas:=main_config.dir_base+'extras\maps\';
     main_config.dir_guias:=main_config.dir_base+'extras\walk\';
@@ -1078,6 +1155,7 @@ if DirectoryExists(main_config.dir_base) then begin
   fich_ini.WriteInteger('opciones','apple2_joy',byte(main_config.apple2_joy));
   fich_ini.WriteInteger('opciones','amiga_vertical',byte(form1.checkbox19.Checked));
   fich_ini.WriteInteger('opciones','amiga_horizontal',byte(form1.checkbox20.Checked));
+  fich_ini.WriteInteger('opciones','descargar_extras',byte(main_config.descargar_extra));
   fich_ini.WriteString('opciones','atari800_exe',main_config.atari800_exe);
   fich_ini.WriteString('opciones','dir_manual',main_config.dir_manual);
   fich_ini.WriteString('opciones','dir_maps',main_config.dir_mapas);
@@ -1124,18 +1202,77 @@ extract_zip:=true;
 end;
 
 procedure form_principal_execute;
+function juego_grafica(ngame:integer):string;
 var
-  cd_rom_dir,exec_dir,exec_base,exec_memoria,exec_parametros,exec_dosbox_extra_config,temp_str,temp_str2,temp_disco,exec_mapper,exec_sd,exec_roland,exec_extra,exec_params,exec_gus,exec_sound,exec_c_param,exec_string,param_string,exec_ciclos,exec_video,exec_fullscreen,exec_pre:string;
-  ngame:integer;
+  res:string;
+begin
+  juego_grafica:=games_final[ngame].grafica;
+  if (games_final[ngame].ref[0].nref<>0) then begin
+      if form1.ComboBox1.ItemIndex>0 then begin
+        res:=GAME_DATA_REF[games_final[ngame].ref[form1.ComboBox1.ItemIndex-1].nref].grafica;
+        if res<>'' then juego_grafica:=res;
+      end;
+  end;
+end;
+
+function juego_mapper(ngame:integer):string;
+begin
+  juego_mapper:=games_final[ngame].mapper;
+  if (games_final[ngame].ref[0].nref<>0) then begin
+      if form1.ComboBox1.ItemIndex>0 then juego_mapper:=GAME_DATA_REF[games_final[ngame].ref[form1.ComboBox1.ItemIndex-1].nref].mapper;
+  end;
+end;
+
+function juego_mensaje(ngame:integer):string;
+begin
+  juego_mensaje:=games_final[ngame].mensaje;
+  if (games_final[ngame].ref[0].nref<>0) then begin
+      if form1.ComboBox1.ItemIndex<>0 then juego_mensaje:=GAME_DATA_REF[games_final[ngame].ref[form1.ComboBox1.ItemIndex-1].nref].mensaje;
+  end;
+end;
+
+function juego_ciclos(ngame:integer):integer;
+var
+  res:integer;
+begin
+  juego_ciclos:=games_final[ngame].ciclos;
+  if (games_final[ngame].ref[0].nref<>0) then begin
+      if form1.ComboBox1.ItemIndex<>0 then begin
+        res:=GAME_DATA_REF[games_final[ngame].ref[form1.ComboBox1.ItemIndex-1].nref].ciclos;
+        if res<>0 then juego_ciclos:=res;
+      end;
+  end;
+end;
+
+function juego_es_zip(ngame:integer):boolean;
+begin
+  juego_es_zip:=games_final[ngame].zip;
+  if (games_final[ngame].ref[0].nref<>0) then begin
+      if form1.ComboBox1.ItemIndex>0 then juego_es_zip:=games_final[ngame].ref[form1.ComboBox1.ItemIndex-1].zip;
+  end;
+end;
+
+function juego_segundo_disco(ngame:integer):string;
+begin
+  juego_segundo_disco:=games_final[ngame].segundo_disco;
+  if (games_final[ngame].ref[0].nref<>0) then begin
+      if form1.ComboBox1.ItemIndex>0 then juego_segundo_disco:=GAME_DATA_REF[games_final[ngame].ref[form1.ComboBox1.ItemIndex-1].nref].segundo_disco;
+  end;
+end;
+
+var
+  trad_dir,cd_rom_dir,exec_dir,exec_base,exec_memoria,exec_parametros,exec_dosbox_extra_config,temp_str,temp_str2,temp_disco,exec_mapper,exec_sd,exec_roland,exec_extra,exec_params,exec_gus,exec_sound,exec_c_param,exec_string,param_string,exec_ciclos,exec_video,exec_fullscreen,exec_pre:string;
+  ngame,nfloppy,tempi:integer;
   play_file:textfile;
   {$IFNDEF WINDOWS}
   process:tprocess;
   {$ENDIF}
+  temps,temp_exec:string;
 begin
 ngame:=numero_juego;
 if ngame=-1 then exit;
 estoy_ejecutando:=true;
-if games_final[ngame].mal then begin
+if juego_mal(ngame) then begin
   if games_final[ngame].interno then begin
     if not(descargar_juego(ngame)) then exit;
   end else begin
@@ -1162,27 +1299,30 @@ if main_config.motor=MDSP then begin
     {$ENDIF}
     exit;
 end;
+trad_dir:=juego_dir(ngame);
 //Si es un ZIP lo descomprimo!
-if games_final[ngame].zip then begin
-  delete_dir(TEMP_DIR+'\'+games_final[ngame].dir);
-  CreateDir(cambiar_path(main_config.dir_base+TEMP_DIR+'\'+games_final[ngame].dir));
-  extract_zip(main_config.dir_zip,games_final[ngame].dir);
-  exec_dir:=cambiar_path(TEMP_DIR+'\'+games_final[ngame].dir);
-end else exec_dir:=games_final[ngame].dir;
+if juego_es_zip(ngame) then begin
+  delete_dir(TEMP_DIR+'\'+trad_dir);
+  CreateDir(cambiar_path(main_config.dir_base+TEMP_DIR+'\'+trad_dir));
+  extract_zip(main_config.dir_zip,trad_dir);
+  exec_dir:=cambiar_path(TEMP_DIR+'\'+trad_dir);
+end else exec_dir:=trad_dir;
 //Mostrar mensaje de ayuda
 if (form1.checkbox2.Checked and (main_config.motor<>MSCUMM)) then begin
-  if games_final[ngame].mensaje<>'' then begin
-    temp_str:=games_final[ngame].mensaje;
+  temp_str:=juego_mensaje(ngame);
+  if temp_str<>'' then begin
     case main_config.motor of
       MMSDOS:begin
                 if main_config.motor_msdos=0 then temp_disco:='CONTROL+F4'
                   else temp_disco:={$ifdef windows}'F11+O';{$else}'F12+O';{$endif}
              end;
+      MAPPLE2:temp_disco:='F3';
+      MATARI8:temp_disco:='ALT+O';
       MAMIGA:temp_disco:='FIN+F1';
       MATARIST:temp_disco:='F11';
     end;
-    if ContainsText(temp_str,'[KEY_DISK]') then temp_str:=StringReplace(temp_str,'[KEY_DISK]',temp_disco,[]);
-    if ContainsText(temp_str,'[RET]') then temp_str:=StringReplace(temp_str,'[RET]',RETURN,[rfReplaceAll]);
+    temp_str:=StringReplace(temp_str,'[KEY_DISK]',temp_disco,[rfReplaceAll]);
+    temp_str:=StringReplace(temp_str,'[RET]',RETURN,[rfReplaceAll]);
     MessageDlg(temp_str,mtInformation,[mbOK],0);
   end;
 end;
@@ -1290,9 +1430,10 @@ case main_config.motor of
         end;
     end;
     //Velocidad CPU
-    if games_final[ngame].ciclos=-1 then exec_ciclos:=exec_ciclos+'auto'
-      else if games_final[ngame].ciclos=1 then exec_ciclos:=exec_ciclos+'max'
-        else if games_final[ngame].ciclos<>0 then exec_ciclos:=exec_ciclos+inttostr(games_final[ngame].ciclos)
+    tempi:=juego_ciclos(ngame);
+    if tempi=-1 then exec_ciclos:=exec_ciclos+'auto'
+      else if tempi=1 then exec_ciclos:=exec_ciclos+'max'
+        else if tempi<>0 then exec_ciclos:=exec_ciclos+inttostr(tempi)
           else exec_ciclos:=exec_ciclos+'12000';
     //Crear bat de ejecucion
     {$I-}
@@ -1312,7 +1453,7 @@ case main_config.motor of
     if games_final[ngame].exec_pre<>'' then begin
         exec_pre:=games_final[ngame].exec_pre;
         //Si es un ZIP la carpeta base es TEMP
-        if games_final[ngame].zip then begin
+        if juego_es_zip(ngame) then begin
             temp_str:=main_config.dir_base+TEMP_DIR+'\'+games_final[ngame].dir;
             temp_str2:='c:\'+TEMP_DIR+'\'+games_final[ngame].dir;
         end else begin
@@ -1325,12 +1466,13 @@ case main_config.motor of
         WriteLn(play_file,exec_pre);
     end;
     //Añadir, si existe, un fichero de setup que hay que ejecutar
-    if ejecutar_setup then WriteLn(play_file,games_final[ngame].setup);
+    if ejecutar_setup then WriteLn(play_file,juego_setup(ngame));
     //Añadir el ejecutable
+    temp_exec:=juego_exec(ngame,form1.ComboBox1.ItemIndex);
     exec_params:=games_final[ngame].params;
-    if ContainsText(games_final[ngame].exec,'.bat') then WriteLn(play_file,'call '+games_final[ngame].exec+' '+exec_params)
-      else if games_final[ngame].loadfix then WriteLn(play_file,'loadfix '+games_final[ngame].exec+' '+exec_params)
-            else WriteLn(play_file,games_final[ngame].exec+' '+exec_params);
+    if ContainsText(temp_exec,'.bat') then WriteLn(play_file,'call '+temp_exec+' '+exec_params)
+      else if games_final[ngame].loadfix then WriteLn(play_file,'loadfix '+temp_exec+' '+exec_params)
+            else WriteLn(play_file,temp_exec+' '+exec_params);
     //Añadir el ejecutable post
     if games_final[ngame].exec_post<>'' then begin
         temp_str:=games_final[ngame].exec_post;
@@ -1354,8 +1496,9 @@ case main_config.motor of
     end;
     //Comprobar grafica
     exec_video:='';
-    if games_final[ngame].grafica<>'' then begin
-      exec_video:='-machine '+games_final[ngame].grafica;
+    temps:=juego_grafica(ngame);
+    if temps<>'' then begin
+      exec_video:='-machine '+temps;
       exec_memoria:='1';
       //Si es Dosbox, cambio el parametro
       if ((main_config.motor_msdos=0) and ContainsText(exec_video,'cga_composite')) then exec_video:='-machine cga -set composite=true';
@@ -1363,13 +1506,15 @@ case main_config.motor of
     if form1.checkbox1.Checked then exec_fullscreen:='-set fullscreen=true'
       else exec_fullscreen:='-set fullscreen=false';
     //Mirar si tiene mapper
-    if games_final[ngame].mapper<>'' then exec_mapper:='-set mapperfile="'+main_config.dir_base+'extras\mappers\'+games_final[ngame].mapper +'"'
+    temps:=juego_mapper(ngame);
+    if temps<>'' then exec_mapper:='-set mapperfile="'+main_config.dir_base+'extras\mappers\'+temps +'"'
       else exec_mapper:='';
     //Comprobar si es un PC-Booter (tiene la extension .img) o un cartucho PCJR
-    if ((ContainsText(games_final[ngame].exec,'.img') or ContainsText(games_final[ngame].exec,'.jrc')) and not(ContainsText(games_final[ngame].exec_pre,'imgmount'))) then begin
-      if games_final[ngame].segundo_disco<>'' then exec_sd:=' c:\'+exec_dir+'\'+games_final[ngame].segundo_disco
+    if ((ContainsText(temp_exec,'.img') or ContainsText(temp_exec,'.jrc')) and not(ContainsText(games_final[ngame].exec_pre,'imgmount'))) then begin
+      temps:=juego_segundo_disco(ngame);
+      if temps<>'' then exec_sd:=' c:\'+exec_dir+'\'+temps
         else exec_sd:='';
-      exec_c_param:='-c "boot c:\'+exec_dir+'\'+games_final[ngame].exec+exec_sd+'"';
+      exec_c_param:='-c "boot c:\'+exec_dir+'\'+temp_exec+exec_sd+'"';
       exec_memoria:='1';
     end else begin
       exec_c_param:='-c c:\TEMP\start.bat'
@@ -1399,9 +1544,26 @@ case main_config.motor of
       else exec_sound:='';
     if games_final[ngame].loadfix then temp_str2:='-s gfx_atari_palette_fix=3to8bit '
       else temp_str2:='';
-    if ContainsText(lowercase(games_final[ngame].exec),'vhd') then temp_str:='-s hardfile2=rw,DH0:'+main_config.dir_base+exec_dir+'\'+games_final[ngame].exec+','+games_final[ngame].params+' '
-      else temp_str:='-0 "'+main_config.dir_base+exec_dir+'\'+games_final[ngame].exec+'" ';
-    if games_final[ngame].segundo_disco<>'' then temp_str:=temp_str+'-1 "'+main_config.dir_base+exec_dir+'\'+games_final[ngame].segundo_disco+'" ';
+    if ContainsText(lowercase(games_final[ngame].exec),'vhd') then begin
+      temp_str:='-s hardfile2=rw,DH0:'+main_config.dir_base+exec_dir+'\'+games_final[ngame].exec+','+games_final[ngame].params+' ';
+      if games_final[ngame].segundo_disco<>'' then temp_str:=temp_str+'-0 "'+main_config.dir_base+exec_dir+'\'+games_final[ngame].segundo_disco+'" -s floppy1type=-1 ';
+    end else begin
+      temp_str:='-0 "'+main_config.dir_base+exec_dir+'\'+games_final[ngame].exec+'" ';
+      nfloppy:=1;
+      if games_final[ngame].segundo_disco<>'' then begin
+        temp_str:=temp_str+'-1 "'+main_config.dir_base+exec_dir+'\'+games_final[ngame].segundo_disco+'" ';
+        nfloppy:=2;
+      end else temp_str:=temp_str+'-s floppy1type=-1 ';
+      if games_final[ngame].tercer_disco<>'' then begin
+        temp_str:=temp_str+'-2 "'+main_config.dir_base+exec_dir+'\'+games_final[ngame].tercer_disco+'" -s floppy2type=0 ';
+        nfloppy:=3;
+      end;
+      if games_final[ngame].cuarto_disco<>'' then begin
+        temp_str:=temp_str+'-3 "'+main_config.dir_base+exec_dir+'\'+games_final[ngame].cuarto_disco+'" -s floppy3type=0 ';
+        nfloppy:=4;
+      end;
+      temp_str:=temp_str+'-s nr_floppies='+inttostr(nfloppy)+' ';
+    end;
     if games_final[ngame].exec_pre<>'' then exec_pre:='-s joyport1='+games_final[ngame].exec_pre+' ';
     param_string:='-G -f "'+main_config.dir_base+'extras\config\'+exec_video+'" '+temp_str+' '+exec_fullscreen+exec_sound+exec_ciclos+temp_str2+exec_pre;
     if form1.checkbox19.Checked then param_string:=param_string+'-s gfx_center_vertical=smart ';
@@ -1412,8 +1574,9 @@ case main_config.motor of
   end;
   MATARIST:begin
     exec_mapper:='--tos "'+ExtractFilePath(main_config.atarise_exe);
-    if games_final[ngame].grafica='st' then exec_mapper:=exec_mapper+'TOS\tos104uk.img" --machine st '
-      else exec_mapper:=exec_mapper+'TOS\tos162uk.img"  --machine ste ';
+    if games_final[ngame].grafica='st_102' then exec_mapper:=exec_mapper+'TOS\tos102uk.img" --machine st '
+      else if games_final[ngame].grafica='st' then exec_mapper:=exec_mapper+'TOS\tos104uk.img" --machine st '
+        else exec_mapper:=exec_mapper+'TOS\tos162uk.img"  --machine ste ';
     if form1.checkbox1.Checked then exec_fullscreen:='-f '
       else exec_fullscreen:='';
     if not(form1.CheckBox14.Checked) then exec_sound:='--sound off '
@@ -1654,7 +1817,6 @@ case form2.PageControl1.ActivePageIndex of
             form2.statictext5.visible:=true;
           end;
   MATARIST:begin
-
            end;
   MAMIGA:begin
             form2.LabeledEdit6.visible:=true;
@@ -1807,6 +1969,8 @@ begin
   form4.labelededit14.Text:=main_config.apple2_exe;
   form4.labelededit15.Text:=main_config.atari800_exe;
   form4.labelededit16.Text:=main_config.amiga_exe;
+  form4.labelededit21.Text:=main_config.atarise_exe;
+  form4.labelededit22.Text:=main_config.config_atarise;
   //Dirs misc
   form4.labelededit6.Text:=main_config.dir_manual;
   form4.labelededit7.Text:=main_config.dir_mapas;
@@ -1825,6 +1989,7 @@ begin
   form4.checkbox1.Checked:=main_config.mostrar_todos;
   form4.checkbox10.Checked:=main_config.leer_fijos;
   form4.checkbox2.Checked:=main_config.mostrar_anadidos;
+  form4.checkbox3.Checked:=main_config.descargar_extra;
 end;
 
 end.
