@@ -1,6 +1,29 @@
 # GamePlay status #
-![Main Screen](https://i.ibb.co/7xVTscqV/gameplay-070-en.png)<br>
+![Main Screen](https://i.ibb.co/r2LBp0jj/gameplay-080-en.png)<br>
 Please read 'Most Wanted' games!<br>
+<b>16/04/26 - GamePlay updated to 0.80b
+<pre>
+-General
+    +Added a message when downloading games
+    +Added emulation support for Windows 95 games
+-MSDOS
+    +Added games
+        -Castillo del Doctor Brain
+        -La Espada Sagrada
+        -Freddy Pharkas - Frontier Pharmacist
+        -Freddy Pharkas - Farmacéutico de la Frontera
+        -Life and Death (EN)
+        -Life and Death (ES)
+        -Life & Death II - The Brain (ES)
+        -Silent Shadow
+        -Stardust
+        -The Terminator
+-Windows 95
+    +Added games
+        -Fire Fight
+        -Ages of Empire - Gold (ES)
+        -Ages of Empire II - The Age of Kings (ES)
+</pre>
 <b>10/04/26 - GamePlay updated to 0.70b
 <pre>
 -General
@@ -81,6 +104,45 @@ Please read 'Most Wanted' games!<br>
         -Exolon
         -5th Gear
         -Oids
+</pre>
+<b>31/03/26 - GamePlay updated to 0.61b
+<pre>
+-General
+    +Atari ST: Added a new emulation engine
+    +Ability to remove games from the main list (and restore them later)
+    +If a game is not available, its images are shown with a blur effect
+     that disappears once it’s downloaded, indicating it’s not present
+    +A new download button is shown for manual download
+-MSDOS
+    +Added games
+       -Super Street Fighter II Turbo
+       -Summer Challenge
+       -The Games: Winter Challenge
+       -Syndicate (Plus)
+-Amiga
+    +Added floppy drive sound
+    +Available floppy drives fixed
+    +Games added
+       -Out Run
+       -Out Run Europa
+       -Turbo Outrun
+       -Atari ST
+       -Added games
+       -Bubble Bobble
+       -Leisure Suit Larry in the Land of the Lounge Lizards
+       -Altered Beast
+       -Defender of the Crown
+       -Gauntlet II
+       -Rick Dangerous
+       -Rick Dangerous II
+       -Xenon II - Megablast
+       -Lorna
+       -Robocop
+       -Out Run
+       -Out Run Europa
+       -Turbo Outrun
+       -Satan
+       -Livingstone II
 </pre>
 <b>21/03/26 - GamePlay updated to 0.60b
 <pre>

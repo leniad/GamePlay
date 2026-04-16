@@ -753,7 +753,20 @@ const
   (image_name:'bdash_a8';tipo:ARCADE),
   (image_name:'bdash2_a8';tipo:ARCADE),
   (image_name:'rraid_a8';tipo:ARCADE),
-  (manual:'U7_Copy Protection Answers.pdf$U7_BlackGate_ES_RF.pdf$U7_Isle of Fire guide.pdf$U7_LibroHermandad_ES.pdf$';map:'U7_Map.pdf$U7_Map_bw.pdf';image_name:'ultima7';tipo:RPG)
+  (manual:'U7_Copy Protection Answers.pdf$U7_BlackGate_ES_RF.pdf$U7_Isle of Fire guide.pdf$U7_LibroHermandad_ES.pdf$';map:'U7_Map.pdf$U7_Map_bw.pdf';image_name:'ultima7';tipo:RPG),
+  (image_name:'ffight';tipo:ARCADE),
+  (manual:'Castle of Dr. Brain_Manual_ES.pdf$Castle of Dr. Brain_HB_EN.pdf';image_name:'castlebrain';tipo:PUZ),
+  (image_name:'espadas';tipo:ARCADE),
+  (manual:'Freddy Pharkas_Manual_EN.pdf$Freddy Pharkas_HB_EN.pdf';image_name:'freddyp';tipo:AG),
+  (manual:'Freddy Pharkas_Manual_ES.pdf$Freddy Pharkas_HB_ES.pdf';image_name:'freddyp';tipo:AG),
+  (manual:'L&D_Manual.pdf$L&D_Claves.pdf$L&D_Anatomy_and_the_Surgical_Technique.pdf$L&D_New_Resident_Orientation.pdf$L&D_The_History_of_Surgery.pdf';image_name:'lifedeath';tipo:SIMULA),
+  (manual:'L&D_Manual.pdf$L&D_Claves.pdf$L&D_Anatomy_and_the_Surgical_Technique.pdf$L&D_New_Resident_Orientation.pdf$L&D_The_History_of_Surgery.pdf';image_name:'lifedeath';tipo:SIMULA),
+  (image_name:'lifedeath2';tipo:SIMULA),
+  (image_name:'sshadow';tipo:ARCADE),
+  (manual:'Stardust_Manual.pdf';image_name:'stardust';tipo:ARCADE),
+  (manual:'Terminator_Manual.pdf$Terminator_RF.pdf';map:'Terminator_map.pdf';image_name:'terminator';tipo:ARCADE),
+  (image_name:'aoe_es';idioma:ESP;tipo:SIMULA),
+  (image_name:'aoe2_es';idioma:ESP;tipo:SIMULA)
   );
 
 implementation

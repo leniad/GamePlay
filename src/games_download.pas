@@ -8,7 +8,6 @@ uses
 
 type
   TForm5 = class(TForm)
-
     Label1: TLabel;
     Button1: TButton;
     Button2: TButton;
@@ -26,6 +25,7 @@ type
   end;
   function descargar_juego(ngame:integer):boolean;
   procedure descargar_juego_sin_confirmar(ngame:integer);
+  function descargar_fichero(origen,destino:string;check:boolean):boolean;
 
 var
   Form5:TForm5;
@@ -60,13 +60,12 @@ begin
   descargar_juego:=juego_descargado;
 end;
 
-procedure TForm5.Button1Click(Sender:TObject);
+function descargar_fichero(origen,destino:string;check:boolean):boolean;
 var
-  lmsg,trad_dir:string;
-  ZipFile:TZipFile;
-  temps:string;
+  lmsg:string;
 begin
   //Conexion+token
+  descargar_fichero:=false;
   try
     if not(FApi.Login(USUARIO,PASSWORD,lmsg)) then begin
       MessageDlg('Error login '+lmsg,mtError,[mbOk],0);
@@ -80,39 +79,11 @@ begin
   end;
   //Descargar fichero
   try
-    if games_final[game_number].motor=MDSP then begin
-      if not(FApi.DownloadFile(games_final[game_number].dir+'_dsp.zip',main_config.dir_base+'\dsp\roms\'+games_final[game_number].dir+'.zip',LMsg)) then begin
-        MessageDlg('Error descargando '+lmsg,mtError,[mbOk],0);
-        exit;
-      end;
-    end else begin
-      trad_dir:=juego_dir(game_number);
-      if not(FApi.DownloadFile(trad_dir+'.zip',main_config.dir_zip+trad_dir+'.zip',LMsg)) then begin
-        MessageDlg('Error descargando '+lmsg,mtError,[mbOk],0);
-        exit;
-      end;
-      //Descargar extras
-      if main_config.descargar_extra then begin
-        temps:=main_config.dir_base+'\extras\'+trad_dir+'_extra.zip';
-        if FApi.DownloadFile(trad_dir+'_extra.zip',temps,LMsg) then begin
-          ZipFile:=TZipFile.Create;
-          if Zipfile.IsValid(temps) then begin
-              ZipFile.Open(temps,zmRead);
-              ZipFIle.ExtractAll(main_config.dir_base+'\extras');
-              ZipFile.Close;
-          end;
-          ZipFile.Free;
-        end;
-        {$I-}
-        deletefile(temps);
-        {$I+}
-      end;
+    if not(FApi.DownloadFile(origen,destino,LMsg)) then begin
+      if not(check) then exit;
+      MessageDlg('Error descargando '+lmsg,mtError,[mbOk],0);
+      exit;
     end;
-    pillar_juegos;
-    ordena_juegos;
-    mostrar_juegos;
-    juego_descargado:=true;
-    games_final[game_number].mostrar:=true;
   except
     on E: Exception do begin
       MessageDlg('Error incontrolado download',mtError,[mbOk],0);
@@ -131,7 +102,47 @@ begin
       exit;
     end;
   end;
-  close;
+  descargar_fichero:=true;
+end;
+
+
+procedure TForm5.Button1Click(Sender:TObject);
+var
+  origen,destino:string;
+  ZipFile:TZipFile;
+begin
+    if games_final[game_number].motor=MDSP then begin
+      origen:=games_final[game_number].dir+'_dsp.zip';
+      destino:=main_config.dir_base+'dsp\roms\'+games_final[game_number].dir+'.zip';
+      if not(descargar_fichero(origen,destino,true)) then exit;
+    end else begin
+      origen:=juego_dir(game_number)+'.zip';
+      destino:=main_config.dir_zip+juego_dir(game_number)+'.zip';
+      if not(descargar_fichero(origen,destino,true)) then exit;
+      //Descargar extras
+      if main_config.descargar_extra then begin
+        origen:=juego_dir(game_number)+'_extra.zip';
+        destino:=main_config.dir_base+'extras\'+juego_dir(game_number)+'_extra.zip';
+        if descargar_fichero(origen,destino,false) then begin
+          ZipFile:=TZipFile.Create;
+          if Zipfile.IsValid(destino) then begin
+              ZipFile.Open(destino,zmRead);
+              ZipFIle.ExtractAll(main_config.dir_base+'\extras');
+              ZipFile.Close;
+          end;
+          ZipFile.Free;
+        end;
+        {$I-}
+        deletefile(destino);
+        {$I+}
+      end;
+    end;
+    pillar_juegos;
+    ordena_juegos;
+    mostrar_juegos;
+    juego_descargado:=true;
+    games_final[game_number].mostrar:=true;
+    close;
 end;
 
 procedure TForm5.Button2Click(Sender: TObject);

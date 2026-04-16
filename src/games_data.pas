@@ -29,7 +29,7 @@ type
     motor:byte;
   end;
 const
-  GAME_TOTAL=714;
+  GAME_TOTAL=727;
   GAME_DATA:array[0..(GAME_TOTAL-1)] of tipo_games=(
   (nombre:'Bruce Lee';dir:'brucelee';exec:'brucelee.img';ciclos:300;grafica:'cga_composite';extra_param:'-set joysticktype=2axis';mapper:'brucelee.map'),
   (nombre:'Lost Vikings, the';dir:'lostv';exec:'vikings.exe';setup:'setup.exe'),
@@ -200,7 +200,7 @@ const
   (nombre:'Jumpman';dir:'jumpman';exec:'jumpman.img';ciclos:450;grafica:'cga_composite'),
   (nombre:'Viaje al Centro de la Tierra';dir:'vct';exec:'viaje_d1.img';exec_pre:'imgmount a viaje_d*.img -t floppy[RET]a:[RET]menu.com'),
   (nombre:'Risky Woods (ES)';dir:'risky_es';exec:'risky.exe'),
-  (nombre:'SimAnt';dir:'simant';exec:'simant.exe'),
+  (nombre:'SimAnt';dir:'simant';exec:'simant.exe';setup:'install.exe'),
   (nombre:'Arkanoid (CGA)';dir:'arka_cga';exec:'arkanoid.exe';ciclos:750),
   (nombre:'Arkanoid';dir:'arkanoid';exec:'arkanoid.exe';grafica:'tandy'),
   (nombre:'Epic Pinball';dir:'epicpin';exec:'pinball.exe';gus:true;setup:'setup.exe'),
@@ -688,7 +688,6 @@ const
   (nombre:'Turbo Outrun';dir:'TOUTRUN_ST';exec:'Turbo Out Run.ipf';motor:MATARIST),
   (nombre:'Satan';dir:'SATAN_ST';exec:'satan disk1.stx';motor:MATARIST),
   (nombre:'Livingstone II';dir:'LIVIN2_ST';exec:'Livingstone II.stx';motor:MATARIST),
-  //
   (nombre:'Zero-5';dir:'ZERO5_ST';exec:'ZERO_5\zero_5\ZERO5.PRG';params:'ZERO_5';exec_post:'c:\zero_5\ZERO5.PRG';motor:MATARIST),
   (nombre:'3D Breakthru';dir:'3DBREAK_ST';exec:'3D Breakthru.ST';exec_post:'a:\SBREAK.TOS';motor:MATARIST),
   (nombre:'10th Frame';dir:'10FRAME_ST';exec:'10frame\BOWLING.PRG';params:'10frame';exec_post:'C:\BOWLING.PRG';grafica:'st';motor:MATARIST),
@@ -745,7 +744,21 @@ const
   (nombre:'Boulderdash';dir:'BOULDER_A8';exec:'Boulderdash.rom';motor:MATARI8),
   (nombre:'Boulderdash II';dir:'BOULDER2_A8';exec:'Boulder Dash II.cas';motor:MATARI8),
   (nombre:'River Raid';dir:'RIVERRAID_A8';exec:'River Raid.cas';motor:MATARI8),
-  (nombre:'Ultima VII: The Black Gate';dir:'ULTIMA7';exec:'ultima7.com';ciclos:14000;extra_param:'-set ems=false';setup:'install.exe';refs:(1,0,0))
+  (nombre:'Ultima VII: The Black Gate';dir:'ULTIMA7';exec:'ultima7.com';ciclos:14000;extra_param:'-set ems=false';setup:'install.exe';refs:(1,0,0)),
+  //
+  (nombre:'Fire Fight';dir:'FFIGHT';exec:'ffight.img';cdrom:'ffight.cue';motor:MWIN95),
+  (nombre:'Castillo del Doctor Brain (ES)';dir:'BRAIN_ES';exec:'sierra.exe';setup:'install.exe'),
+  (nombre:'Espada Sagrada, la';dir:'ESPADAS';exec:'espada.com';ciclos:1500),
+  (nombre:'Freddy Pharkas - Frontier Pharmacist (EN)';dir:'FPFP_EN';exec:'sierra.exe';setup:'install.exe'),
+  (nombre:'Freddy Pharkas - Farmacéutico de la Frontera (ES)';dir:'FPFP_ES';exec:'sierra.exe';setup:'install.exe'),
+  (nombre:'Life and Death (EN)';dir:'LDEATH';exec:'L&D.EXE';ciclos:450),
+  (nombre:'Life and Death (ES)';dir:'LD_ES';exec:'L&D.EXE';ciclos:450),
+  (nombre:'Life & Death II - The Brain (ES)';dir:'LD2_ES';exec:'LD2.EXE'),
+  (nombre:'Silent Shadow';dir:'SSHADOW';exec:'SILENT.EXE';ciclos:1500),
+  (nombre:'Stardust';dir:'STARDUST';exec:'STARDUST.EXE';ciclos:750),
+  (nombre:'Terminator, the';dir:'TERM';exec:'TERM.COM';ciclos:3500),
+  (nombre:'Ages of Empire - Gold (ES)';dir:'AOE_ES';exec:'aoe_es.img';cdrom:'AOE.cue';motor:MWIN95),
+  (nombre:'Ages of Empire II - The Age of Kings (ES)';dir:'AOE2_ES';exec:'aoe2.img';extra_param:'-set cputype=pentium';cdrom:'AOE2.cue';motor:MWIN95)
 );
 
 implementation

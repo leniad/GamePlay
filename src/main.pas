@@ -1,5 +1,5 @@
 ﻿unit main;
-//{$DEFINE IS_DEBUG}
+{$DEFINE IS_DEBUG}
 interface
 uses graphics,ExtCtrls;
 
@@ -24,6 +24,7 @@ function juego_mal(ngame:integer):boolean;
 function juego_dir(ngame:integer):string;
 function juego_imagen(ngame:integer):string;
 function juego_setup(ngame:integer):string;
+function comprobar_win95:boolean;
 {$ifdef fpc}
 function comprobar_si_existe_fichero(directorio:string;var nombre:string;es_zip:boolean):boolean;
 {$endif}
@@ -35,16 +36,17 @@ const
   MATARI8=3;
   MAMIGA=4;
   MATARIST=5;
+  MWIN95=6;
   MDSP=255;
   MAX_GAMES=2000;
   TEMP_DIR='TEMP';
-  VERSION='v0.70β';
+  VERSION='v0.80β';
   IMAGE_FADE=0.3;
   {$IFDEF IS_DEBUG}
   {$ifndef windows}
   debug_base_dir='/home/leniad/abandon/GamePlayVol1/';
   {$else}
-  debug_base_dir='c:\datos\abandon\GamePlay_070\';
+  debug_base_dir='c:\datos\abandon\GamePlay_080\';
   {$ENDIF}
   {$endif}
   NREFS=2;
@@ -129,7 +131,7 @@ var
   games_final:array[0..(MAX_GAMES-1)] of tipo_final;
   main_config:tipo_config;
   idioma_sel,juego_editado,total_juegos:integer;
-  total_scumm,total_apple,total_atari800,total_msdos,total_amiga,total_dsp,total_atarise:integer;
+  total_scumm,total_apple,total_atari800,total_msdos,total_amiga,total_dsp,total_atarise,total_win95:integer;
   ejecutar_setup,estoy_anadiendo,estoy_ejecutando:boolean;
   dir_dsp:string;
 
@@ -264,6 +266,17 @@ begin
     end;
   image.picture.assign(bmp);
   bmp.free;
+end;
+
+function comprobar_win95:boolean;
+begin
+  comprobar_win95:=false;
+  if not(fileexists(main_config.dir_base+'extras\win95\win95.zip')) then begin
+      if MessageDlg('Para jugar a juegos de Windows 95 hay que descargar una imagen de disco. ¿Deseas continuar?',mtWarning,[mbOK]+[mbCancel],0)=2 then exit;
+      comprobar_win95:=descargar_fichero('win95.zip',main_config.dir_base+'extras\win95\win95.zip',true);
+      exit;
+  end;
+  comprobar_win95:=true;
 end;
 
 function juego_mal(ngame:integer):boolean;
@@ -478,6 +491,7 @@ case main_config.motor of
     MATARI8:temps:=inttostr(total_atari800);
     MAMIGA:temps:=inttostr(total_amiga);
     MATARIST:temps:=inttostr(total_atarise);
+    MWIN95:temps:=inttostr(total_win95);
     MDSP:temps:=inttostr(total_dsp);
 end;
 form1.Label5.Caption:='TOTAL: '+temps+'/'+inttostr(contador);
@@ -604,6 +618,7 @@ total_atari800:=0;
 total_amiga:=0;
 total_dsp:=0;
 total_atarise:=0;
+total_win95:=0;
 //Primero los fijos...
 for f:=0 to (GAME_TOTAL-1) do begin
   games_final[f].nombre:=GAME_DATA[f].nombre;
@@ -657,6 +672,7 @@ for f:=0 to (GAME_TOTAL-1) do begin
       MATARI8:total_atari800:=total_atari800+1;
       MAMIGA:total_amiga:=total_amiga+1;
       MATARIST:total_atarise:=total_atarise+1;
+      MWIN95:total_win95:=total_win95+1;
     end;
   end;
 end;
@@ -735,6 +751,7 @@ if fileexists(main_config.dir_base+'extra_games.info') then begin
         MATARI8:total_atari800:=total_atari800+1;
         MAMIGA:total_amiga:=total_amiga+1;
         MATARIST:total_atarise:=total_atarise+1;
+        MWIN95:total_win95:=total_win95+1;
       end;
     end;
     total_juegos:=total_juegos+1;
@@ -856,6 +873,7 @@ begin
       MATARI8:form1.radiobutton6.Checked:=true;
       MAMIGA:form1.radiobutton10.Checked:=true;
       MATARIST:form1.radiobutton11.Checked:=true;
+      MWIN95:form1.radiobutton12.Checked:=true;
     end;
     form1.checkbox1.Checked:=(fich_ini.readinteger('opciones','pantalla',1)<>0);
     form1.checkbox14.Checked:=(fich_ini.readinteger('opciones','sonido',1)<>0);
@@ -1095,6 +1113,7 @@ delete_dir(TEMP_DIR);
 //Borro el directorio que deja el doom!
 delete_dir('DOOMDATA');
 deletefile(main_config.dir_base+'LCACHE00.TMP');
+deletefile(main_config.dir_base+'extras\win95\win95.img');
 delete_dir('DELUXE');
 if DirectoryExists(main_config.dir_base) then begin
   AssignFile(games_file,main_config.dir_base+'show_games.info');
@@ -1268,6 +1287,7 @@ var
   process:tprocess;
   {$ENDIF}
   temps,temp_exec:string;
+  ZipFile:TZipFile;
 begin
 ngame:=numero_juego;
 if ngame=-1 then exit;
@@ -1593,6 +1613,33 @@ case main_config.motor of
     {$IFDEF WINDOWS}
     ShellExecute(form1.Handle,'open',pchar(main_config.atarise_exe),pchar(param_string),nil,SW_SHOWNORMAL);
     {$ENDIF}
+  end;
+  MWIN95:begin
+     if not(comprobar_win95) then exit;
+     {$I-}
+     if fileexists(main_config.dir_base+'extras\win95\win95.img') then deletefile(main_config.dir_base+'extras\win95\win95.img');
+     {$I+}
+     temps:=main_config.dir_base+'extras\win95\win95.zip';
+     ZipFile:=TZipFile.Create;
+     if Zipfile.IsValid(temps) then begin
+        ZipFile.Open(temps,zmRead);
+        ZipFIle.ExtractAll(main_config.dir_base+'\extras\win95');
+        ZipFile.Close;
+     end;
+     ZipFile.Free;
+     exec_string:=main_config.dosbox_x_exe;
+     exec_dosbox_extra_config:=' --conf "'+ExtractFilePath(main_config.config_dosbox_x)+'dosbox-x_win95.conf" -set windowresolution='{$IFDEF IS_DEBUG}+'original'{$ELSE}+'800x600'{$ENDIF};
+     exec_parametros:=' -set titlebar="'+games_final[ngame].nombre+'" ';
+     exec_extra:=games_final[ngame].extra_param;
+     if form1.checkbox1.Checked then exec_fullscreen:=' -set fullscreen=true '
+      else exec_fullscreen:=' -set fullscreen=false ';
+     if form1.checkbox14.Checked then exec_sound:=' -set nosound=false '
+      else exec_sound:=' -set nosound=true ';
+     if games_final[ngame].cdrom<>'' then cd_rom_dir:=' -c "imgmount e: '+main_config.dir_base+exec_dir+'\'+games_final[ngame].cdrom+'"'
+      else cd_rom_dir:='';
+     temps:='-c "imgmount c: '+main_config.dir_base+'extras\win95\win95.img" -c "imgmount d: '+main_config.dir_base+exec_dir+'\'+games_final[ngame].exec+'" '+cd_rom_dir+' -c "boot c:" ';
+     param_string:=temps+exec_dosbox_extra_config+exec_parametros+exec_fullscreen+exec_sound+' '+exec_extra;
+     ShellExecute(form1.Handle,'open',pchar(exec_string),pchar(param_string),nil,SW_SHOWNORMAL);
   end;
 end;
 end;

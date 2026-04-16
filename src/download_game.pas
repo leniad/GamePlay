@@ -35,7 +35,7 @@ type
 implementation
 
 uses
-  System.SysUtils,System.Classes,System.Net.HttpClient,System.Net.URLClient,REST.Json;
+  System.SysUtils,System.Classes,System.Net.HttpClient,System.Net.URLClient,REST.Json,descarga;
 
 constructor TApiClient.Create(const baseurl:string);
 begin
@@ -175,10 +175,13 @@ var
   LStream:TFileStream;
   LUrl:string;
 begin
+  descargando.show;
+  descargando.Update;
   result:=false;
   mensaje:='';
   if FToken='' then begin
     mensaje:='No hay token';
+    descargando.close;
     exit;
   end;
   LHttp:=THTTPClient.create;
@@ -199,6 +202,7 @@ begin
   finally
     LHttp.free;
   end;
+  descargando.close;
 end;
 
 end.

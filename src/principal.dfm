@@ -4,8 +4,7 @@ object Form1: TForm1
   Anchors = []
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
-  Caption = #186
-  ClientHeight = 635
+  ClientHeight = 655
   ClientWidth = 1050
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -3714,15 +3713,15 @@ object Form1: TForm1
   OnShow = FormShow
   TextHeight = 20
   object Label5: TLabel
-    Left = 392
-    Top = 607
+    Left = 400
+    Top = 631
     Width = 82
     Height = 20
     Caption = 'Total: ---/---'
   end
   object Image2: TImage
-    Left = 988
-    Top = 492
+    Left = 989
+    Top = 517
     Width = 38
     Height = 40
     Cursor = crHandPoint
@@ -5839,7 +5838,7 @@ object Form1: TForm1
   end
   object Image6: TImage
     Left = 972
-    Top = 549
+    Top = 577
     Width = 78
     Height = 78
     Cursor = crHandPoint
@@ -6882,7 +6881,7 @@ object Form1: TForm1
     Left = 242
     Top = 7
     Width = 418
-    Height = 596
+    Height = 622
     ColCount = 2
     FixedColor = clWhite
     FixedCols = 0
@@ -6900,12 +6899,12 @@ object Form1: TForm1
     Left = 8
     Top = 358
     Width = 214
-    Height = 271
+    Height = 288
     Caption = 'Opciones Generales'
     TabOrder = 1
     object CheckBox1: TCheckBox
       Left = 16
-      Top = 185
+      Top = 205
       Width = 213
       Height = 19
       TabStop = False
@@ -6915,7 +6914,7 @@ object Form1: TForm1
     end
     object CheckBox2: TCheckBox
       Left = 16
-      Top = 225
+      Top = 245
       Width = 212
       Height = 19
       TabStop = False
@@ -6927,7 +6926,7 @@ object Form1: TForm1
     end
     object CheckBox14: TCheckBox
       Left = 16
-      Top = 205
+      Top = 225
       Width = 97
       Height = 19
       TabStop = False
@@ -6941,7 +6940,7 @@ object Form1: TForm1
       Left = 16
       Top = 17
       Width = 177
-      Height = 163
+      Height = 182
       Caption = 'Sistema'
       TabOrder = 3
       object RadioButton1: TRadioButton
@@ -6955,7 +6954,7 @@ object Form1: TForm1
       end
       object RadioButton3: TRadioButton
         Left = 16
-        Top = 40
+        Top = 60
         Width = 153
         Height = 17
         Caption = 'ScummVM'
@@ -6964,7 +6963,7 @@ object Form1: TForm1
       end
       object RadioButton4: TRadioButton
         Left = 16
-        Top = 60
+        Top = 80
         Width = 153
         Height = 17
         Caption = 'DSP Emulator'
@@ -6973,7 +6972,7 @@ object Form1: TForm1
       end
       object RadioButton5: TRadioButton
         Left = 16
-        Top = 79
+        Top = 100
         Width = 92
         Height = 19
         Caption = 'Apple ]['
@@ -6982,7 +6981,7 @@ object Form1: TForm1
       end
       object RadioButton6: TRadioButton
         Left = 16
-        Top = 100
+        Top = 120
         Width = 97
         Height = 17
         Caption = 'Atari 800'
@@ -6991,7 +6990,7 @@ object Form1: TForm1
       end
       object RadioButton10: TRadioButton
         Left = 16
-        Top = 140
+        Top = 160
         Width = 97
         Height = 20
         Caption = 'Amiga'
@@ -7000,17 +6999,26 @@ object Form1: TForm1
       end
       object RadioButton11: TRadioButton
         Left = 16
-        Top = 120
+        Top = 140
         Width = 97
         Height = 17
         Caption = 'Atari ST'
         TabOrder = 6
         OnClick = RadioButton11Click
       end
+      object RadioButton12: TRadioButton
+        Left = 16
+        Top = 40
+        Width = 153
+        Height = 17
+        Caption = 'Windows 95'
+        TabOrder = 7
+        OnClick = RadioButton12Click
+      end
     end
     object CheckBox15: TCheckBox
       Left = 16
-      Top = 245
+      Top = 265
       Width = 212
       Height = 19
       TabStop = False
@@ -7256,7 +7264,7 @@ object Form1: TForm1
   end
   object GroupBox8: TGroupBox
     Left = 684
-    Top = 477
+    Top = 492
     Width = 272
     Height = 150
     Caption = 'Opciones Avanzadas'
@@ -7388,7 +7396,7 @@ object Form1: TForm1
   end
   object ComboBox1: TComboBox
     Left = 684
-    Top = 438
+    Top = 450
     Width = 239
     Height = 28
     Margins.Left = 5
@@ -7405,13 +7413,13 @@ object Form1: TForm1
     Enabled = False
     Interval = 2000
     OnTimer = Timer1Timer
-    Left = 512
-    Top = 606
+    Left = 952
+    Top = 430
   end
   object Timer2: TTimer
     Interval = 500
     OnTimer = Timer2Timer
-    Left = 560
-    Top = 608
+    Left = 992
+    Top = 432
   end
 end

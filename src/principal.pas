@@ -69,6 +69,7 @@ type
     RadioButton11: TRadioButton;
     Image8: TImage;
     ComboBox1: TComboBox;
+    RadioButton12: TRadioButton;
     procedure FormCreate(Sender: TObject);
     procedure StringGrid1DblClick(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
@@ -103,6 +104,7 @@ type
     procedure Image8Click(Sender: TObject);
     procedure ComboBox1Change(Sender: TObject);
     procedure StringGrid1Click(Sender: TObject);
+    procedure RadioButton12Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -116,7 +118,7 @@ var
 implementation
 {$R *.dfm}
 uses shellapi,strutils,save_game,acercade,config,idioma_info,main,dsp_data,
-     games_download,games_ref;
+     games_download,games_ref,system.UITypes;
 
 var
   image_num:integer;
@@ -148,7 +150,7 @@ end;
 
 procedure TForm1.CheckBox15Click(Sender: TObject);
 begin
-  groupbox8.visible:=checkbox15.Checked;
+  groupbox8.visible:=checkbox15.Checked and checkbox15.enabled;
   if form1.Visible then StringGrid1.SetFocus;
 end;
 
@@ -485,8 +487,37 @@ begin
   groupbox8.visible:=form1.checkbox15.Checked;
   if stringgrid1.Cells[1,0]<>'' then button2.Enabled:=not(games_final[strtoint(stringgrid1.Cells[1,0])].interno) or main_config.leer_fijos;
   if total_juegos=0 then exit;
-  stringgrid1.Row:=0;
+  stringgrid1.row:=0;
   mostrar_juegos;
+end;
+
+procedure TForm1.RadioButton12Click(Sender: TObject);
+begin
+  main_config.motor:=MWIN95;
+  combobox1.Visible:=false;
+  checkbox9.Enabled:=true;
+  checkbox10.Enabled:=true;
+  checkbox11.Enabled:=true;
+  checkbox12.Enabled:=true;
+  checkbox13.Enabled:=true;
+  checkbox18.Enabled:=true;
+  checkbox3.Enabled:=true;
+  checkbox16.Enabled:=true;
+  checkbox6.Enabled:=true;
+  checkbox4.Enabled:=true;
+  checkbox5.Enabled:=true;
+  checkbox7.Enabled:=true;
+  checkbox8.Enabled:=true;
+  checkbox17.Enabled:=true;
+  checkbox2.Enabled:=true;
+  groupbox8.Height:=90;
+  checkbox15.Enabled:=false;
+  groupbox8.visible:=false;
+  if stringgrid1.Cells[1,0]<>'' then button2.Enabled:=not(games_final[strtoint(stringgrid1.Cells[1,0])].interno) or main_config.leer_fijos;
+  if total_juegos=0 then exit;
+  stringgrid1.row:=0;
+  mostrar_juegos;
+  comprobar_win95;
 end;
 
 procedure TForm1.StringGrid1Click(Sender: TObject);
