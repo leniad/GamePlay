@@ -20,7 +20,7 @@ type
   end;
 
 const
-  GAME_TOTAL_REF=24;
+  GAME_TOTAL_REF=26;
 
 GAME_DATA_REF:array[1..GAME_TOTAL_REF] of tipo_games_ref=(
   (nombre_original:'Original';nombre:'Español no oficial';dir:'U7_ES'),
@@ -46,7 +46,9 @@ GAME_DATA_REF:array[1..GAME_TOTAL_REF] of tipo_games_ref=(
   (nombre_original:'VGA Version';nombre:'EGA Version';dir:'PQ3_EN_E';exec:'SCIDUV.EXE';setup:'install.exe';image_alt:'pq3_ega'),
   (nombre_original:'EGA Version';nombre:'Tandy Version';dir:'TD_TANDY';exec:'td.exe';ciclos:1000;grafica:'tandy';mensaje:'Al empezar pulsa 2 para seleccionar Tandy'),
   (nombre_original:'EGA (New Version)';nombre:'EGA (Old Version)';dir:'ZAK_OLD';exec:'zak.exe';image_alt:'zak_old'),
-  (nombre_original:'Tandy/EGA';nombre:'EGA (Old Version)';dir:'MANIACO';exec:'maniac.exe';grafica:'vga';image_alt:'maniac_old')
+  (nombre_original:'Tandy/EGA';nombre:'EGA (Old Version)';dir:'MANIACO';exec:'maniac.exe';grafica:'vga';image_alt:'maniac_old'),
+  (nombre_original:'Parte I';nombre:'Parte II';dir:'ZIPIZAPE';exec:'ZAPE.EXE';ciclos:3500),
+  (nombre_original:'Joker';nombre:'Penguin';dir:'batmancc';exec:'penguin.exe')
 );
 
 implementation

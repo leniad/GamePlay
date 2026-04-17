@@ -316,7 +316,6 @@ const
   (image_name:'armymoves';tipo:ARCADE),
   (manual:'arcticmoves_manual.pdf';image_name:'arcticmoves';tipo:ARCADE),
   (manual:'batmancc_manual.pdf';image_name:'batmancc';tipo:ARCADE),
-  (manual:'batmancc_manual.pdf';image_name:'batmancc';tipo:ARCADE),
   (image_name:'batmanm';tipo:ARCADE;mensaje:'Pulsa 4 para VGA'),
   (image_name:'gameover2';tipo:ARCADE),
   (image_name:'phantis';tipo:ARCADE),
@@ -766,7 +765,18 @@ const
   (manual:'Stardust_Manual.pdf';image_name:'stardust';tipo:ARCADE),
   (manual:'Terminator_Manual.pdf$Terminator_RF.pdf';map:'Terminator_map.pdf';image_name:'terminator';tipo:ARCADE),
   (image_name:'aoe_es';idioma:ESP;tipo:SIMULA),
-  (image_name:'aoe2_es';idioma:ESP;tipo:SIMULA)
+  (image_name:'aoe2_es';idioma:ESP;tipo:SIMULA),
+  (image_name:'aoriginal';tipo:AG),
+  (image_name:'corrupt';tipo:ARCADE),
+  (image_name:'ctrueno';tipo:ARCADE),
+  (image_name:'enigma';tipo:ARCADE),
+  (image_name:'jabato';tipo:ARCADE),
+  (image_name:'megacorp';tipo:ARCADE;mensaje:'Activa MAYUSCULAS para escribir comandos'),
+  (image_name:'donquijote';tipo:ARCADE),
+  (image_name:'starlife';tipo:ARCADE),
+  (image_name:'stunts';tipo:ARCADE),
+  (image_name:'zipizape';tipo:ARCADE),
+  (image_name:'popnpop';tipo:ARCADE)
   );
 
 implementation

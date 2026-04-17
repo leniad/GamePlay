@@ -39,7 +39,7 @@ var
   juego_descargado:boolean;
 
 const
-  USUARIO='usuario';
+  USUARIO='user';
   PASSWORD='password';
   URL='url';
 

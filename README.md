@@ -1,6 +1,27 @@
 # GamePlay status #
 ![Main Screen](https://i.ibb.co/r2LBp0jj/gameplay-080-en.png)<br>
 Please read 'Most Wanted' games!<br>
+<b>17/04/26 - GamePlay updated to 0.81b
+<pre>
+-General
+    +Fixed base directories that were mistakenly left in debug mode
+-MSDOS
+    +Added games
+        -La Aventura Original
+        -Corrupt
+        -El Capitan Trueno
+        -El Enigma de Aceps
+        -Jabato
+        -Megacorp
+        -Don Quijote
+        -Starlife
+        -Stunts
+        -Zipi y Zape
+-Windows 95
+    +Updated to DirectX 7 image base
+    +Added game
+        -Pop'n'pop
+</pre>
 <b>16/04/26 - GamePlay updated to 0.80b
 <pre>
 -General
@@ -57,9 +78,9 @@ Please read 'Most Wanted' games!<br>
         -Boulderdash II
         -Ultima I: The Beginning
         -Ultima II: The Revenge of the Enchantress
-        -Ultima III: Exodus';dir:'ULTIMAIII_APPLE
+        -Ultima III: Exodus
         -Ultima IV: Quest of the Avatar
-        -Zaxxon';dir:'ZAXXON_APPLE
+        -Zaxxon
 -Amiga
     +Games added
         -Shadow of the Beast

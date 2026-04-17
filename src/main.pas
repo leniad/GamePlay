@@ -40,13 +40,13 @@ const
   MDSP=255;
   MAX_GAMES=2000;
   TEMP_DIR='TEMP';
-  VERSION='v0.80β';
+  VERSION='v0.81β';
   IMAGE_FADE=0.3;
   {$IFDEF IS_DEBUG}
   {$ifndef windows}
   debug_base_dir='/home/leniad/abandon/GamePlayVol1/';
   {$else}
-  debug_base_dir='c:\datos\abandon\GamePlay_080\';
+  debug_base_dir='c:\datos\abandon\GamePlay_081\';
   {$ENDIF}
   {$endif}
   NREFS=2;

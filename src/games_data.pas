@@ -29,7 +29,7 @@ type
     motor:byte;
   end;
 const
-  GAME_TOTAL=727;
+  GAME_TOTAL=737;
   GAME_DATA:array[0..(GAME_TOTAL-1)] of tipo_games=(
   (nombre:'Bruce Lee';dir:'brucelee';exec:'brucelee.img';ciclos:300;grafica:'cga_composite';extra_param:'-set joysticktype=2axis';mapper:'brucelee.map'),
   (nombre:'Lost Vikings, the';dir:'lostv';exec:'vikings.exe';setup:'setup.exe'),
@@ -308,8 +308,7 @@ const
   (nombre:'GameOver';dir:'gameover';exec:'gameover.img';ciclos:750),
   (nombre:'Army Moves';dir:'amoves';exec:'amoves.img';ciclos:300),
   (nombre:'Arctic Moves';dir:'arcticm';exec:'arctic.exe';exec_pre:'amfix.com'),
-  (nombre:'Batman the Caped Crusader - Joker';dir:'batmancc';exec:'joker.exe';ciclos:3000),
-  (nombre:'Batman the Caped Crusader - Penguin';dir:'batmancc';exec:'penguin.exe';ciclos:3000),
+  (nombre:'Batman the Caped Crusader';dir:'batmancc';exec:'joker.exe';ciclos:3000;refs:(26,0,0)),
   (nombre:'Batman: The Movie';dir:'batmanm';exec:'batman.exe';ciclos:3000),
   (nombre:'GameOver II';dir:'gameovr2';exec:'goverii.bat';ciclos:300),
   (nombre:'Phantis';dir:'phantis';exec:'phantis.exe';ciclos:300),
@@ -758,7 +757,19 @@ const
   (nombre:'Stardust';dir:'STARDUST';exec:'STARDUST.EXE';ciclos:750),
   (nombre:'Terminator, the';dir:'TERM';exec:'TERM.COM';ciclos:3500),
   (nombre:'Ages of Empire - Gold (ES)';dir:'AOE_ES';exec:'aoe_es.img';cdrom:'AOE.cue';motor:MWIN95),
-  (nombre:'Ages of Empire II - The Age of Kings (ES)';dir:'AOE2_ES';exec:'aoe2.img';extra_param:'-set cputype=pentium';cdrom:'AOE2.cue';motor:MWIN95)
+  (nombre:'Ages of Empire II - The Age of Kings (ES)';dir:'AOE2_ES';exec:'aoe2.img';extra_param:'-set cputype=pentium';cdrom:'AOE2.cue';motor:MWIN95),
+  //
+  (nombre:'Aventura Original, la';dir:'AORIGINA';exec:'AD.EXE';ciclos:450),
+  (nombre:'Corrupt';dir:'CORRUPT';exec:'CORRUPT.EXE';ciclos:3500),
+  (nombre:'Capitan Trueno, el';dir:'CTRUENO';exec:'CAP.EXE';ciclos:3500),
+  (nombre:'Enigma de Aceps, el';dir:'ENIGMA';exec:'ENIGMA.COM';ciclos:450),
+  (nombre:'Jabato';dir:'JABATO';exec:'AD.EXE';ciclos:1500),
+  (nombre:'Megacorp';dir:'MEGACORP';exec:'MEGACORP.EXE';ciclos:450),
+  (nombre:'Don Quijote';dir:'QUIJOTE';exec:'QUIJOTE.BAT';ciclos:450),
+  (nombre:'Starlife';dir:'STARLIFE';exec:'INSTALL1.EXE';ciclos:300),
+  (nombre:'Stunts';dir:'STUNTS';exec:'STUNTS.COM';extra_param:'-set a20=off';setup:'SETUP.EXE'),
+  (nombre:'Zipi y Zape';dir:'ZIPIZAPE';exec:'ZIPI.EXE';ciclos:450;refs:(25,0,0)),
+  (nombre:'Pop''n''pop';dir:'POPNPOP';exec:'popnpop.img';motor:MWIN95)
 );
 
 implementation
