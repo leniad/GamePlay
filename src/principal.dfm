@@ -6878,9 +6878,9 @@ object Form1: TForm1
     OnClick = Image8Click
   end
   object StringGrid1: TStringGrid
-    Left = 242
+    Left = 231
     Top = 7
-    Width = 418
+    Width = 434
     Height = 622
     ColCount = 2
     FixedColor = clWhite
@@ -6897,14 +6897,14 @@ object Form1: TForm1
   end
   object GroupBox1: TGroupBox
     Left = 8
-    Top = 358
+    Top = 207
     Width = 214
-    Height = 288
+    Height = 422
     Caption = 'Opciones Generales'
     TabOrder = 1
     object CheckBox1: TCheckBox
       Left = 16
-      Top = 205
+      Top = 225
       Width = 213
       Height = 19
       TabStop = False
@@ -6914,7 +6914,7 @@ object Form1: TForm1
     end
     object CheckBox2: TCheckBox
       Left = 16
-      Top = 245
+      Top = 265
       Width = 212
       Height = 19
       TabStop = False
@@ -6926,7 +6926,7 @@ object Form1: TForm1
     end
     object CheckBox14: TCheckBox
       Left = 16
-      Top = 225
+      Top = 245
       Width = 97
       Height = 19
       TabStop = False
@@ -6940,7 +6940,7 @@ object Form1: TForm1
       Left = 16
       Top = 17
       Width = 177
-      Height = 182
+      Height = 202
       Caption = 'Sistema'
       TabOrder = 3
       object RadioButton1: TRadioButton
@@ -6954,7 +6954,7 @@ object Form1: TForm1
       end
       object RadioButton3: TRadioButton
         Left = 16
-        Top = 60
+        Top = 80
         Width = 153
         Height = 17
         Caption = 'ScummVM'
@@ -6963,7 +6963,7 @@ object Form1: TForm1
       end
       object RadioButton4: TRadioButton
         Left = 16
-        Top = 80
+        Top = 100
         Width = 153
         Height = 17
         Caption = 'DSP Emulator'
@@ -6972,7 +6972,7 @@ object Form1: TForm1
       end
       object RadioButton5: TRadioButton
         Left = 16
-        Top = 100
+        Top = 120
         Width = 92
         Height = 19
         Caption = 'Apple ]['
@@ -6981,7 +6981,7 @@ object Form1: TForm1
       end
       object RadioButton6: TRadioButton
         Left = 16
-        Top = 120
+        Top = 140
         Width = 97
         Height = 17
         Caption = 'Atari 800'
@@ -6990,7 +6990,7 @@ object Form1: TForm1
       end
       object RadioButton10: TRadioButton
         Left = 16
-        Top = 160
+        Top = 180
         Width = 97
         Height = 20
         Caption = 'Amiga'
@@ -6999,7 +6999,7 @@ object Form1: TForm1
       end
       object RadioButton11: TRadioButton
         Left = 16
-        Top = 140
+        Top = 160
         Width = 97
         Height = 17
         Caption = 'Atari ST'
@@ -7008,17 +7008,26 @@ object Form1: TForm1
       end
       object RadioButton12: TRadioButton
         Left = 16
+        Top = 60
+        Width = 153
+        Height = 17
+        Caption = 'Windows 98'
+        TabOrder = 7
+        OnClick = RadioButton12Click
+      end
+      object RadioButton13: TRadioButton
+        Left = 16
         Top = 40
         Width = 153
         Height = 17
-        Caption = 'Windows 95'
-        TabOrder = 7
-        OnClick = RadioButton12Click
+        Caption = 'Windows 3.1'
+        TabOrder = 8
+        OnClick = RadioButton13Click
       end
     end
     object CheckBox15: TCheckBox
       Left = 16
-      Top = 265
+      Top = 285
       Width = 212
       Height = 19
       TabStop = False
@@ -7031,192 +7040,104 @@ object Form1: TForm1
     Left = 8
     Top = -2
     Width = 214
-    Height = 355
+    Height = 203
     Caption = 'Filtros del Juego'
     TabOrder = 2
-    object GroupBox4: TGroupBox
-      Left = 16
-      Top = 159
-      Width = 177
-      Height = 188
-      Caption = 'Tipo'
+    object CheckBox3: TCheckBox
+      Left = 24
+      Top = 28
+      Width = 182
+      Height = 19
+      TabStop = False
+      Caption = 'Aventura Gr'#225'fica'
+      Checked = True
+      State = cbChecked
       TabOrder = 0
-      object CheckBox3: TCheckBox
-        Left = 16
-        Top = 20
-        Width = 182
-        Height = 19
-        TabStop = False
-        Caption = 'Aventura Gr'#225'fica'
-        Checked = True
-        State = cbChecked
-        TabOrder = 0
-        OnClick = CheckBox3Click
-      end
-      object CheckBox4: TCheckBox
-        Left = 16
-        Top = 80
-        Width = 113
-        Height = 19
-        TabStop = False
-        Caption = 'Simulador'
-        Checked = True
-        State = cbChecked
-        TabOrder = 2
-        OnClick = CheckBox3Click
-      end
-      object CheckBox5: TCheckBox
-        Left = 16
-        Top = 100
-        Width = 113
-        Height = 19
-        TabStop = False
-        Caption = 'Deportes'
-        Checked = True
-        State = cbChecked
-        TabOrder = 3
-        OnClick = CheckBox3Click
-      end
-      object CheckBox6: TCheckBox
-        Left = 16
-        Top = 60
-        Width = 113
-        Height = 19
-        TabStop = False
-        Caption = '3D'
-        Checked = True
-        State = cbChecked
-        TabOrder = 1
-        OnClick = CheckBox3Click
-      end
-      object CheckBox7: TCheckBox
-        Left = 16
-        Top = 120
-        Width = 89
-        Height = 19
-        TabStop = False
-        Caption = 'Puzzles'
-        Checked = True
-        State = cbChecked
-        TabOrder = 4
-        OnClick = CheckBox3Click
-      end
-      object CheckBox8: TCheckBox
-        Left = 16
-        Top = 140
-        Width = 89
-        Height = 19
-        TabStop = False
-        Caption = 'RPG'
-        Checked = True
-        State = cbChecked
-        TabOrder = 5
-        OnClick = CheckBox3Click
-      end
-      object CheckBox16: TCheckBox
-        Left = 16
-        Top = 40
-        Width = 121
-        Height = 19
-        TabStop = False
-        Caption = 'Arcade'
-        Checked = True
-        State = cbChecked
-        TabOrder = 6
-        OnClick = CheckBox3Click
-      end
-      object CheckBox17: TCheckBox
-        Left = 16
-        Top = 160
-        Width = 89
-        Height = 19
-        TabStop = False
-        Caption = 'Carreras'
-        Checked = True
-        State = cbChecked
-        TabOrder = 7
-        OnClick = CheckBox3Click
-      end
+      OnClick = CheckBox3Click
     end
-    object GroupBox5: TGroupBox
-      Left = 16
-      Top = 17
-      Width = 177
-      Height = 144
-      Caption = 'Idioma'
+    object CheckBox16: TCheckBox
+      Left = 24
+      Top = 48
+      Width = 121
+      Height = 19
+      TabStop = False
+      Caption = 'Arcade'
+      Checked = True
+      State = cbChecked
       TabOrder = 1
-      object CheckBox9: TCheckBox
-        Left = 16
-        Top = 40
-        Width = 121
-        Height = 19
-        TabStop = False
-        Caption = 'Espa'#241'ol'
-        Checked = True
-        State = cbChecked
-        TabOrder = 0
-        OnClick = CheckBox3Click
-      end
-      object CheckBox10: TCheckBox
-        Left = 16
-        Top = 80
-        Width = 113
-        Height = 19
-        TabStop = False
-        Caption = 'Alem'#225'n'
-        Checked = True
-        State = cbChecked
-        TabOrder = 2
-        OnClick = CheckBox3Click
-      end
-      object CheckBox11: TCheckBox
-        Left = 16
-        Top = 100
-        Width = 113
-        Height = 19
-        TabStop = False
-        Caption = 'Franc'#233's'
-        Checked = True
-        State = cbChecked
-        TabOrder = 3
-        OnClick = CheckBox3Click
-      end
-      object CheckBox12: TCheckBox
-        Left = 16
-        Top = 60
-        Width = 121
-        Height = 19
-        TabStop = False
-        Caption = 'Ingl'#233's'
-        Checked = True
-        State = cbChecked
-        TabOrder = 1
-        OnClick = CheckBox3Click
-      end
-      object CheckBox13: TCheckBox
-        Left = 16
-        Top = 120
-        Width = 89
-        Height = 19
-        TabStop = False
-        Caption = 'Italiano'
-        Checked = True
-        State = cbChecked
-        TabOrder = 4
-        OnClick = CheckBox3Click
-      end
-      object CheckBox18: TCheckBox
-        Left = 16
-        Top = 20
-        Width = 121
-        Height = 19
-        TabStop = False
-        Caption = 'Gen'#233'rico'
-        Checked = True
-        State = cbChecked
-        TabOrder = 5
-        OnClick = CheckBox3Click
-      end
+      OnClick = CheckBox3Click
+    end
+    object CheckBox6: TCheckBox
+      Left = 24
+      Top = 68
+      Width = 113
+      Height = 19
+      TabStop = False
+      Caption = '3D'
+      Checked = True
+      State = cbChecked
+      TabOrder = 2
+      OnClick = CheckBox3Click
+    end
+    object CheckBox4: TCheckBox
+      Left = 24
+      Top = 88
+      Width = 113
+      Height = 19
+      TabStop = False
+      Caption = 'Simulador'
+      Checked = True
+      State = cbChecked
+      TabOrder = 3
+      OnClick = CheckBox3Click
+    end
+    object CheckBox5: TCheckBox
+      Left = 24
+      Top = 108
+      Width = 113
+      Height = 19
+      TabStop = False
+      Caption = 'Deportes'
+      Checked = True
+      State = cbChecked
+      TabOrder = 4
+      OnClick = CheckBox3Click
+    end
+    object CheckBox7: TCheckBox
+      Left = 24
+      Top = 128
+      Width = 89
+      Height = 19
+      TabStop = False
+      Caption = 'Puzzles'
+      Checked = True
+      State = cbChecked
+      TabOrder = 5
+      OnClick = CheckBox3Click
+    end
+    object CheckBox8: TCheckBox
+      Left = 24
+      Top = 148
+      Width = 89
+      Height = 19
+      TabStop = False
+      Caption = 'RPG'
+      Checked = True
+      State = cbChecked
+      TabOrder = 6
+      OnClick = CheckBox3Click
+    end
+    object CheckBox17: TCheckBox
+      Left = 24
+      Top = 168
+      Width = 89
+      Height = 19
+      TabStop = False
+      Caption = 'Carreras'
+      Checked = True
+      State = cbChecked
+      TabOrder = 7
+      OnClick = CheckBox3Click
     end
   end
   object GroupBox6: TGroupBox

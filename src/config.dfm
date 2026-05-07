@@ -4,7 +4,7 @@ object Form4: TForm4
   BorderIcons = [biMinimize, biMaximize]
   BorderStyle = bsSingle
   Caption = 'Configuraci'#243'n Avanzada'
-  ClientHeight = 631
+  ClientHeight = 520
   ClientWidth = 869
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -18,8 +18,8 @@ object Form4: TForm4
   OnShow = FormShow
   TextHeight = 15
   object Button1: TButton
-    Left = 216
-    Top = 567
+    Left = 200
+    Top = 457
     Width = 121
     Height = 49
     Caption = 'ACEPTAR'
@@ -27,8 +27,8 @@ object Form4: TForm4
     OnClick = Button1Click
   end
   object Button7: TButton
-    Left = 588
-    Top = 567
+    Left = 548
+    Top = 457
     Width = 121
     Height = 49
     Caption = 'CANCELAR'
@@ -37,7 +37,7 @@ object Form4: TForm4
   end
   object GroupBox3: TGroupBox
     Left = 25
-    Top = 280
+    Top = 164
     Width = 600
     Height = 261
     Caption = 'Directorios Base'
@@ -184,7 +184,7 @@ object Form4: TForm4
   end
   object Button14: TButton
     Left = 688
-    Top = 135
+    Top = 53
     Width = 121
     Height = 49
     BiDiMode = bdLeftToRight
@@ -195,8 +195,8 @@ object Form4: TForm4
     OnClick = Button14Click
   end
   object GroupBox5: TGroupBox
-    Left = 641
-    Top = 279
+    Left = 665
+    Top = 143
     Width = 168
     Height = 94
     Margins.Left = 5
@@ -264,7 +264,7 @@ object Form4: TForm4
     Left = 25
     Top = 10
     Width = 600
-    Height = 247
+    Height = 135
     Margins.Left = 5
     Margins.Top = 5
     Margins.Right = 5
@@ -280,7 +280,7 @@ object Form4: TForm4
       Caption = 'MSDOS'
       object LabeledEdit4: TLabeledEdit
         Left = 15
-        Top = 125
+        Top = 30
         Width = 514
         Height = 23
         EditLabel.Width = 76
@@ -291,7 +291,7 @@ object Form4: TForm4
       end
       object Button2: TButton
         Left = 535
-        Top = 124
+        Top = 30
         Width = 33
         Height = 25
         Caption = 'Abrir'
@@ -300,7 +300,7 @@ object Form4: TForm4
       end
       object Button3: TButton
         Left = 535
-        Top = 166
+        Top = 70
         Width = 33
         Height = 25
         Caption = 'Abrir'
@@ -309,7 +309,7 @@ object Form4: TForm4
       end
       object LabeledEdit5: TLabeledEdit
         Left = 15
-        Top = 167
+        Top = 71
         Width = 514
         Height = 23
         EditLabel.Width = 88
@@ -317,48 +317,6 @@ object Form4: TForm4
         EditLabel.Caption = 'DosBox-X config'
         TabOrder = 3
         Text = ''
-      end
-      object LabeledEdit1: TLabeledEdit
-        Left = 15
-        Top = 23
-        Width = 514
-        Height = 23
-        EditLabel.Width = 61
-        EditLabel.Height = 15
-        EditLabel.Caption = 'DosBox EXE'
-        EditLabel.Color = clBtnFace
-        EditLabel.ParentColor = False
-        TabOrder = 4
-        Text = ''
-      end
-      object LabeledEdit2: TLabeledEdit
-        Left = 15
-        Top = 65
-        Width = 514
-        Height = 23
-        EditLabel.Width = 73
-        EditLabel.Height = 15
-        EditLabel.Caption = 'DosBox-X EXE'
-        TabOrder = 5
-        Text = ''
-      end
-      object Button5: TButton
-        Left = 535
-        Top = 64
-        Width = 33
-        Height = 25
-        Caption = 'Abrir'
-        TabOrder = 6
-        OnClick = Button5Click
-      end
-      object Button4: TButton
-        Left = 535
-        Top = 22
-        Width = 33
-        Height = 25
-        Caption = 'Abrir'
-        TabOrder = 7
-        OnClick = Button5Click
       end
     end
     object TabSheet2: TTabSheet
@@ -368,44 +326,24 @@ object Form4: TForm4
       Margins.Bottom = 5
       Caption = 'ScummVM'
       ImageIndex = 1
-      object Button6: TButton
-        Left = 535
-        Top = 22
-        Width = 33
-        Height = 25
-        Caption = 'Abrir'
-        TabOrder = 0
-        OnClick = Button6Click
-      end
-      object LabeledEdit3: TLabeledEdit
-        Left = 15
-        Top = 23
-        Width = 514
-        Height = 23
-        EditLabel.Width = 81
-        EditLabel.Height = 15
-        EditLabel.Caption = 'ScummVM EXE'
-        TabOrder = 1
-        Text = ''
-      end
       object LabeledEdit12: TLabeledEdit
         Left = 15
-        Top = 125
+        Top = 30
         Width = 514
         Height = 23
         EditLabel.Width = 96
         EditLabel.Height = 15
         EditLabel.Caption = 'ScummVM config'
-        TabOrder = 2
+        TabOrder = 0
         Text = ''
       end
       object Button15: TButton
         Left = 535
-        Top = 124
+        Top = 30
         Width = 33
         Height = 25
         Caption = 'Abrir'
-        TabOrder = 3
+        TabOrder = 1
         OnClick = Button15Click
       end
     end
@@ -416,44 +354,24 @@ object Form4: TForm4
       Margins.Bottom = 5
       Caption = 'DSP Emulator'
       ImageIndex = 2
-      object Button16: TButton
-        Left = 535
-        Top = 22
-        Width = 33
-        Height = 25
-        Caption = 'Abrir'
-        TabOrder = 0
-        OnClick = Button16Click
-      end
-      object LabeledEdit13: TLabeledEdit
-        Left = 15
-        Top = 23
-        Width = 514
-        Height = 23
-        EditLabel.Width = 94
-        EditLabel.Height = 15
-        EditLabel.Caption = 'DSP Emulator EXE'
-        TabOrder = 1
-        Text = ''
-      end
       object LabeledEdit20: TLabeledEdit
         Left = 15
-        Top = 125
+        Top = 30
         Width = 514
         Height = 23
         EditLabel.Width = 58
         EditLabel.Height = 15
         EditLabel.Caption = 'DSP config'
-        TabOrder = 2
+        TabOrder = 0
         Text = ''
       end
       object Button23: TButton
         Left = 535
-        Top = 124
+        Top = 30
         Width = 33
         Height = 25
         Caption = 'Abrir'
-        TabOrder = 3
+        TabOrder = 1
         OnClick = Button23Click
       end
     end
@@ -464,44 +382,24 @@ object Form4: TForm4
       Margins.Bottom = 5
       Caption = 'Apple II'
       ImageIndex = 3
-      object LabeledEdit14: TLabeledEdit
-        Left = 15
-        Top = 23
-        Width = 514
-        Height = 23
-        EditLabel.Width = 74
-        EditLabel.Height = 15
-        EditLabel.Caption = 'AppleWin EXE'
-        TabOrder = 0
-        Text = ''
-      end
-      object Button17: TButton
-        Left = 535
-        Top = 22
-        Width = 33
-        Height = 25
-        Caption = 'Abrir'
-        TabOrder = 1
-        OnClick = Button17Click
-      end
       object Button20: TButton
         Left = 535
-        Top = 124
+        Top = 30
         Width = 33
         Height = 25
         Caption = 'Abrir'
-        TabOrder = 2
+        TabOrder = 0
         OnClick = Button20Click
       end
       object LabeledEdit17: TLabeledEdit
         Left = 15
-        Top = 125
+        Top = 30
         Width = 514
         Height = 23
         EditLabel.Width = 89
         EditLabel.Height = 15
         EditLabel.Caption = 'AppleWin config'
-        TabOrder = 3
+        TabOrder = 1
         Text = ''
       end
     end
@@ -512,44 +410,24 @@ object Form4: TForm4
       Margins.Bottom = 5
       Caption = 'Atari 800'
       ImageIndex = 4
-      object Button18: TButton
+      object Button21: TButton
         Left = 535
-        Top = 22
+        Top = 30
         Width = 33
         Height = 25
         Caption = 'Abrir'
         TabOrder = 0
-        OnClick = Button18Click
-      end
-      object LabeledEdit15: TLabeledEdit
-        Left = 15
-        Top = 23
-        Width = 514
-        Height = 23
-        EditLabel.Width = 54
-        EditLabel.Height = 15
-        EditLabel.Caption = 'Altirra EXE'
-        TabOrder = 1
-        Text = ''
-      end
-      object Button21: TButton
-        Left = 535
-        Top = 124
-        Width = 33
-        Height = 25
-        Caption = 'Abrir'
-        TabOrder = 2
         OnClick = Button21Click
       end
       object LabeledEdit18: TLabeledEdit
         Left = 15
-        Top = 125
+        Top = 30
         Width = 514
         Height = 23
         EditLabel.Width = 69
         EditLabel.Height = 15
         EditLabel.Caption = 'Altirra config'
-        TabOrder = 3
+        TabOrder = 1
         Text = ''
       end
     end
@@ -560,44 +438,24 @@ object Form4: TForm4
       Margins.Bottom = 5
       Caption = 'Amiga'
       ImageIndex = 5
-      object Button19: TButton
+      object Button22: TButton
         Left = 535
-        Top = 22
+        Top = 30
         Width = 33
         Height = 25
         Caption = 'Abrir'
         TabOrder = 0
-        OnClick = Button19Click
-      end
-      object LabeledEdit16: TLabeledEdit
-        Left = 15
-        Top = 23
-        Width = 514
-        Height = 23
-        EditLabel.Width = 62
-        EditLabel.Height = 15
-        EditLabel.Caption = 'Winuae EXE'
-        TabOrder = 1
-        Text = ''
-      end
-      object Button22: TButton
-        Left = 535
-        Top = 124
-        Width = 33
-        Height = 25
-        Caption = 'Abrir'
-        TabOrder = 2
         OnClick = Button22Click
       end
       object LabeledEdit19: TLabeledEdit
         Left = 15
-        Top = 125
+        Top = 30
         Width = 514
         Height = 23
         EditLabel.Width = 77
         EditLabel.Height = 15
         EditLabel.Caption = 'Winuae config'
-        TabOrder = 3
+        TabOrder = 1
         Text = ''
       end
     end
@@ -608,44 +466,24 @@ object Form4: TForm4
       Margins.Bottom = 5
       Caption = 'Atari ST'
       ImageIndex = 6
-      object LabeledEdit21: TLabeledEdit
-        Left = 23
-        Top = 31
-        Width = 514
-        Height = 23
-        EditLabel.Width = 63
-        EditLabel.Height = 15
-        EditLabel.Caption = 'Atari ST EXE'
-        TabOrder = 0
-        Text = ''
-      end
       object LabeledEdit22: TLabeledEdit
         Left = 23
-        Top = 133
+        Top = 30
         Width = 514
         Height = 23
         EditLabel.Width = 78
         EditLabel.Height = 15
         EditLabel.Caption = 'Atari ST config'
-        TabOrder = 1
+        TabOrder = 0
         Text = ''
       end
-      object Button24: TButton
+      object Button25: TButton
         Left = 543
         Top = 30
         Width = 33
         Height = 25
         Caption = 'Abrir'
-        TabOrder = 2
-        OnClick = Button24Click
-      end
-      object Button25: TButton
-        Left = 543
-        Top = 132
-        Width = 33
-        Height = 25
-        Caption = 'Abrir'
-        TabOrder = 3
+        TabOrder = 1
         OnClick = Button25Click
       end
     end
@@ -663,8 +501,8 @@ object Form4: TForm4
     TabOrder = 6
   end
   object GroupBox6: TGroupBox
-    Left = 641
-    Top = 390
+    Left = 648
+    Top = 261
     Width = 211
     Height = 116
     Margins.Left = 5
@@ -713,7 +551,7 @@ object Form4: TForm4
     end
   end
   object OpenDialog1: TOpenDialog
-    Left = 716
-    Top = 45
+    Left = 828
+    Top = 13
   end
 end

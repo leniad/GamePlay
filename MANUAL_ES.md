@@ -3,23 +3,21 @@
 **Gameplay** está dividido en varias secciones.
 Si sólo quieres jugar, **inicialmente no hay que configurar nada**.
 
-![Pantalla Principal](https://i.ibb.co/ksgzfRF5/gameplay-060-es.png)
+![Pantalla Principal](https://i.ibb.co/PZf64DSB/gameplay-082-es.png)
 
 ---
 ## 1. Pantalla principal
 
 ### 1.1 Filtros para los juegos
-Puedes elegir:
-- El idioma del juego.
-- El tipo de juego.
-
-La lista se actualizará según las opciones elegidas.
+Puedes elegir el tipo de juego y la lista de juegos se actualizará según las opciones elegidas.
 
 ### 1.2 Sistema a emular
 Puedes elegir entre:
 - **MS-DOS**: Juegos para el sistema MS-DOS.
-- **ScummVM**: Solo para ciertas aventuras gráficas. Al seleccionarlo, la lista se ajusta automáticamente.
-- **DSP Emulator**: Emulador para Arcade, Ordenadores 8bits y Consolas
+- **Windows 3.1**: Juegos para Windows 3.1
+- **Windows 98**: Juegos para Windows 95/98
+- **ScummVM**: Sólo para ciertas aventuras gráficas.
+- **DSP Emulator**: Emulador para arcade, ordenadores 8bits y consolas
 - **Apple II**: Juegos para la serie de ordenadores Apple II
 - **Atari 800**: Juegos para la serie de ordenadores Atari 800
 - **Atari ST**: Juegos para la serie de ordenadores Atari ST
@@ -29,23 +27,24 @@ Puedes elegir entre:
 
 
 ### 1.3 Opciones Generales
-- **Pantalla completa**: Cuando arranque el juego se hará a pantalla completa
-- **Sonido**: Activar o desactivar el sonido del juego ejecutado
-- **Mostrar mensaje de info/ayuda**: Cuando se ejecuta un juego, se puede configurar un mensaje con información sobre, por ejemplo, que opciones elegir para una mejor experiencia o tarjeta gráfica, sonido, teclas, etc. Con esta opción se puede desactivar y que no aparezca el mensaje
+- **Pantalla completa**: Cuando arranque el juego se hará en pantalla completa
+- **Sonido**: Activar o desactivar el sonido
+- **Mostrar mensaje de info/ayuda**: Cuando se ejecuta un juego, se puede mostrar un mensaje con información sobre el arranque. Con esta opción se puede desactivar y que no aparezca el mensaje
 - **Opciones Avanzadas**: Mostrar las opciones avanzadas.
 
 ### 1.4 Listado de juegos
-Código de colores:
-- **Azul**: Juego del listado predeterminado y disponible.
-- **Amarillo**: Juego añadido manualmente y disponible.
-- **Gris**: Juego listado, pero no disponible localmente.
-- **Morado**: Juego que funciona sólo con el motor ScummVM.
+En la pantalla principal se muestra el listado de los juegos disponibles para el emulador seleccionado. Hay un código de colores que aporta información del juego:
+- **Azul**: Juego listo para ejecutar
+- **Amarillo**: Juego añadido manualmente y listo para ejecutar
+- **Gris**: Juego no disponible. Cuando se intenta ejecutar, aparecerá un diálogo para poder descargarlo.
+- **Morado**: Juego que funciona sólo con el motor ScummVM, listo para ejecutar.
 
-Juega pulsando `ENTER` o doble click sobre el juego.
+Para jugar pulsa `ENTER` o doble click sobre el juego.
+Adicionalmente si pulsas la tecla 'SUPRIMIR', se puede eliminar (no definitivamente) el juego de la lista. Para volverlo a ver, se puede deshacer en las opciones avanzadas del juego.
 > Si el juego no está disponible, se abrirá una opción para descargar el juego.
 
 ### 1.5 Juegos disponibles / Juegos totales
-Este contador indica cuantos juegos hay disponibles / cuantos juegos hay en total, incluidos los fijos del listado de Gameplay y los añadidos manualmente.<br>
+Este contador indica cuantos juegos hay disponibles / cuantos juegos hay en total, incluidos los fijos del listado de Gameplay y los añadidos manualmente.
 
 ### 1.6 Imágenes del juego
 Muestra una o varias imágenes en bucle, cambiando cada segundo si hay más de una.
@@ -57,21 +56,23 @@ Aparece la **compañía** y el **año** de publicación.
 Si el juego tiene documentos asociados (PDF, TXT, imágenes), se pueden abrir desde aquí.<br>
 Si hay muchos ficheros, puede que se abra una carpeta con el contenido.<br>
 
-### 1.9 Configuración Avanzada
+### 1.9 Seleccionar versión o idioma
+Hay algunos juegos que tienen diferentes versiones o un idioma diferente, GamePlay selecciona automáticamente la mejor versión y el idioma, pero en este desplegable, puedes seleccionar otra versión
+
+### 1.10 Configuración Avanzada
 Acceso al menú avanzado, donde puedes cambiar:
-- Directorios
-- Ejecutables
-- Visualización del listado
-- Etc...
+- Directorios principales
+- Idioma
+- Ficheros de configuración por emulador
+- Valores por defecto
 
 ---
 ## 2. Configuración Avanzada
 
-![Configuración](https://i.ibb.co/qFx4wbkz/config-060-es.png")
+![Configuración](https://i.ibb.co/ynGDbGxc/config-082-es.png)
 
-### 2.1 Ficheros ejecutables y configuración
-Par poder lanzar los juegos, Gameplay necesita los emuladores de *DosBox, DosBox-X, ScummVM, DSP Emulator, AppleWin y Altirra*.
-Cambiando de pestaña se pueden cambiar los ficheros ejecutables y de configuración para elegir otras versiones, o actualizaciones de los emuladores.
+### 2.1 Ficheros de configuración
+Par poder lanzar los juegos, Gameplay necesita ficheros de configuración de los emuladores. Estos ficheros vienen con Gameplay, pero cambiando de pestaña se pueden cambiar los ficheros de configuración para elegir otros dieferentes.
 
 ### 2.2 Directorios Principales
 Aquí se pueden seleccionar los directorios donde estén alojados los ficheros de manuales, mapas, guías e imágenes.
@@ -92,11 +93,11 @@ Restaura la configuración original. (_Botón del pánico_)
 ---
 ## 3. Añadir / Modificar / Borrar Juegos (Opciones Avanzadas)
 
-![Modificar Juegos](https://i.ibb.co/d3fwvhd/add-060-es.png)
+![Modificar Juegos](https://i.ibb.co/1fgVYrNv/add-082-es.png)
 
 Si pulsas la opción en la pantalla principal 'Opciones Avanzadas' aparecerán dos botones extras, 'Añadir Juegos' y 'Modificar/Borrar Juegos'.<br>
 En este menú, puedes añadir juegos nuevos que se añadirán a la lista principal junto con los que vienen por defecto o puedes modificar los juegos ya añadidos.<br>
-Por defecto, no se pueden modificar los valores de los juegos que vienen en el listado por defecto, pero si quieres cambiarlos, deberás activar la opción 'Leer los valores de los juegos fijos' en la pantalla de 'Configuración Avanzada'. Los valores de los juegos predeterminados, sólo se modificarán en el momento, si cierras la Gameplay y vuelves lo vuelves a abrir, los valores volverán a la normalidad.<br>
+Por defecto, no se pueden modificar los valores de los juegos que vienen en el listado por defecto, pero si q-uieres cambiarlos, deberás activar la opción 'Leer los valores de los juegos fijos' en la pantalla de 'Configuración Avanzada'. Los valores de los juegos predeterminados, sólo se modificarán en el momento, si cierras la Gameplay y vuelves lo vuelves a abrir, los valores volverán a la normalidad.<br>
 En cambio, si el juego lo has añadido manualmente, si podrás modificar los valores y estos se guardarán.<br>
 Dependiedo de la pestaña seleccionada, aparecerán diferentes opciones.
 

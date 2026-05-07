@@ -13,20 +13,8 @@ Coordinates=266,146,79,58
 [RadioButton4]
 Coordinates=316,418,92,36
 
-[CheckBox11]
-Coordinates=10,350,114,58
-
 [Label1]
 Coordinates=523,10,53,58
-
-[CheckBox16]
-Coordinates=10,282,114,58
-
-[CheckBox5]
-Coordinates=10,146,114,58
-
-[CheckBox6]
-Coordinates=134,350,114,58
 
 [GroupBox1]
 Coordinates=197,214,79,58
@@ -43,38 +31,11 @@ Coordinates=214,418,92,36
 [Label3]
 Coordinates=286,214,53,58
 
-[CheckBox9]
-Coordinates=355,146,114,58
-
-[GroupBox4]
-Coordinates=624,78,79,58
-
-[CheckBox17]
-Coordinates=73,214,114,58
-
 [CheckBox1]
 Coordinates=586,10,114,58
 
-[CheckBox10]
-Coordinates=224,78,114,58
-
-[CheckBox13]
-Coordinates=382,282,114,58
-
-[CheckBox12]
-Coordinates=545,146,114,58
-
-[CheckBox7]
-Coordinates=348,78,114,58
-
 [CheckBox2]
 Coordinates=134,282,114,58
-
-[CheckBox8]
-Coordinates=347,350,114,58
-
-[GroupBox5]
-Coordinates=471,350,79,58
 
 [GroupBox6]
 Coordinates=258,350,79,58
@@ -85,14 +46,8 @@ Coordinates=10,78,80,58
 [Label5]
 Coordinates=472,78,53,58
 
-[CheckBox3]
-Coordinates=415,214,114,58
-
 [RadioButton6]
 Coordinates=112,418,92,36
-
-[CheckBox4]
-Coordinates=100,78,114,58
 
 [RadioButton1]
 Coordinates=10,418,92,36
@@ -113,7 +68,7 @@ Coordinates=168,10,79,58
 Coordinates=257,10,57,58
 
 []
-Coordinates=893,1,91,36
+Coordinates=624,78,79,58
 Visible=True
 
 [RadioButton9]
@@ -154,9 +109,6 @@ Coordinates=252,155,57,58
 
 [Image1]
 Coordinates=567,291,57,58
-
-[CheckBox18]
-Coordinates=347,1,114,58
 
 [RadioButton10]
 Coordinates=741,298,100,36

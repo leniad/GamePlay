@@ -1,6 +1,31 @@
 # GamePlay status #
-![Main Screen](https://i.ibb.co/r2LBp0jj/gameplay-080-en.png)<br>
+![Main Screen](https://i.ibb.co/V0jXJtKb/gameplay-082-en.png)<br>
 Please read 'Most Wanted' games!<br>
+<b>07/05/26 - GamePlay updated to 0.82b
+<pre>
+-General
+    +Removed the language options. The language is now selected automatically based
+    on the system's primary language, although a different language can still be
+    selected manually
+    +Games that only differ by language are now grouped together in the versions
+    dropdown list
+    +As with Windows 3.1/98, the required disk images for emulation must now be
+    downloaded separately. This has also been applied to the ScummVM emulator
+    +Added the versions dropdown list for the ScummVM engine
+    +Updated Windows 95 to Windows 98 image
+-MSDOS
+    +Added games
+        -Darkseed (ES)
+        -Targhan
+        -Heroes of Might and Magic
+-Windows 3.1
+    Added games
+        -Darkseed II (ES)
+        -Pirates Gold
+        -Risk
+        -Where in the World is Carmen Sandiego
+        -Zombie Wars
+</pre>
 <b>17/04/26 - GamePlay updated to 0.81b
 <pre>
 -General

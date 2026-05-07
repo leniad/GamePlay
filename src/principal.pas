@@ -15,22 +15,7 @@ type
     CheckBox1: TCheckBox;
     CheckBox2: TCheckBox;
     GroupBox3: TGroupBox;
-    GroupBox4: TGroupBox;
-    CheckBox3: TCheckBox;
-    CheckBox4: TCheckBox;
-    CheckBox5: TCheckBox;
-    CheckBox6: TCheckBox;
-    CheckBox7: TCheckBox;
-    CheckBox8: TCheckBox;
-    GroupBox5: TGroupBox;
-    CheckBox9: TCheckBox;
-    CheckBox10: TCheckBox;
-    CheckBox11: TCheckBox;
-    CheckBox12: TCheckBox;
-    CheckBox13: TCheckBox;
     CheckBox14: TCheckBox;
-    CheckBox16: TCheckBox;
-    CheckBox17: TCheckBox;
     GroupBox6: TGroupBox;
     Label1: TLabel;
     Label2: TLabel;
@@ -57,7 +42,6 @@ type
     RadioButton7: TRadioButton;
     RadioButton8: TRadioButton;
     CheckBox15: TCheckBox;
-    CheckBox18: TCheckBox;
     GroupBox2: TGroupBox;
     RadioButton2: TRadioButton;
     RadioButton9: TRadioButton;
@@ -70,6 +54,15 @@ type
     Image8: TImage;
     ComboBox1: TComboBox;
     RadioButton12: TRadioButton;
+    CheckBox3: TCheckBox;
+    CheckBox16: TCheckBox;
+    CheckBox6: TCheckBox;
+    CheckBox4: TCheckBox;
+    CheckBox5: TCheckBox;
+    CheckBox7: TCheckBox;
+    CheckBox8: TCheckBox;
+    CheckBox17: TCheckBox;
+    RadioButton13: TRadioButton;
     procedure FormCreate(Sender: TObject);
     procedure StringGrid1DblClick(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
@@ -105,6 +98,7 @@ type
     procedure ComboBox1Change(Sender: TObject);
     procedure StringGrid1Click(Sender: TObject);
     procedure RadioButton12Click(Sender: TObject);
+    procedure RadioButton13Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -123,6 +117,23 @@ uses shellapi,strutils,save_game,acercade,config,idioma_info,main,dsp_data,
 var
   image_num:integer;
   typed:string;
+
+function juego_manual(ngame:integer):string;
+begin
+  juego_manual:=games_final[ngame].manual;
+  if (games_final[ngame].ref[0].nref<>0) then begin
+      if form1.ComboBox1.ItemIndex>0 then juego_manual:=GAME_DATA_REF[games_final[ngame].ref[form1.ComboBox1.ItemIndex-1].nref and $ffff].manual;
+  end;
+end;
+
+procedure comprobar_extras(ngame:integer);
+begin
+  form1.image4.visible:=juego_manual(ngame)<>'';
+  form1.image3.visible:=games_final[ngame].guia<>'';
+  form1.image5.visible:=games_final[ngame].map<>'';
+  form1.label3.Caption:=games_final[ngame].company;
+  form1.label4.Caption:=games_final[ngame].year;
+end;
 
 procedure TForm1.Button1Click(Sender: TObject);
 begin
@@ -173,6 +184,7 @@ begin
   StringGrid1.Refresh;
   image7.visible:=juego_setup(numero_juego)<>'';
   if form1.Visible then groupbox7.SetFocus;
+  comprobar_extras(numero_juego);
 end;
 
 procedure TForm1.FormClose(Sender: TObject; var Action: TCloseAction);
@@ -208,7 +220,7 @@ end;
 
 procedure TForm1.Image4Click(Sender:TObject);
 begin
-abrir_ficheros_separados(games_final[numero_juego].manual,main_config.dir_manual);
+abrir_ficheros_separados(juego_manual(numero_juego),main_config.dir_manual);
 end;
 
 procedure TForm1.Image5Click(Sender:TObject);
@@ -241,12 +253,6 @@ end;
 procedure TForm1.RadioButton1Click(Sender: TObject);
 begin
   main_config.motor:=MMSDOS;
-  checkbox9.Enabled:=true;
-  checkbox10.Enabled:=true;
-  checkbox11.Enabled:=true;
-  checkbox12.Enabled:=true;
-  checkbox13.Enabled:=true;
-  checkbox18.Enabled:=true;
   checkbox3.Enabled:=true;
   checkbox16.Enabled:=true;
   checkbox6.Enabled:=true;
@@ -280,12 +286,6 @@ procedure TForm1.RadioButton3Click(Sender: TObject);
 begin
   main_config.motor:=MSCUMM;
   combobox1.Visible:=false;
-  checkbox9.Enabled:=true;
-  checkbox10.Enabled:=true;
-  checkbox11.Enabled:=true;
-  checkbox12.Enabled:=true;
-  checkbox13.Enabled:=true;
-  checkbox18.Enabled:=true;
   checkbox3.Enabled:=false;
   checkbox16.Enabled:=false;
   checkbox6.Enabled:=false;
@@ -309,18 +309,13 @@ begin
   if total_juegos=0 then exit;
   stringgrid1.Row:=0;
   mostrar_juegos;
+  comprobar_scummvm;
 end;
 
 procedure TForm1.RadioButton4Click(Sender: TObject);
 begin
   main_config.motor:=MDSP;
   combobox1.Visible:=false;
-  checkbox9.Enabled:=false;
-  checkbox10.Enabled:=false;
-  checkbox11.Enabled:=false;
-  checkbox12.Enabled:=false;
-  checkbox13.Enabled:=false;
-  checkbox18.Enabled:=false;
   checkbox3.Enabled:=false;
   checkbox16.Enabled:=false;
   checkbox6.Enabled:=false;
@@ -341,12 +336,6 @@ procedure TForm1.RadioButton5Click(Sender: TObject);
 begin
   main_config.motor:=MAPPLE2;
   combobox1.Visible:=false;
-  checkbox9.Enabled:=false;
-  checkbox10.Enabled:=false;
-  checkbox11.Enabled:=false;
-  checkbox12.Enabled:=false;
-  checkbox13.Enabled:=false;
-  checkbox18.Enabled:=false;
   checkbox3.Enabled:=true;
   checkbox16.Enabled:=true;
   checkbox6.Enabled:=true;
@@ -375,12 +364,6 @@ procedure TForm1.RadioButton6Click(Sender: TObject);
 begin
   main_config.motor:=MATARI8;
   combobox1.Visible:=false;
-  checkbox9.Enabled:=false;
-  checkbox10.Enabled:=false;
-  checkbox11.Enabled:=false;
-  checkbox12.Enabled:=false;
-  checkbox13.Enabled:=false;
-  checkbox18.Enabled:=false;
   checkbox3.Enabled:=true;
   checkbox16.Enabled:=true;
   checkbox6.Enabled:=true;
@@ -426,12 +409,6 @@ procedure TForm1.RadioButton10Click(Sender: TObject);
 begin
   main_config.motor:=MAMIGA;
   combobox1.Visible:=false;
-  checkbox9.Enabled:=false;
-  checkbox10.Enabled:=false;
-  checkbox11.Enabled:=false;
-  checkbox12.Enabled:=false;
-  checkbox13.Enabled:=false;
-  checkbox18.Enabled:=false;
   checkbox3.Enabled:=true;
   checkbox16.Enabled:=true;
   checkbox6.Enabled:=true;
@@ -460,12 +437,6 @@ procedure TForm1.RadioButton11Click(Sender: TObject);
 begin
   main_config.motor:=MATARIST;
   combobox1.Visible:=false;
-  checkbox9.Enabled:=true;
-  checkbox10.Enabled:=true;
-  checkbox11.Enabled:=true;
-  checkbox12.Enabled:=true;
-  checkbox13.Enabled:=true;
-  checkbox18.Enabled:=true;
   checkbox3.Enabled:=true;
   checkbox16.Enabled:=true;
   checkbox6.Enabled:=true;
@@ -493,14 +464,8 @@ end;
 
 procedure TForm1.RadioButton12Click(Sender: TObject);
 begin
-  main_config.motor:=MWIN95;
+  main_config.motor:=MWIN98;
   combobox1.Visible:=false;
-  checkbox9.Enabled:=true;
-  checkbox10.Enabled:=true;
-  checkbox11.Enabled:=true;
-  checkbox12.Enabled:=true;
-  checkbox13.Enabled:=true;
-  checkbox18.Enabled:=true;
   checkbox3.Enabled:=true;
   checkbox16.Enabled:=true;
   checkbox6.Enabled:=true;
@@ -517,13 +482,36 @@ begin
   if total_juegos=0 then exit;
   stringgrid1.row:=0;
   mostrar_juegos;
-  comprobar_win95;
+  comprobar_win98;
+end;
+
+procedure TForm1.RadioButton13Click(Sender: TObject);
+begin
+  main_config.motor:=MWIN3;
+  combobox1.Visible:=false;
+  checkbox3.Enabled:=true;
+  checkbox16.Enabled:=true;
+  checkbox6.Enabled:=true;
+  checkbox4.Enabled:=true;
+  checkbox5.Enabled:=true;
+  checkbox7.Enabled:=true;
+  checkbox8.Enabled:=true;
+  checkbox17.Enabled:=true;
+  checkbox2.Enabled:=true;
+  groupbox8.Height:=90;
+  checkbox15.Enabled:=false;
+  groupbox8.visible:=false;
+  if stringgrid1.Cells[1,0]<>'' then button2.Enabled:=not(games_final[strtoint(stringgrid1.Cells[1,0])].interno) or main_config.leer_fijos;
+  if total_juegos=0 then exit;
+  stringgrid1.row:=0;
+  mostrar_juegos;
+  comprobar_win3;
 end;
 
 procedure TForm1.StringGrid1Click(Sender: TObject);
 var
   image_string:string;
-  ngame,f:integer;
+  ngame,f,cantidad:integer;
 
 procedure poner_en_blanco;
 var
@@ -546,27 +534,34 @@ begin
       exit;
   end;
   if (old_game<>ngame) then begin
-    //Compruebo si hay manuales, mapas o guia y activo los botones
-    image4.visible:=games_final[ngame].manual<>'';
-    image3.visible:=games_final[ngame].guia<>'';
-    image5.visible:=games_final[ngame].map<>'';
-    label3.Caption:=games_final[ngame].company;
-    label4.Caption:=games_final[ngame].year;
-    if main_config.motor=MMSDOS then begin
+    image7.visible:=false;
+    if ((main_config.motor=MMSDOS) or (main_config.motor=MSCUMM)) then begin
         combobox1.Visible:=false;
         if (games_final[ngame].ref[0].nref<>0) then begin
           combobox1.Items.Clear;
-          combobox1.Items.Add(GAME_DATA_REF[games_final[ngame].ref[0].nref].nombre_original);
+          combobox1.Items.Add(GAME_DATA_REF[games_final[ngame].ref[0].nref and $ffff].nombre_original);
           combobox1.ItemIndex:=0;
+          cantidad:=0;
           for f:=0 to NREFS do begin
             if (games_final[ngame].ref[f].nref<>0) then begin
-              combobox1.Items.Add(GAME_DATA_REF[games_final[ngame].ref[f].nref].nombre);
-              combobox1.Visible:=true;
+              if (((main_config.motor=MSCUMM) and ((games_final[ngame].ref[f].nref and NO_SCUMM)=0)) or (main_config.motor=MMSDOS)) then begin
+                combobox1.Items.Add(GAME_DATA_REF[games_final[ngame].ref[f].nref and $ffff].nombre);
+                cantidad:=cantidad+1;
+                if (games_final[ngame].ref[f].nref and $ff0000)<>0 then
+                  case (games_final[ngame].ref[f].nref and $ff0000) of
+                    ESP:if idioma_ind=0 then combobox1.ItemIndex:=cantidad;
+                    ALE:if idioma_ind=2 then combobox1.ItemIndex:=cantidad;
+                    FRA:if idioma_ind=3 then combobox1.ItemIndex:=cantidad;
+                    ITA:if idioma_ind=4 then combobox1.ItemIndex:=cantidad;
+                  end;
+              end;
             end;
           end;
+          if cantidad<>0 then combobox1.Visible:=true;
         end;
-        image7.visible:=juego_setup(ngame)<>'';
-    end else image7.visible:=false;
+        if (main_config.motor=MMSDOS) then image7.visible:=juego_setup(ngame)<>'';
+    end;
+    comprobar_extras(ngame);
     button2.Enabled:=not(games_final[ngame].interno) or main_config.leer_fijos;
   end;
   old_game:=ngame;

@@ -40,22 +40,12 @@ type
     TabSheet4: TTabSheet;
     TabSheet5: TTabSheet;
     TabSheet6: TTabSheet;
-    Button6: TButton;
-    LabeledEdit3: TLabeledEdit;
-    Button16: TButton;
-    LabeledEdit13: TLabeledEdit;
     LabeledEdit12: TLabeledEdit;
     Button15: TButton;
     GroupBox4: TGroupBox;
     GroupBox6: TGroupBox;
     CheckBox10: TCheckBox;
     CheckBox2: TCheckBox;
-    LabeledEdit14: TLabeledEdit;
-    Button17: TButton;
-    Button18: TButton;
-    LabeledEdit15: TLabeledEdit;
-    Button19: TButton;
-    LabeledEdit16: TLabeledEdit;
     Button20: TButton;
     LabeledEdit17: TLabeledEdit;
     Button21: TButton;
@@ -66,26 +56,17 @@ type
     Button2: TButton;
     Button3: TButton;
     LabeledEdit5: TLabeledEdit;
-    LabeledEdit1: TLabeledEdit;
-    LabeledEdit2: TLabeledEdit;
-    Button5: TButton;
-    Button4: TButton;
     LabeledEdit20: TLabeledEdit;
     Button23: TButton;
     CheckBox1: TCheckBox;
     TabSheet7: TTabSheet;
-    LabeledEdit21: TLabeledEdit;
     LabeledEdit22: TLabeledEdit;
-    Button24: TButton;
     Button25: TButton;
     CheckBox3: TCheckBox;
     procedure Button1Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
-    procedure Button5Click(Sender: TObject);
-    procedure Button4Click(Sender: TObject);
-    procedure Button6Click(Sender: TObject);
     procedure Button7Click(Sender: TObject);
     procedure RadioButton1Click(Sender: TObject);
     procedure RadioButton2Click(Sender: TObject);
@@ -104,16 +85,11 @@ type
     procedure Button14Click(Sender: TObject);
     procedure CheckBox2Click(Sender: TObject);
     procedure Button15Click(Sender: TObject);
-    procedure Button16Click(Sender: TObject);
-    procedure Button17Click(Sender: TObject);
-    procedure Button18Click(Sender: TObject);
-    procedure Button19Click(Sender: TObject);
     procedure Button23Click(Sender: TObject);
     procedure Button20Click(Sender: TObject);
     procedure Button21Click(Sender: TObject);
     procedure Button22Click(Sender: TObject);
     procedure CheckBox1Click(Sender: TObject);
-    procedure Button24Click(Sender: TObject);
     procedure Button25Click(Sender: TObject);
   private
     { Private declarations }
@@ -163,13 +139,6 @@ end;
 
 procedure TForm4.Button14Click(Sender: TObject);
 begin
-  labelededit1.Text:=main_config.dir_base+'extras\dosbox\dosbox.exe';
-  labelededit2.Text:=main_config.dir_base+'extras\dosbox_x\dosbox-x.exe';
-  labelededit3.Text:=main_config.dir_base+'extras\scummvm\scummvm.exe';
-  labelededit13.Text:=main_config.dir_base+'dsp\dsp.exe';
-  labelededit14.Text:=main_config.dir_base+'extras\apple2\applewin.exe';
-  labelededit15.Text:=main_config.dir_base+'extras\atari800\altirra.exe';
-  labelededit16.Text:=main_config.dir_base+'extras\winuae\winuae.exe';
   labelededit6.Text:=main_config.dir_base+'extras\manual\';
   labelededit7.Text:=main_config.dir_base+'extras\maps\';
   labelededit8.Text:=main_config.dir_base+'extras\walk\';
@@ -182,7 +151,6 @@ begin
   labelededit17.Text:=main_config.dir_base+'extras\config\apple2.ini';
   labelededit18.Text:=main_config.dir_base+'extras\config\altirra.ini';
   labelededit19.Text:=main_config.dir_base+'extras\winuae\winuae.ini';
-  labelededit21.Text:=main_config.dir_base+'extras\hatari\hatari.exe';
   labelededit22.Text:=main_config.dir_base+'extras\config\hatari.cfg';
   labelededit20.Text:=main_config.dir_base+'dsp\dsp.ini';
 end;
@@ -195,38 +163,6 @@ begin
   if Opendialog1.Execute then labelededit12.Text:=opendialog1.FileName;
 end;
 
-procedure TForm4.Button16Click(Sender: TObject);
-begin
-  openDialog1.InitialDir:=extractfilepath(main_config.dsp_exe);
-  openDialog1.Options:=[ofFileMustExist];
-  Opendialog1.Filter:='EXE file (*.exe)|*.exe';
-  if Opendialog1.Execute then labelededit13.Text:=opendialog1.FileName;
-end;
-
-procedure TForm4.Button17Click(Sender: TObject);
-begin
-  openDialog1.InitialDir:=extractfilepath(main_config.apple2_exe);
-  openDialog1.Options:=[ofFileMustExist];
-  Opendialog1.Filter:='EXE file (*.exe)|*.exe';
-  if Opendialog1.Execute then labelededit14.Text:=opendialog1.FileName;
-end;
-
-procedure TForm4.Button18Click(Sender: TObject);
-begin
-  openDialog1.InitialDir:=extractfilepath(main_config.atari800_exe);
-  openDialog1.Options:=[ofFileMustExist];
-  Opendialog1.Filter:='EXE file (*.exe)|*.exe';
-  if Opendialog1.Execute then labelededit15.Text:=opendialog1.FileName;
-end;
-
-procedure TForm4.Button19Click(Sender: TObject);
-begin
-  openDialog1.InitialDir:=extractfilepath(main_config.amiga_exe);
-  openDialog1.Options:=[ofFileMustExist];
-  Opendialog1.Filter:='EXE file (*.exe)|*.exe';
-  if Opendialog1.Execute then labelededit16.Text:=opendialog1.FileName;
-end;
-
 procedure TForm4.Button1Click(Sender: TObject);
 begin
   main_config.config_dosbox:=labelededit4.Text;
@@ -236,16 +172,8 @@ begin
   main_config.config_atari800:=labelededit18.Text;
   main_config.config_amiga:=labelededit19.Text;
   main_config.config_dsp:=labelededit20.Text;
-  main_config.atarise_exe:=labelededit21.Text;
   main_config.config_atarise:=labelededit22.Text;
   form1.button2.Enabled:=main_config.leer_fijos;
-  main_config.dosbox_exe:=labelededit1.Text;
-  main_config.dosbox_x_exe:=labelededit2.Text;
-  main_config.scumm_exe:=labelededit3.Text;
-  main_config.dsp_exe:=labelededit13.Text;
-  main_config.apple2_exe:=labelededit14.Text;
-  main_config.atari800_exe:=labelededit15.Text;
-  main_config.amiga_exe:=labelededit16.Text;
   main_config.dir_manual:=labelededit6.Text;
   main_config.dir_mapas:=labelededit7.Text;
   main_config.dir_guias:=labelededit8.Text;
@@ -288,14 +216,6 @@ begin
   if Opendialog1.Execute then labelededit20.Text:=opendialog1.FileName;
 end;
 
-procedure TForm4.Button24Click(Sender: TObject);
-begin
-  openDialog1.InitialDir:=extractfilepath(main_config.atarise_exe);
-  openDialog1.Options:=[ofFileMustExist];
-  Opendialog1.Filter:='EXE file (*.exe)|*.exe';
-  if Opendialog1.Execute then labelededit21.Text:=opendialog1.FileName;
-end;
-
 procedure TForm4.Button25Click(Sender: TObject);
 begin
   openDialog1.InitialDir:=extractfilepath(main_config.config_atarise);
@@ -318,30 +238,6 @@ begin
   openDialog1.Options:=[ofFileMustExist];
   Opendialog1.Filter:='Config file (*.conf)|*.conf';
   if Opendialog1.Execute then labelededit5.Text:=opendialog1.FileName;
-end;
-
-procedure TForm4.Button4Click(Sender: TObject);
-begin
-  openDialog1.InitialDir:=extractfilepath(main_config.dosbox_exe);
-  openDialog1.Options:=[ofFileMustExist];
-  Opendialog1.Filter:='EXE file (*.exe)|*.exe';
-  if Opendialog1.Execute then labelededit1.Text:=opendialog1.FileName;
-end;
-
-procedure TForm4.Button5Click(Sender: TObject);
-begin
-  openDialog1.InitialDir:=extractfilepath(main_config.dosbox_x_exe);
-  openDialog1.Options:=[ofFileMustExist];
-  Opendialog1.Filter:='EXE file (*.exe)|*.exe';
-  if Opendialog1.Execute then labelededit2.Text:=opendialog1.FileName;
-end;
-
-procedure TForm4.Button6Click(Sender: TObject);
-begin
-  openDialog1.InitialDir:=extractfilepath(main_config.scumm_exe);
-  openDialog1.Options:=[ofFileMustExist];
-  Opendialog1.Filter:='EXE file (*.exe)|*.exe';
-  if Opendialog1.Execute then labelededit3.Text:=opendialog1.FileName;
 end;
 
 procedure TForm4.Button7Click(Sender: TObject);
