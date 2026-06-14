@@ -125,20 +125,21 @@
         <VerInfo_Locale>1033</VerInfo_Locale>
         <Icon_MainIcon>gfx\gameplay_Icon_b.ico</Icon_MainIcon>
         <VerInfo_MajorVer>0</VerInfo_MajorVer>
-        <VerInfo_MinorVer>82</VerInfo_MinorVer>
-        <VerInfo_Keys>CompanyName=Leniad;FileDescription=$(MSBuildProjectName);FileVersion=0.82.0.76;InternalName=GamePlay;LegalCopyright=Leniad;LegalTrademarks=;OriginalFilename=;ProgramID=com.embarcadero.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=0.80.0;Comments=</VerInfo_Keys>
+        <VerInfo_MinorVer>83</VerInfo_MinorVer>
+        <VerInfo_Keys>CompanyName=Leniad;FileDescription=$(MSBuildProjectName);FileVersion=0.83.0.85;InternalName=GamePlay;LegalCopyright=Leniad;LegalTrademarks=;OriginalFilename=;ProgramID=com.embarcadero.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=0.80.0;Comments=</VerInfo_Keys>
         <UWP_DelphiLogo44>gfx\gameplay_Icon.png</UWP_DelphiLogo44>
         <UWP_DelphiLogo150>gfx\gameplay_Icon.png</UWP_DelphiLogo150>
         <VerInfo_AutoIncVersion>true</VerInfo_AutoIncVersion>
-        <VerInfo_Build>76</VerInfo_Build>
+        <VerInfo_Build>85</VerInfo_Build>
+        <UsePackages>true</UsePackages>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win64)'!=''">
         <AppDPIAwarenessMode>PerMonitorV2</AppDPIAwarenessMode>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <VerInfo_Locale>1033</VerInfo_Locale>
         <VerInfo_MajorVer>0</VerInfo_MajorVer>
-        <VerInfo_MinorVer>82</VerInfo_MinorVer>
-        <VerInfo_Keys>CompanyName=;FileDescription=$(MSBuildProjectName);FileVersion=0.82.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProgramID=com.embarcadero.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=0.80.0;Comments=</VerInfo_Keys>
+        <VerInfo_MinorVer>83</VerInfo_MinorVer>
+        <VerInfo_Keys>CompanyName=;FileDescription=$(MSBuildProjectName);FileVersion=0.83.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProgramID=com.embarcadero.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=0.80.0;Comments=</VerInfo_Keys>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
         <DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>
@@ -162,19 +163,11 @@
         <DCCReference Include="principal.pas">
             <Form>Form1</Form>
         </DCCReference>
-        <DCCReference Include="games_data.pas"/>
-        <DCCReference Include="games_info.pas"/>
-        <DCCReference Include="save_game.pas">
-            <Form>Form2</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
         <DCCReference Include="acercade.pas">
             <Form>Form3</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="config.pas">
             <Form>Form4</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="idioma_info.pas"/>
         <DCCReference Include="main.pas"/>
@@ -182,11 +175,9 @@
         <DCCReference Include="download_game.pas"/>
         <DCCReference Include="games_download.pas">
             <Form>Form5</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="games_ref.pas"/>
-        <DCCReference Include="descarga.pas">
-            <Form>Descargando</Form>
+        <DCCReference Include="mensajes.pas">
+            <Form>Form2</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <BuildConfiguration Include="Base">

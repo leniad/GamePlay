@@ -22,25 +22,24 @@ type
   end;
   TApiClient=class
   private
-    FBaseUrl:string;
     FToken:string;
   public
-    constructor create(const baseurl:string);
+    constructor create;
     function login(const usuario,password:string;out mensaje:string):boolean;
     function logout(out mensaje:string):boolean;
     function downloadFile(const remoteName,localpath:string;out mensaje:string):boolean;
+    function GetServerVersion:string;
     property token:string read FToken;
   end;
 
 implementation
-
 uses
-  System.SysUtils,System.Classes,System.Net.HttpClient,System.Net.URLClient,REST.Json,descarga;
+  System.SysUtils,System.Classes,System.Net.HttpClient,System.Net.URLClient,REST.Json,
+  mensajes,json,games_download;
 
-constructor TApiClient.Create(const baseurl:string);
+constructor TApiClient.Create;
 begin
   inherited Create;
-  FBaseUrl:=baseurl;
   FToken:='';
 end;
 
@@ -65,7 +64,7 @@ begin
       LStream:=TStringStream.create(LJson, TEncoding.UTF8);
       try
         LStream.Position:=0;
-        LHttpResp:=LHttp.Post(FBaseUrl+'/login',LStream,nil,[TNameValuePair.Create('Content-Type','application/json')]);
+        LHttpResp:=LHttp.Post(URL_GAMEPLAY+'/login',LStream,nil,[TNameValuePair.Create('Content-Type','application/json')]);
         LRaw:=Trim(LHttpResp.ContentAsString(TEncoding.UTF8));
         if ((LHttpResp.StatusCode=200) or (LHttpResp.StatusCode=201) or (LHttpResp.StatusCode=401)) then begin
           if (LRaw='') or (LRaw[1]<>'{') then begin
@@ -134,7 +133,7 @@ begin
     LHttp.CustomHeaders['Authorization']:='Bearer '+FToken;
     LEmptyBody:=TStringStream.Create('',TEncoding.UTF8);
     try
-      LHttpResp := LHttp.Post(FBaseUrl+'/logout',LEmptyBody,nil,
+      LHttpResp := LHttp.Post(URL_GAMEPLAY+'/logout',LEmptyBody,nil,
         [TNameValuePair.Create('Content-Type','application/json')]);
     finally
       LEmptyBody.free;
@@ -175,13 +174,14 @@ var
   LStream:TFileStream;
   LUrl:string;
 begin
-  descargando.show;
-  descargando.Update;
+  message_num:=0;
+  form2.show;
+  form2.Update;
   result:=false;
   mensaje:='';
   if FToken='' then begin
     mensaje:='No hay token';
-    descargando.close;
+    form2.close;
     exit;
   end;
   LHttp:=THTTPClient.create;
@@ -190,7 +190,7 @@ begin
     ForceDirectories(ExtractFileDir(localpath));
     LStream:=TFileStream.create(localpath,fmCreate);
     try
-      LUrl:=FBaseUrl+'/download/'+remotename;
+      LUrl:=URL_GAMEPLAY+'/download/'+remotename;
       LResp:=LHttp.Get(LUrl,LStream);
       if LResp.StatusCode=200 then begin
         mensaje:='Fichero descargado correctamente';
@@ -202,7 +202,37 @@ begin
   finally
     LHttp.free;
   end;
-  descargando.close;
+  form2.close;
+end;
+
+function TApiClient.GetServerVersion:string;
+var
+  LHttp:THTTPClient;
+  LResp:IHTTPResponse;
+  LRaw:string;
+  LJson:TJSONObject;
+  version:string;
+begin
+  version:='';
+  LHttp:=THTTPClient.Create;
+  try
+    LResp:=LHttp.Get(URL_API+'/api/version');
+    LRaw:=LResp.ContentAsString(TEncoding.UTF8);
+    if LResp.StatusCode<>200 then begin
+      result:='0';
+      exit;
+    end;
+    LJson := TJSONObject.ParseJSONValue(LRaw) as TJSONObject;
+    try
+      if Assigned(LJson) then begin
+        result:=LJson.GetValue<string>('Version','0');
+      end;
+    finally
+      LJson.free;
+    end;
+  finally
+    LHttp.free;
+  end;
 end;
 
 end.

@@ -1,6 +1,50 @@
 # GamePlay status #
-![Main Screen](https://i.ibb.co/V0jXJtKb/gameplay-082-en.png)<br>
+![Main Screen](https://i.ibb.co/8gHhF4sK/gameplay-083-en.png)<br>
 Please read 'Most Wanted' games!<br>
+<b>14/06/26 - GamePlay updated to 0.83b
+<pre>
+-General
+    +The game list is now downloaded automatically if it is not present
+    +The game list now checks its version and automatically downloads and 
+    updates itself when a newer version is available
+    +Converted the game list to JSON format
+    +Further simplified the interface by removing the game addition feature.
+    A separate application for editing and adding games to the list is
+    planned for a future release
+    +A message is now displayed while games are being downloaded or extracted
+    +Extra content can now be downloaded separately from the games
+    +Added an option to display only available games in the game list
+    +Added GunStick game emulation support
+-MSDOS
+    +Added games
+        -Little Big Adventure
+        -Zorro
+        -Basket Master
+        -Buggy Ranger
+        -Michel Futbol Master/Super Skills
+        -Galaxian
+        -LockOn
+        -Grand Theft Auto
+        -Tomb Raider
+        -Total Eclipse
+        -Hexen - Beyond Heretic
+        -Gonzzalezz
+        -Mithos
+        -MOT
+        -Soviet
+        -Trigger
+        -Solo
+        -Guillermo Tell
+        -Cosmic Sheriff
+        -Hammer Boy
+        -Navy Moves
+        -Jai-Alai
+        -La Colmena
+-Windows 95/98
+    Added games
+        -Dungeon Keeper (Gold)
+        -Get Medieval
+</pre>
 <b>07/05/26 - GamePlay updated to 0.82b
 <pre>
 -General

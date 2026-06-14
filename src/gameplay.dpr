@@ -14,9 +14,6 @@ uses
   principal in 'principal.pas' {Form1},
   Vcl.Themes,
   Vcl.Styles,
-  games_data in 'games_data.pas',
-  games_info in 'games_info.pas',
-  save_game in 'save_game.pas' {Form2},
   acercade in 'acercade.pas' {Form3},
   config in 'config.pas' {Form4},
   idioma_info in 'idioma_info.pas',
@@ -24,8 +21,7 @@ uses
   dsp_data in 'dsp_data.pas',
   download_game in 'download_game.pas',
   games_download in 'games_download.pas' {Form5},
-  games_ref in 'games_ref.pas',
-  descarga in 'descarga.pas' {Descargando};
+  mensajes in 'mensajes.pas' {Form2};
 
 {$R *.res}
 
@@ -34,10 +30,9 @@ begin
   Application.MainFormOnTaskbar := True;
   TStyleManager.TrySetStyle('Windows10');
   Application.CreateForm(TForm1, Form1);
-  Application.CreateForm(TForm2, Form2);
-  Application.CreateForm(TForm3, Form3);
-  Application.CreateForm(TForm4, Form4);
   Application.CreateForm(TForm5, Form5);
-  Application.CreateForm(TDescargando, Descargando);
+  Application.CreateForm(TForm2, Form2);
+  Application.CreateForm(TForm4, Form4);
+  Application.CreateForm(TForm3, Form3);
   Application.Run;
 end.

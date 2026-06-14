@@ -1,4 +1,4 @@
-unit descarga;
+unit mensajes;
 
 interface
 
@@ -7,7 +7,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls;
 
 type
-  TDescargando = class(TForm)
+  TForm2 = class(TForm)
     Label1: TLabel;
     procedure FormShow(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -18,26 +18,31 @@ type
   end;
 
 var
-  Descargando: TDescargando;
+  Form2: TForm2;
+  message_num:integer;
 
 implementation
 uses idioma_info;
 
 {$R *.dfm}
 
-procedure TDescargando.FormCreate(Sender: TObject);
+procedure TForm2.FormCreate(Sender: TObject);
 begin
-    cambiar_idioma_descarga2;
+    message_num:=0;
 end;
 
-procedure TDescargando.FormShow(Sender: TObject);
+procedure TForm2.FormShow(Sender: TObject);
 var
   f:integer;
 begin
-  f:=(screen.Width-descargando.Width) div 2;
-  if f>0 then descargando.Left:=f;
-  f:=(screen.Height-descargando.Height) div 2;
-  if f>0 then descargando.Top:=f;
+  case message_num of
+    0:label1.Caption:=list_descarga[3];
+    1:label1.Caption:='Unzip...';
+  end;
+  f:=(screen.Width-form2.Width) div 2;
+  if f>0 then form2.Left:=f;
+  f:=(screen.Height-form2.Height) div 2;
+  if f>0 then form2.Top:=f;
 end;
 
 end.

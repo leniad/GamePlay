@@ -1,10 +1,10 @@
-object Descargando: TDescargando
+object Form2: TForm2
   Left = 0
   Top = 0
   BorderIcons = []
   BorderStyle = bsSingle
-  ClientHeight = 77
-  ClientWidth = 233
+  ClientHeight = 60
+  ClientWidth = 227
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText

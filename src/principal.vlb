@@ -55,24 +55,12 @@ Coordinates=10,418,92,36
 [RadioButton5]
 Coordinates=560,350,92,36
 
-[Button1]
-Coordinates=324,10,59,58
-
-[Button2]
-Coordinates=99,10,59,58
-
-[GroupBox8]
-Coordinates=168,10,79,58
-
 [Image2]
 Coordinates=257,10,57,58
 
 []
-Coordinates=624,78,79,58
+Coordinates=168,10,79,58
 Visible=True
-
-[RadioButton9]
-Coordinates=738,78,92,36
 
 [Timer2]
 Coordinates=738,133,55,36
@@ -83,23 +71,11 @@ Coordinates=252,78,57,58
 [Image6]
 Coordinates=138,174,57,58
 
-[GroupBox2]
-Coordinates=0,0,79,58
-
 [Image4]
 Coordinates=252,1,57,58
 
-[GroupBox9]
-Coordinates=98,1,79,58
-
 [CheckBox15]
 Coordinates=741,1,114,58
-
-[RadioButton8]
-Coordinates=738,188,92,36
-
-[RadioButton2]
-Coordinates=738,243,92,36
 
 [Image3]
 Coordinates=567,405,57,58
@@ -112,7 +88,4 @@ Coordinates=567,291,57,58
 
 [RadioButton10]
 Coordinates=741,298,100,36
-
-[RadioButton7]
-Coordinates=738,353,92,36
 

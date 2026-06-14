@@ -28,9 +28,6 @@ type
     RadioButton4: TRadioButton;
     RadioButton5: TRadioButton;
     RadioButton6: TRadioButton;
-    GroupBox8: TGroupBox;
-    Button1: TButton;
-    Button2: TButton;
     Image2: TImage;
     Image1: TImage;
     Image3: TImage;
@@ -38,18 +35,9 @@ type
     Image5: TImage;
     Image6: TImage;
     Timer2: TTimer;
-    GroupBox9: TGroupBox;
-    RadioButton7: TRadioButton;
-    RadioButton8: TRadioButton;
     CheckBox15: TCheckBox;
-    GroupBox2: TGroupBox;
-    RadioButton2: TRadioButton;
-    RadioButton9: TRadioButton;
     Image7: TImage;
     RadioButton10: TRadioButton;
-    GroupBox10: TGroupBox;
-    CheckBox20: TCheckBox;
-    CheckBox19: TCheckBox;
     RadioButton11: TRadioButton;
     Image8: TImage;
     ComboBox1: TComboBox;
@@ -63,6 +51,17 @@ type
     CheckBox8: TCheckBox;
     CheckBox17: TCheckBox;
     RadioButton13: TRadioButton;
+    CheckBox10: TCheckBox;
+    CheckBox9: TCheckBox;
+    GroupBox2: TGroupBox;
+    RadioButton2: TRadioButton;
+    RadioButton9: TRadioButton;
+    GroupBox10: TGroupBox;
+    CheckBox20: TCheckBox;
+    CheckBox19: TCheckBox;
+    GroupBox9: TGroupBox;
+    RadioButton7: TRadioButton;
+    RadioButton8: TRadioButton;
     procedure FormCreate(Sender: TObject);
     procedure StringGrid1DblClick(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
@@ -70,8 +69,6 @@ type
     procedure RadioButton3Click(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure RadioButton1Click(Sender:TObject);
-    procedure Button1Click(Sender:TObject);
-    procedure Button2Click(Sender:TObject);
     procedure CheckBox1Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure RadioButton4Click(Sender: TObject);
@@ -92,13 +89,14 @@ type
     procedure RadioButton2Click(Sender: TObject);
     procedure Image7Click(Sender: TObject);
     procedure RadioButton10Click(Sender: TObject);
-    procedure Button3Click(Sender: TObject);
     procedure RadioButton11Click(Sender: TObject);
     procedure Image8Click(Sender: TObject);
     procedure ComboBox1Change(Sender: TObject);
     procedure StringGrid1Click(Sender: TObject);
     procedure RadioButton12Click(Sender: TObject);
     procedure RadioButton13Click(Sender: TObject);
+    procedure CheckBox10Click(Sender: TObject);
+    procedure CheckBox9Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -111,8 +109,8 @@ var
 
 implementation
 {$R *.dfm}
-uses shellapi,strutils,save_game,acercade,config,idioma_info,main,dsp_data,
-     games_download,games_ref,system.UITypes;
+uses shellapi,strutils,acercade,config,idioma_info,main,dsp_data,
+     games_download,system.UITypes;
 
 var
   image_num:integer;
@@ -122,46 +120,40 @@ function juego_manual(ngame:integer):string;
 begin
   juego_manual:=games_final[ngame].manual;
   if (games_final[ngame].ref[0].nref<>0) then begin
-      if form1.ComboBox1.ItemIndex>0 then juego_manual:=GAME_DATA_REF[games_final[ngame].ref[form1.ComboBox1.ItemIndex-1].nref and $ffff].manual;
+      if form1.ComboBox1.ItemIndex>0 then juego_manual:=games_final_ref[games_final[ngame].ref[form1.ComboBox1.ItemIndex-1].nref and $ffff].manual;
+  end;
+end;
+
+function juego_guia(ngame:integer):string;
+begin
+  juego_guia:=games_final[ngame].guia;
+  if (games_final[ngame].ref[0].nref<>0) then begin
+      if form1.ComboBox1.ItemIndex>0 then juego_guia:=games_final_ref[games_final[ngame].ref[form1.ComboBox1.ItemIndex-1].nref and $ffff].guia;
   end;
 end;
 
 procedure comprobar_extras(ngame:integer);
 begin
   form1.image4.visible:=juego_manual(ngame)<>'';
-  form1.image3.visible:=games_final[ngame].guia<>'';
+  form1.image3.visible:=juego_guia(ngame)<>'';
   form1.image5.visible:=games_final[ngame].map<>'';
   form1.label3.Caption:=games_final[ngame].company;
   form1.label4.Caption:=games_final[ngame].year;
 end;
 
-procedure TForm1.Button1Click(Sender: TObject);
+procedure TForm1.CheckBox10Click(Sender: TObject);
 begin
-  juego_editado:=total_juegos;
-  estoy_anadiendo:=true;
-  form2.showmodal;
-  ordena_juegos;
-  mostrar_juegos;
-end;
-
-procedure TForm1.Button2Click(Sender: TObject);
-begin
-  juego_editado:=numero_juego;
-  if juego_editado=-1 then exit;
-  estoy_anadiendo:=false;
-  form2.showmodal;
-  ordena_juegos;
-  mostrar_juegos;
-end;
-
-procedure TForm1.Button3Click(Sender: TObject);
-begin
-  //sacar_juegos;
+  main_config.descargar_extra:=checkbox10.Checked;
 end;
 
 procedure TForm1.CheckBox15Click(Sender: TObject);
 begin
-  groupbox8.visible:=checkbox15.Checked and checkbox15.enabled;
+  checkbox15.enabled;
+  case main_config.motor of
+    MMSDOS:groupbox9.visible:=checkbox15.Checked;
+    MAPPLE2:groupbox2.visible:=checkbox15.Checked;
+    MAMIGA:groupbox10.visible:=checkbox15.Checked;
+  end;
   if form1.Visible then StringGrid1.SetFocus;
 end;
 
@@ -172,6 +164,12 @@ end;
 
 procedure TForm1.CheckBox3Click(Sender: TObject);
 begin
+  mostrar_juegos;
+end;
+
+procedure TForm1.CheckBox9Click(Sender: TObject);
+begin
+  main_config.mostrar_funcionan:=checkbox9.Checked;
   mostrar_juegos;
 end;
 
@@ -205,6 +203,11 @@ begin
   if f>0 then form1.Left:=f;
   f:=(screen.Height-form1.Height) div 2;
   if f>0 then form1.Top:=f;
+  //Meto los juegos
+  pillar_juegos;
+  //Los ordeno...
+  ordena_juegos;
+  mostrar_juegos;
 end;
 
 procedure TForm1.Image2Click(Sender: TObject);
@@ -215,7 +218,7 @@ end;
 
 procedure TForm1.Image3Click(Sender:TObject);
 begin
-abrir_ficheros_separados(games_final[numero_juego].guia,main_config.dir_guias);
+abrir_ficheros_separados(juego_guia(numero_juego),main_config.dir_guias);
 end;
 
 procedure TForm1.Image4Click(Sender:TObject);
@@ -263,15 +266,10 @@ begin
   checkbox17.Enabled:=true;
   checkbox2.Enabled:=true;
   checkbox15.Enabled:=true;
-  button1.Visible:=true;
-  button2.Visible:=true;
-  button1.top:=99;
-  button2.top:=99;
+  checkbox10.Enabled:=true;
+  groupbox9.visible:=form1.checkbox15.Checked;
   groupbox2.visible:=false;
   groupbox10.visible:=false;
-  groupbox9.visible:=true;
-  groupbox8.visible:=form1.checkbox15.Checked;
-  if stringgrid1.Cells[1,0]<>'' then button2.Enabled:=not(games_final[strtoint(stringgrid1.Cells[1,0])].interno) or main_config.leer_fijos;
   if total_juegos=0 then exit;
   stringgrid1.Row:=0;
   mostrar_juegos;
@@ -295,17 +293,11 @@ begin
   checkbox8.Enabled:=false;
   checkbox17.Enabled:=false;
   checkbox2.Enabled:=false;
-  groupbox8.Height:=90;
   checkbox15.Enabled:=true;
-  button1.Visible:=true;
-  button2.Visible:=true;
-  button1.top:=30;
-  button2.top:=30;
+  checkbox10.Enabled:=true;
+  groupbox9.visible:=false;
   groupbox2.visible:=false;
   groupbox10.visible:=false;
-  groupbox9.visible:=false;
-  groupbox8.visible:=form1.checkbox15.Checked;
-  if stringgrid1.Cells[1,0]<>'' then button2.Enabled:=not(games_final[strtoint(stringgrid1.Cells[1,0])].interno) or main_config.leer_fijos;
   if total_juegos=0 then exit;
   stringgrid1.Row:=0;
   mostrar_juegos;
@@ -326,7 +318,10 @@ begin
   checkbox17.Enabled:=false;
   checkbox2.Enabled:=false;
   checkbox15.Enabled:=false;
-  groupbox8.visible:=false;
+  checkbox10.Enabled:=false;
+  groupbox9.visible:=false;
+  groupbox2.visible:=false;
+  groupbox10.visible:=false;
   if total_juegos=0 then exit;
   stringgrid1.Row:=0;
   mostrar_juegos;
@@ -346,15 +341,10 @@ begin
   checkbox17.Enabled:=true;
   checkbox2.Enabled:=true;
   checkbox15.Enabled:=true;
-  button1.Visible:=true;
-  button2.Visible:=true;
-  form1.groupbox8.Height:=150;
-  button1.top:=99;
-  button2.top:=99;
+  checkbox10.Enabled:=true;
   groupbox9.visible:=false;
-  groupbox2.visible:=true;
+  groupbox2.visible:=checkbox15.Checked;
   groupbox10.visible:=false;
-  groupbox8.visible:=checkbox15.Checked;
   if total_juegos=0 then exit;
   stringgrid1.Row:=0;
   mostrar_juegos;
@@ -373,16 +363,11 @@ begin
   checkbox8.Enabled:=true;
   checkbox17.Enabled:=true;
   checkbox2.Enabled:=true;
-  checkbox15.Enabled:=true;
-  button1.Visible:=true;
-  button2.Visible:=true;
-  button1.top:=30;
-  button2.top:=30;
-  groupbox8.Height:=90;
+  checkbox15.Enabled:=false;
+  checkbox10.Enabled:=true;
+  groupbox9.visible:=false;
   groupbox2.visible:=false;
   groupbox10.visible:=false;
-  groupbox9.visible:=false;
-  groupbox8.visible:=form1.checkbox15.Checked;
   if total_juegos=0 then exit;
   stringgrid1.Row:=0;
   mostrar_juegos;
@@ -419,15 +404,10 @@ begin
   checkbox17.Enabled:=true;
   checkbox2.Enabled:=true;
   checkbox15.Enabled:=true;
-  groupbox8.visible:=form1.checkbox15.Checked;
-  groupbox2.visible:=false;
+  checkbox10.Enabled:=true;
   groupbox9.visible:=false;
-  groupbox10.visible:=true;
-  button1.visible:=true;
-  button2.visible:=true;
-  button1.top:=99;
-  button2.top:=99;
-  groupbox8.Height:=150;
+  groupbox2.visible:=false;
+  groupbox10.visible:=checkbox15.Checked;
   if total_juegos=0 then exit;
   stringgrid1.Row:=0;
   mostrar_juegos;
@@ -446,17 +426,11 @@ begin
   checkbox8.Enabled:=true;
   checkbox17.Enabled:=true;
   checkbox2.Enabled:=true;
-  groupbox8.Height:=90;
-  checkbox15.Enabled:=true;
-  button1.Visible:=true;
-  button2.Visible:=true;
-  button1.top:=30;
-  button2.top:=30;
+  checkbox15.Enabled:=false;
+  checkbox10.Enabled:=true;
+  groupbox9.visible:=false;
   groupbox2.visible:=false;
   groupbox10.visible:=false;
-  groupbox9.visible:=false;
-  groupbox8.visible:=form1.checkbox15.Checked;
-  if stringgrid1.Cells[1,0]<>'' then button2.Enabled:=not(games_final[strtoint(stringgrid1.Cells[1,0])].interno) or main_config.leer_fijos;
   if total_juegos=0 then exit;
   stringgrid1.row:=0;
   mostrar_juegos;
@@ -475,10 +449,11 @@ begin
   checkbox8.Enabled:=true;
   checkbox17.Enabled:=true;
   checkbox2.Enabled:=true;
-  groupbox8.Height:=90;
   checkbox15.Enabled:=false;
-  groupbox8.visible:=false;
-  if stringgrid1.Cells[1,0]<>'' then button2.Enabled:=not(games_final[strtoint(stringgrid1.Cells[1,0])].interno) or main_config.leer_fijos;
+  checkbox10.Enabled:=true;
+  groupbox9.visible:=false;
+  groupbox2.visible:=false;
+  groupbox10.visible:=false;
   if total_juegos=0 then exit;
   stringgrid1.row:=0;
   mostrar_juegos;
@@ -498,10 +473,11 @@ begin
   checkbox8.Enabled:=true;
   checkbox17.Enabled:=true;
   checkbox2.Enabled:=true;
-  groupbox8.Height:=90;
   checkbox15.Enabled:=false;
-  groupbox8.visible:=false;
-  if stringgrid1.Cells[1,0]<>'' then button2.Enabled:=not(games_final[strtoint(stringgrid1.Cells[1,0])].interno) or main_config.leer_fijos;
+  checkbox10.Enabled:=true;
+  groupbox9.visible:=false;
+  groupbox2.visible:=false;
+  groupbox10.visible:=false;
   if total_juegos=0 then exit;
   stringgrid1.row:=0;
   mostrar_juegos;
@@ -535,17 +511,17 @@ begin
   end;
   if (old_game<>ngame) then begin
     image7.visible:=false;
-    if ((main_config.motor=MMSDOS) or (main_config.motor=MSCUMM)) then begin
+    if ((main_config.motor=MMSDOS) or (main_config.motor=MSCUMM) or ((main_config.motor=MWIN98))) then begin
         combobox1.Visible:=false;
         if (games_final[ngame].ref[0].nref<>0) then begin
           combobox1.Items.Clear;
-          combobox1.Items.Add(GAME_DATA_REF[games_final[ngame].ref[0].nref and $ffff].nombre_original);
+          combobox1.Items.Add(games_final_ref[games_final[ngame].ref[0].nref and $ffff].nombre_original);
           combobox1.ItemIndex:=0;
           cantidad:=0;
           for f:=0 to NREFS do begin
             if (games_final[ngame].ref[f].nref<>0) then begin
-              if (((main_config.motor=MSCUMM) and ((games_final[ngame].ref[f].nref and NO_SCUMM)=0)) or (main_config.motor=MMSDOS)) then begin
-                combobox1.Items.Add(GAME_DATA_REF[games_final[ngame].ref[f].nref and $ffff].nombre);
+              if (((main_config.motor=MSCUMM) and ((games_final[ngame].ref[f].nref and NO_SCUMM)=0)) or (main_config.motor=MMSDOS) or (main_config.motor=MWIN98)) then begin
+                combobox1.Items.Add(games_final_ref[games_final[ngame].ref[f].nref and $ffff].nombre);
                 cantidad:=cantidad+1;
                 if (games_final[ngame].ref[f].nref and $ff0000)<>0 then
                   case (games_final[ngame].ref[f].nref and $ff0000) of
@@ -562,7 +538,6 @@ begin
         if (main_config.motor=MMSDOS) then image7.visible:=juego_setup(ngame)<>'';
     end;
     comprobar_extras(ngame);
-    button2.Enabled:=not(games_final[ngame].interno) or main_config.leer_fijos;
   end;
   old_game:=ngame;
   //Importante el orden!!
@@ -594,7 +569,6 @@ end;
 procedure TForm1.StringGrid1DrawCell(Sender:TObject;ACol,ARow:LongInt;Rect:TRect;State:TGridDrawState);
 const
   SelectedColor=$ffffe8;
-  AddedColor=$e8ffff;
   BadColor=$e8e8e8;
   ScummColor=$ffe8e8;
 var
@@ -610,8 +584,7 @@ begin
         Brush.Color:=BadColor;
         image8.Visible:=true;
       end else if (games_final[ngame].motor=MSCUMM) then Brush.Color:=ScummColor
-          else if (games_final[ngame].interno or (games_final[ngame].motor=MDSP)) then Brush.Color:=SelectedColor
-            else Brush.Color:=AddedColor;
+          else Brush.Color:=SelectedColor;
       FillRect(Rect);
       TextRect(Rect,Rect.Left+2,Rect.Top+2,Cells[aCol,aRow]);
     end;
@@ -626,16 +599,6 @@ begin
 case key of
   13:if not(estoy_ejecutando) then StringGrid1DblClick(nil)
         else estoy_ejecutando:=false;
-  46:begin //Borrar!
-        estoy_ejecutando:=true;
-        f:=numero_juego;
-        if f=-1 then exit;
-        if games_final[f].interno then begin
-          if MessageDlg(list_error[9],mtWarning,[mbOK]+[mbCancel],0)=2 then exit;
-          games_final[f].mostrar:=false;
-          mostrar_juegos;
-        end else form2.Button3Click(nil);
-     end;
   48..57,65..90:begin
             typed:=typed+lowercase(char(key));
             timer2.Enabled:=false;

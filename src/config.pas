@@ -43,9 +43,6 @@ type
     LabeledEdit12: TLabeledEdit;
     Button15: TButton;
     GroupBox4: TGroupBox;
-    GroupBox6: TGroupBox;
-    CheckBox10: TCheckBox;
-    CheckBox2: TCheckBox;
     Button20: TButton;
     LabeledEdit17: TLabeledEdit;
     Button21: TButton;
@@ -58,11 +55,9 @@ type
     LabeledEdit5: TLabeledEdit;
     LabeledEdit20: TLabeledEdit;
     Button23: TButton;
-    CheckBox1: TCheckBox;
     TabSheet7: TTabSheet;
     LabeledEdit22: TLabeledEdit;
     Button25: TButton;
-    CheckBox3: TCheckBox;
     procedure Button1Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure Button2Click(Sender: TObject);
@@ -81,15 +76,12 @@ type
     procedure Button11Click(Sender: TObject);
     procedure Button12Click(Sender: TObject);
     procedure Button13Click(Sender: TObject);
-    procedure CheckBox10Click(Sender: TObject);
     procedure Button14Click(Sender: TObject);
-    procedure CheckBox2Click(Sender: TObject);
     procedure Button15Click(Sender: TObject);
     procedure Button23Click(Sender: TObject);
     procedure Button20Click(Sender: TObject);
     procedure Button21Click(Sender: TObject);
     procedure Button22Click(Sender: TObject);
-    procedure CheckBox1Click(Sender: TObject);
     procedure Button25Click(Sender: TObject);
   private
     { Private declarations }
@@ -173,14 +165,13 @@ begin
   main_config.config_amiga:=labelededit19.Text;
   main_config.config_dsp:=labelededit20.Text;
   main_config.config_atarise:=labelededit22.Text;
-  form1.button2.Enabled:=main_config.leer_fijos;
+  //form1.button2.Enabled:=main_config.leer_fijos;
   main_config.dir_manual:=labelededit6.Text;
   main_config.dir_mapas:=labelededit7.Text;
   main_config.dir_guias:=labelededit8.Text;
   main_config.dir_zip:=labelededit9.Text;
   main_config.dir_imgs:=labelededit10.Text;
   main_config.dir_mt32:=labelededit11.Text;
-  main_config.descargar_extra:=checkbox3.Checked;
   form4.close;
 end;
 
@@ -261,21 +252,6 @@ dir:=seleccionar_directorio(main_config.dir_mapas);
 if dir<>'' then labelededit7.Text:=dir+'\';
 end;
 
-procedure TForm4.CheckBox10Click(Sender: TObject);
-begin
-  main_config.leer_fijos:=checkbox10.Checked;
-end;
-
-procedure TForm4.CheckBox1Click(Sender: TObject);
-begin
-  main_config.mostrar_todos:=checkbox1.Checked;
-end;
-
-procedure TForm4.CheckBox2Click(Sender: TObject);
-begin
-  main_config.mostrar_anadidos:=checkbox2.Checked;
-end;
-
 procedure TForm4.FormCreate(Sender: TObject);
 begin
   cambiar_idioma_avanzado;
@@ -297,7 +273,6 @@ begin
   idioma_sel:=200;
   seleccionar_idioma;
   cambiar_idioma_principal;
-  cambiar_idioma_grabar;
   cambiar_idioma_avanzado;
   cambiar_idioma_descarga;
 end;
@@ -307,7 +282,6 @@ begin
   idioma_sel:=0;
   idioma_ind:=0;
   cambiar_idioma_principal;
-  cambiar_idioma_grabar;
   cambiar_idioma_avanzado;
   cambiar_idioma_descarga;
 end;
@@ -317,7 +291,6 @@ begin
   idioma_sel:=1;
   idioma_ind:=1;
   cambiar_idioma_principal;
-  cambiar_idioma_grabar;
   cambiar_idioma_avanzado;
   cambiar_idioma_descarga;
 end;
@@ -327,7 +300,6 @@ begin
   idioma_sel:=2;
   idioma_ind:=2;
   cambiar_idioma_principal;
-  cambiar_idioma_grabar;
   cambiar_idioma_avanzado;
   cambiar_idioma_descarga;
 end;
@@ -337,7 +309,6 @@ begin
   idioma_sel:=3;
   idioma_ind:=3;
   cambiar_idioma_principal;
-  cambiar_idioma_grabar;
   cambiar_idioma_avanzado;
   cambiar_idioma_descarga;
 end;
@@ -347,7 +318,6 @@ begin
   idioma_sel:=4;
   idioma_ind:=4;
   cambiar_idioma_principal;
-  cambiar_idioma_grabar;
   cambiar_idioma_avanzado;
   cambiar_idioma_descarga;
 end;

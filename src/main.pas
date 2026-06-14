@@ -11,12 +11,8 @@ procedure ordena_juegos;
 procedure mostrar_juegos;
 function numero_juego:integer;
 procedure abrir_ficheros_separados(nombre_ficheros,ruta_ficheros:string);
-function save_game_accept:boolean;
-procedure save_game_show;
 procedure config_show;
 function seleccionar_directorio(inicial:string):string;
-procedure guardar_juegos_anadidos;
-procedure save_game_poner_cosas;
 procedure PNGBlurEnImage(image:TImage;image_string:string);
 function cambiar_path(cadena:string):string;
 function juego_mal(ngame:integer):boolean;
@@ -39,11 +35,12 @@ const
   MATARIST=5;
   MWIN98=6;
   MWIN3=7;
+  MGUNSTICK=254;
   MDSP=255;
   MAX_GAMES=2000;
   TEMP_DIR='TEMP';
-  VERSION='v0.82β';
-  IMAGE_FADE=0.3;
+  VERSION='v0.83β';
+  BLURFACT=2;
   {$IFDEF IS_DEBUG}
   {$ifndef windows}
   debug_base_dir='/home/leniad/abandon/GamePlayVol1/';
@@ -58,6 +55,14 @@ const
   FRA=$80000;
   ITA=$100000;
   NO_SCUMM=$800000;
+  AG=1;
+  ARCADE=2;
+  TRESD=4;
+  SIMULA=8;
+  SPORT=$10;
+  PUZ=$20;
+  RPG=$40;
+  COCHES=$80;
 
 type
   tipo_ref=record
@@ -81,6 +86,7 @@ type
     extra_param:string;
     mapper:string;
     gus:boolean;
+    gunstick:boolean;
     scumm:boolean;
     cdrom:string;
     memoria:integer;
@@ -92,14 +98,28 @@ type
     map:string;
     guia:string;
     image_name:string;
-    idioma:integer;
     tipo:integer;
     mensaje:string;
-    interno:boolean;
     mal:boolean;
     ref:array[0..NREFS] of tipo_ref;
     motor:byte;
-    mostrar:boolean;
+  end;
+  type
+  tipo_games_ref=record
+    nombre_original:string;
+    nombre:string;
+    dir:string;
+    exec:string;
+    exec_pre:string;
+    segundo_disco:string;
+    ciclos:integer;
+    grafica:string;
+    mapper:string;
+    manual:string;
+    guia:string;
+    setup:string;
+    image_alt:string;
+    mensaje:string;
   end;
   tipo_config=record
      config_dosbox:string;
@@ -110,9 +130,7 @@ type
      config_apple:string;
      config_amiga:string;
      config_atarise:string;
-     mostrar_todos:boolean;
-     leer_fijos:boolean;
-     mostrar_anadidos:boolean;
+     mostrar_funcionan:boolean;
      motor_msdos:byte;
      dir_base:string;
      dir_manual:string;
@@ -129,6 +147,7 @@ type
 var
   orden_games:array[0..(MAX_GAMES-1)] of integer;
   games_final:array[0..(MAX_GAMES-1)] of tipo_final;
+  games_final_ref:array of tipo_games_ref;
   main_config:tipo_config;
   idioma_sel,juego_editado,total_juegos:integer;
   total_scumm,total_apple,total_atari800,total_msdos,total_amiga,total_dsp,total_atarise,total_win98,total_win3:integer;
@@ -137,29 +156,24 @@ var
 
 implementation
 uses {$IFDEF WINDOWS}windows,shellapi,MMSystem{$ELSE}LCLIntf,process{$ENDIF},principal,
-     inifiles,grids,sysutils,forms,idioma_info,games_data,games_info,strutils,dsp_data,
-     config,dialogs,save_game{$ifdef fpc},classes,zipper{$else},zip,uitypes{$endif},
-     games_download,system.ioutils,Vcl.Imaging.pngimage,math,types,games_ref;
+     inifiles,grids,sysutils,forms,idioma_info,strutils,dsp_data,
+     config,dialogs{$ifdef fpc},classes,zipper{$else},zip,uitypes{$endif},
+     games_download,system.ioutils,Vcl.Imaging.pngimage,math,types,System.JSON,
+     mensajes,system.generics.Collections;
 
 const
  RETURN=chr(10);
 
+procedure PNGBlurEnImage(image:TImage;image_string:string);
 type
-  TRGBQuadArray=array[0..$400] of TRGBQuad;
-  PRGBQuadArray=^TRGBQuadArray;
-
   TRGBTripleArray = array[0..$400] of TRGBTriple;
   PRGBTripleArray = ^TRGBTripleArray;
-
-procedure PNGBlurEnImage(image:TImage;image_string:string);
 var
   PNG:TPngImage;
   src,temp,small,blurbmp,finalbmp:graphics.tbitmap;
   x,y,xx,yy,r,g,b,count,smallw,smallh,reduce:integer;
   RowSrc,RowTemp,RowDst:PRGBTripleArray;
   Re:trect;
-const
-  blurfact=3;
 begin
   PNG:=TPngImage.Create;
   src:=graphics.tbitmap.Create;
@@ -249,8 +263,12 @@ var
 begin
 ZipFile:=TZipFile.Create;
 if Zipfile.IsValid(fichero) then begin
+  message_num:=1;
+  form2.show;
+  form2.Update;
   ZipFile.Open(fichero,zmRead);
   ZipFIle.ExtractAll(donde);
+  form2.close;
   ZipFile.Close;
 end;
 ZipFile.Free;
@@ -302,7 +320,7 @@ function juego_dir(ngame:integer):string;
 begin
   juego_dir:=games_final[ngame].dir;
   if (games_final[ngame].ref[0].nref<>0) then begin
-      if form1.ComboBox1.ItemIndex>0 then juego_dir:=GAME_DATA_REF[games_final[ngame].ref[form1.ComboBox1.ItemIndex-1].nref and $ffff].dir;
+      if form1.ComboBox1.ItemIndex>0 then juego_dir:=games_final_ref[games_final[ngame].ref[form1.ComboBox1.ItemIndex-1].nref and $ffff].dir;
   end;
 end;
 
@@ -313,7 +331,7 @@ begin
   juego_exec:=games_final[ngame].exec;
   if (games_final[ngame].ref[0].nref<>0) then begin
       if pos>0 then begin
-        res:=GAME_DATA_REF[games_final[ngame].ref[pos-1].nref and $ffff].exec;
+        res:=games_final_ref[games_final[ngame].ref[pos-1].nref and $ffff].exec;
         if res<>'' then juego_exec:=res;
       end;
   end;
@@ -323,7 +341,7 @@ function juego_setup(ngame:integer):string;
 begin
   juego_setup:=games_final[ngame].setup;
   if (games_final[ngame].ref[0].nref<>0) then begin
-      if form1.ComboBox1.ItemIndex>0 then juego_setup:=GAME_DATA_REF[games_final[ngame].ref[form1.ComboBox1.ItemIndex-1].nref and $ffff].setup;
+      if form1.ComboBox1.ItemIndex>0 then juego_setup:=games_final_ref[games_final[ngame].ref[form1.ComboBox1.ItemIndex-1].nref and $ffff].setup;
   end;
 end;
 
@@ -334,7 +352,7 @@ begin
   juego_imagen:=games_final[ngame].image_name;
   if (games_final[ngame].ref[0].nref<>0) then begin
       if form1.ComboBox1.ItemIndex>0 then begin
-        res:=GAME_DATA_REF[games_final[ngame].ref[form1.ComboBox1.ItemIndex-1].nref and $ffff].image_alt;
+        res:=games_final_ref[games_final[ngame].ref[form1.ComboBox1.ItemIndex-1].nref and $ffff].image_alt;
         if res<>'' then juego_imagen:=res;
       end;
   end;
@@ -410,7 +428,7 @@ while not(salir) do begin
     else fichero_extract:=ruta_ficheros+fichero_cut;
   fichero_cut:=RightStr(fichero_cut,Length(fichero_cut)-posicion);
   existe:=true;
-  if not(fileexists(fichero_extract)) then existe:=descargar_juego(numero_juego);
+  if not(fileexists(fichero_extract)) then existe:=descargar_manual(numero_juego);
   if existe then begin
     {$IFDEF WINDOWS}
     ShellExecute(Application.Handle,'open',pchar(fichero_extract),nil,nil, SW_SHOWNORMAL);
@@ -449,14 +467,16 @@ end;
 
 procedure mostrar_juegos;
 var
-  f,contador,mascara:integer;
+  f,contador,mascara,totales_bien:integer;
   temps:string;
 
 procedure poner_juego_dsp(pos:integer);
 begin
+  form1.stringgrid1.RowCount:=form1.stringgrid1.RowCount+1;
   form1.stringgrid1.Cells[0,contador]:=games_final[orden_games[pos]].nombre;
   form1.stringgrid1.Cells[1,contador]:=inttostr(orden_games[pos]);
   contador:=contador+1;
+  if not(games_final[orden_games[f]].mal) then totales_bien:=totales_bien+1;
 end;
 
 procedure poner_juego_motor(pos:integer);
@@ -467,9 +487,11 @@ motor_final:=main_config.motor;
 if ((main_config.motor=MSCUMM) and games_final[orden_games[pos]].scumm) then motor_final:=MMSDOS;
 if (games_final[orden_games[pos]].motor=motor_final) then begin
   if (games_final[orden_games[f]].tipo and mascara)<>0 then begin
+    form1.stringgrid1.RowCount:=form1.stringgrid1.RowCount+1;
     form1.stringgrid1.Cells[0,contador]:=games_final[orden_games[pos]].nombre;
     form1.stringgrid1.Cells[1,contador]:=inttostr(orden_games[pos]);
     contador:=contador+1;
+    if not(games_final[orden_games[f]].mal) then totales_bien:=totales_bien+1;
   end;
 end;
 end;
@@ -479,16 +501,22 @@ if total_juegos=0 then exit;
 form1.stringgrid1.RowCount:=total_juegos;
 form1.Timer1.Enabled:=false;
 contador:=0;
+totales_bien:=0;
+form1.stringgrid1.Cells[0,0]:='';
+form1.stringgrid1.Cells[1,0]:='-1';
 for f:=0 to (total_juegos-1) do begin
   //DSP
   if (games_final[orden_games[f]].motor=MDSP) then begin
     if main_config.motor<>MDSP then continue;
-    poner_juego_dsp(f);
+    if main_config.mostrar_funcionan then begin
+      if not(games_final[orden_games[f]].mal) then poner_juego_dsp(f)
+    end else poner_juego_dsp(f);
   end else begin //Resto
     mascara:=AG*byte(form1.checkbox3.Checked)+ARCADE*byte(form1.checkbox16.Checked)+TRESD*byte(form1.checkbox6.Checked)+SIMULA*byte(form1.checkbox4.Checked)+SPORT*byte(form1.checkbox5.Checked)+PUZ*byte(form1.checkbox7.Checked)+RPG*byte(form1.checkbox8.Checked)+COCHES*byte(form1.checkbox17.Checked);
     if ((mascara=0) or (main_config.motor=MSCUMM)) then mascara:=$ffffff;
-    if main_config.mostrar_todos then poner_juego_motor(f)
-      else if games_final[orden_games[f]].mostrar then poner_juego_motor(f);
+    if main_config.mostrar_funcionan then begin
+      if not(games_final[orden_games[f]].mal) then poner_juego_motor(f);
+    end else poner_juego_motor(f);
   end;
 end;
 case main_config.motor of
@@ -502,8 +530,8 @@ case main_config.motor of
     MWIN3:temps:=inttostr(total_win3);
     MDSP:temps:=inttostr(total_dsp);
 end;
-form1.Label5.Caption:='TOTAL: '+temps+'/'+inttostr(contador);
 form1.stringgrid1.RowCount:=contador;
+form1.Label5.Caption:='TOTAL: '+inttostr(totales_bien)+'/'+temps;
 form1.StringGrid1Click(nil);
 if form1.Visible then form1.StringGrid1.SetFocus;
 end;
@@ -614,10 +642,13 @@ end;
 comprobar_si_existe:=res;
 end;
 var
-  f,h:integer;
-  games_file:textfile;
-  temps,juego:string;
+  f,h,tempi:integer;
+  temps:string;
   mal:boolean;
+  RootObj:TJSONObject;
+  JSONValue:TJSONValue;
+  games,games_ref,ref,version:TJSONArray;
+  gameobj:TJSONObject;
 begin
 total_msdos:=0;
 total_scumm:=0;
@@ -628,49 +659,92 @@ total_dsp:=0;
 total_atarise:=0;
 total_win98:=0;
 //Primero los fijos...
-for f:=0 to (GAME_TOTAL-1) do begin
-  games_final[f].nombre:=GAME_DATA[f].nombre;
-  games_final[f].dir:=GAME_DATA[f].dir;
-  games_final[f].exec:=GAME_DATA[f].exec;
-  games_final[f].loadfix:=GAME_DATA[f].loadfix;
-  games_final[f].params:=GAME_DATA[f].params;
-  games_final[f].exec_pre:=GAME_DATA[f].exec_pre;
-  games_final[f].exec_post:=GAME_DATA[f].exec_post;
-  games_final[f].segundo_disco:=GAME_DATA[f].segundo_disco;
-  games_final[f].tercer_disco:=GAME_DATA[f].tercer_disco;
-  games_final[f].cuarto_disco:=GAME_DATA[f].cuarto_disco;
-  games_final[f].ciclos:=GAME_DATA[f].ciclos;
-  games_final[f].grafica:=GAME_DATA[f].grafica;
-  games_final[f].extra_param:=GAME_DATA[f].extra_param;
-  games_final[f].mapper:=GAME_DATA[f].mapper;
-  games_final[f].gus:=GAME_DATA[f].gus;
-  games_final[f].scumm:=GAME_DATA[f].scumm;
-  games_final[f].cdrom:=GAME_DATA[f].cdrom;
-  games_final[f].memoria:=GAME_DATA[f].memoria;
-  games_final[f].setup:=GAME_DATA[f].setup;
-  //ES IMPORTANTE ESTE ORDEN!!!
-  for h:=0 to NREFS do begin
-    if (GAME_DATA[f].refs[h]<>0) then begin
-      games_final[f].ref[h].nref:=GAME_DATA[f].refs[h];
-      games_final[f].ref[h].mal:=comprobar_si_existe(f,GAME_DATA_REF[GAME_DATA[f].refs[h] and $ffff].dir,games_final[f].ref[h].zip,h+1);
+if not(fileexists(main_config.dir_base+'games.json')) then begin
+  if MessageDlg(list_descarga[4],mtWarning,[mbOK]+[mbCancel],0)=2 then exit;
+  descargar_juego_sin_confirmar(0);
+  if not(fileexists(main_config.dir_base+'games.json')) then exit;
+end;
+JSONValue:=TJSONObject.ParseJSONValue(TFile.ReadAllText(main_config.dir_base+'games.json',TEncoding.UTF8));
+RootObj:=JSONValue as TJSONObject;
+version:=RootObj.GetValue<TJSONArray>('version');
+if version.Count=1 then begin
+  gameobj:=version.Items[0] as TJSONObject;
+  temps:=gameobj.GetValue<string>('version');
+  tempi:=strtoint(comprobar_version_lista);
+  if tempi>strtoint(temps) then begin
+    if MessageDlg(list_descarga[5],mtWarning,[mbOK]+[mbCancel],0)=1 then begin
+      descargar_juego_sin_confirmar(0);
     end;
   end;
-  mal:=comprobar_si_existe(f,GAME_DATA[f].dir,games_final[f].zip,0);
+end;
+JSONValue.free;
+JSONValue:=TJSONObject.ParseJSONValue(TFile.ReadAllText(main_config.dir_base+'games.json',TEncoding.UTF8));
+RootObj:=JSONValue as TJSONObject;
+games:=RootObj.GetValue<TJSONArray>('games');
+games_ref:=RootObj.GetValue<TJSONArray>('games_ref');
+setlength(games_final_ref,games_ref.Count+1);
+for f:=0 to (games_ref.Count-1) do begin
+  gameobj:=games_ref.Items[f] as TJSONObject;
+  games_final_ref[f+1].nombre_original:=gameobj.GetValue<string>('nombre_original');
+  games_final_ref[f+1].nombre:=gameobj.GetValue<string>('nombre');
+  games_final_ref[f+1].dir:=gameobj.GetValue<string>('dir');
+  games_final_ref[f+1].exec:=gameobj.GetValue<string>('exec');
+  games_final_ref[f+1].exec_pre:=gameobj.GetValue<string>('exec_pre');
+  games_final_ref[f+1].segundo_disco:=gameobj.GetValue<string>('segundo_disco');
+  games_final_ref[f+1].ciclos:=gameobj.GetValue<integer>('ciclos');
+  games_final_ref[f+1].grafica:=gameobj.GetValue<string>('grafica');
+  games_final_ref[f+1].mapper:=gameobj.GetValue<string>('mapper');
+  games_final_ref[f+1].manual:=gameobj.GetValue<string>('manual');
+  games_final_ref[f+1].guia:=gameobj.GetValue<string>('guia');
+  games_final_ref[f+1].setup:=gameobj.GetValue<string>('setup');
+  games_final_ref[f+1].image_alt:=gameobj.GetValue<string>('image_alt');
+  games_final_ref[f+1].mensaje:=gameobj.GetValue<string>('mensaje');
+end;
+for f:=0 to (games.Count-1) do begin
+  gameobj:=games.Items[f] as TJSONObject;
+  games_final[f].nombre:=gameobj.GetValue<string>('nombre');
+  games_final[f].dir:=gameobj.GetValue<string>('dir');
+  games_final[f].exec:=gameobj.GetValue<string>('exec');
+  games_final[f].loadfix:=gameobj.GetValue<boolean>('loadfix');
+  games_final[f].params:=gameobj.GetValue<string>('params');
+  games_final[f].exec_pre:=gameobj.GetValue<string>('exec_pre');
+  games_final[f].exec_post:=gameobj.GetValue<string>('exec_post');
+  games_final[f].segundo_disco:=gameobj.GetValue<string>('segundo_disco');
+  games_final[f].tercer_disco:=gameobj.GetValue<string>('tercer_disco');
+  games_final[f].cuarto_disco:=gameobj.GetValue<string>('cuarto_disco');
+  games_final[f].ciclos:=gameobj.GetValue<integer>('ciclos');
+  games_final[f].grafica:=gameobj.GetValue<string>('grafica');
+  games_final[f].extra_param:=gameobj.GetValue<string>('extra_param');
+  games_final[f].mapper:=gameobj.GetValue<string>('mapper');
+  games_final[f].gus:=gameobj.GetValue<boolean>('gus');
+  games_final[f].gunstick:=gameobj.GetValue<boolean>('gunstick');
+  games_final[f].scumm:=gameobj.GetValue<boolean>('scumm');
+  games_final[f].cdrom:=gameobj.GetValue<string>('cdrom');
+  games_final[f].memoria:=gameobj.GetValue<integer>('memoria');
+  games_final[f].setup:=gameobj.GetValue<string>('setup');
+  //ES IMPORTANTE ESTE ORDEN!!!
+  if gameobj.tryGetValue<TJSONArray>('refs',ref) then begin
+    ref:=gameobj.GetValue<TJSONArray>('refs');
+    for h:=0 to NREFS do begin
+      tempi:=strtoint(ref.Items[h].value);
+      if (tempi<>0) then begin
+        games_final[f].ref[h].nref:=tempi;
+        games_final[f].ref[h].mal:=comprobar_si_existe(f,games_final_ref[tempi and $ffff].dir,games_final[f].ref[h].zip,h+1);
+      end;
+    end;
+  end;
+  mal:=comprobar_si_existe(f,games_final[f].dir,games_final[f].zip,0);
   games_final[f].mal:=mal;
-  games_final[f].motor:=GAME_DATA[f].motor;
-  games_final[f].year:=GAME_INFO[f].year;
-  games_final[f].company:=GAME_INFO[f].company;
-  games_final[f].manual:=GAME_INFO[f].manual;
-  games_final[f].map:=GAME_INFO[f].map;
-  games_final[f].guia:=GAME_INFO[f].guia;
-  games_final[f].image_name:=GAME_INFO[f].image_name;
-  games_final[f].idioma:=0;
-  games_final[f].tipo:=GAME_INFO[f].tipo;
-  games_final[f].mensaje:=GAME_INFO[f].mensaje;
-  games_final[f].interno:=true;
-  games_final[f].mostrar:=true;
-  if not(mal) then begin
-    case games_final[f].motor of
+  games_final[f].motor:=gameobj.GetValue<byte>('motor');
+  games_final[f].year:=gameobj.GetValue<string>('year');
+  games_final[f].company:=gameobj.GetValue<string>('company');
+  games_final[f].manual:=gameobj.GetValue<string>('manual');
+  games_final[f].map:=gameobj.GetValue<string>('map');
+  games_final[f].guia:=gameobj.GetValue<string>('guia');
+  games_final[f].image_name:=gameobj.GetValue<string>('image_name');
+  games_final[f].tipo:=gameobj.GetValue<integer>('tipo');
+  games_final[f].mensaje:=gameobj.GetValue<string>('mensaje');
+  case games_final[f].motor of
       MMSDOS:begin
                 total_msdos:=total_msdos+1;
                 if games_final[f].scumm then total_scumm:=total_scumm+1;
@@ -682,11 +756,11 @@ for f:=0 to (GAME_TOTAL-1) do begin
       MATARIST:total_atarise:=total_atarise+1;
       MWIN98:total_win98:=total_win98+1;
       MWIN3:total_win3:=total_win3+1;
-    end;
   end;
 end;
+total_juegos:=games.Count;
+JSONValue.free;
 //Juegos DSP
-total_juegos:=GAME_TOTAL;
 for f:=0 to (GAME_TOTAL_DSP-1) do begin
  games_final[total_juegos].nombre:=GAME_DATA_DSP[f].nombre;
  games_final[total_juegos].dir:=GAME_DATA_DSP[f].dir;
@@ -694,104 +768,15 @@ for f:=0 to (GAME_TOTAL_DSP-1) do begin
  games_final[total_juegos].ciclos:=GAME_DATA_DSP[f].ciclos;
  games_final[total_juegos].year:=GAME_DATA_DSP[f].extra_param;
  games_final[total_juegos].motor:=MDSP;
- games_final[total_juegos].interno:=true;
  temps:=games_final[total_juegos].dir+'.zip';
- mal:=true;
  if temps<>'.zip' then begin
     mal:=not(comprobar_si_existe_fichero(dir_dsp+'roms',temps,false));
     games_final[total_juegos].mal:=mal;
     games_final[total_juegos].dir:=StringReplace(temps,'.zip','',[]);
  end;
- if not(mal) then total_dsp:=total_dsp+1;
+ total_dsp:=total_dsp+1;
  total_juegos:=total_juegos+1;
 end;
-//Y ahora los añadidos
-{$I-}
-if fileexists(main_config.dir_base+'extra_games.info') then begin
-  AssignFile(games_file,main_config.dir_base+'extra_games.info');
-  reset(games_file);
-  while not(eof(games_file)) do begin
-    Readln(games_file,juego);
-    games_final[total_juegos].nombre:=sacar_datos(juego);
-    games_final[total_juegos].dir:=sacar_datos(juego);
-    games_final[total_juegos].exec:=sacar_datos(juego);
-    games_final[total_juegos].params:=sacar_datos(juego);
-    games_final[total_juegos].exec_pre:=sacar_datos(juego);
-    games_final[total_juegos].exec_post:=sacar_datos(juego);
-    games_final[total_juegos].segundo_disco:=sacar_datos(juego);
-    games_final[total_juegos].ciclos:=sacar_numero(sacar_datos(juego));
-    games_final[total_juegos].grafica:=sacar_datos(juego);
-    games_final[total_juegos].extra_param:=sacar_datos(juego);
-    games_final[total_juegos].mapper:=sacar_datos(juego);
-    games_final[total_juegos].gus:=sacar_numero(sacar_datos(juego))<>0;
-    games_final[total_juegos].scumm:=sacar_numero(sacar_datos(juego))<>0;
-    games_final[total_juegos].year:=sacar_datos(juego);
-    games_final[total_juegos].company:=sacar_datos(juego);
-    games_final[total_juegos].manual:=sacar_datos(juego);
-    games_final[total_juegos].map:=sacar_datos(juego);
-    games_final[total_juegos].guia:=sacar_datos(juego);
-    games_final[total_juegos].image_name:=sacar_datos(juego);
-    games_final[total_juegos].idioma:=sacar_numero(sacar_datos(juego));
-    games_final[total_juegos].tipo:=sacar_numero(sacar_datos(juego));
-    games_final[total_juegos].cdrom:=sacar_datos(juego);
-    games_final[total_juegos].memoria:=sacar_numero(sacar_datos(juego));
-    games_final[total_juegos].setup:=sacar_datos(juego);
-    games_final[total_juegos].zip:=sacar_numero(sacar_datos(juego))<>0; //Lo dejo para no romper la compatibilidad
-    games_final[total_juegos].motor:=sacar_numero(sacar_datos(juego));
-    games_final[total_juegos].loadfix:=sacar_numero(sacar_datos(juego))<>0;
-    games_final[total_juegos].interno:=false;
-    //Primero compruebo si existe el directorio y el fichero ejecutable
-    juego:=games_final[total_juegos].exec;
-    mal:=not(comprobar_si_existe_fichero(main_config.dir_base+games_final[total_juegos].dir,juego,false));
-    //No existe, pruebo si es un ZIP
-    if mal then begin
-      mal:=not(comprobar_si_existe_fichero(main_config.dir_zip+games_final[total_juegos].dir,juego,true));
-      if not(mal) then games_final[total_juegos].zip:=true;
-    end;
-    games_final[total_juegos].mal:=mal;
-    if not(mal) then begin
-      case games_final[total_juegos].motor of
-        MMSDOS:begin
-                  total_msdos:=total_msdos+1;
-                  if games_final[total_juegos].scumm then total_scumm:=total_scumm+1;
-               end;
-        MSCUMM:total_scumm:=total_scumm+1;
-        MAPPLE2:total_apple:=total_apple+1;
-        MATARI8:total_atari800:=total_atari800+1;
-        MAMIGA:total_amiga:=total_amiga+1;
-        MATARIST:total_atarise:=total_atarise+1;
-        MWIN98:total_win98:=total_win98+1;
-        MWIN3:total_win3:=total_win3+1;
-      end;
-    end;
-    total_juegos:=total_juegos+1;
-end;
-closefile(games_file);
-end;
-{$I+}
-end;
-
-procedure juegos_borrados;
-var
-  f:integer;
-  games_file:textfile;
-  tmps:string;
-begin
-//Y ahora los juegos que debo mostrar...
-{$I-}
-if fileexists(main_config.dir_base+'show_games.info') then begin
-  AssignFile(games_file,main_config.dir_base+'show_games.info');
-  reset(games_file);
-  for f:=0 to (total_juegos-1) do begin
-    if ((games_final[f].motor<>MDSP) and games_final[f].interno) then begin
-      Readln(games_file,tmps);
-      games_final[f].mostrar:=(tmps[1]='1');
-      if eof(games_file) then break;
-    end;
-  end;
-  closefile(games_file);
-end;
-{$I+}
 end;
 
 procedure ordena_juegos;
@@ -822,6 +807,7 @@ begin
     MAMIGA:fichero:=main_config.config_amiga;
     MATARIST:fichero:=main_config.config_atarise;
     MDSP:fichero:=main_config.config_dsp;
+    MGUNSTICK:fichero:=main_config.dir_base+'extras\dosboxgs\dosbox.conf'
   end;
   {$I-}
   if fileexists(fichero) then begin
@@ -857,13 +843,6 @@ begin
   //Leer las opciones
   if fileexists(main_config.dir_base+'gameplay.ini') then begin
     fich_ini:=Tinifile.Create(main_config.dir_base+'gameplay.ini');
-    //Filtros idioma
-    //form1.checkbox18.Checked:=(fich_ini.readinteger('filtros','gen',1)<>0);
-    //form1.checkbox9.Checked:=(fich_ini.readinteger('filtros','esp',1)<>0);
-    //form1.checkbox12.Checked:=(fich_ini.readinteger('filtros','ing',1)<>0);
-    //form1.checkbox10.Checked:=(fich_ini.readinteger('filtros','ale',1)<>0);
-    //form1.checkbox11.Checked:=(fich_ini.readinteger('filtros','fra',1)<>0);
-    //form1.checkbox13.Checked:=(fich_ini.readinteger('filtros','ita',1)<>0);
     //Filtros tipo
     form1.checkbox3.Checked:=(fich_ini.readinteger('filtros','ag',1)<>0);
     form1.checkbox16.Checked:=(fich_ini.readinteger('filtros','arcade',1)<>0);
@@ -900,9 +879,8 @@ begin
     main_config.config_apple:=fich_ini.ReadString('opciones','config_apple',main_config.dir_base+'extras\config\apple2.ini');
     main_config.config_amiga:=fich_ini.ReadString('opciones','config_amiga',main_config.dir_base+'extras\winuae\winuae.ini');
     main_config.config_atarise:=fich_ini.ReadString('opciones','config_atarise',main_config.dir_base+'extras\config\hatari.cfg');
-    main_config.leer_fijos:=(fich_ini.readinteger('opciones','leer_fijos',0)<>0);
-    main_config.mostrar_todos:=(fich_ini.readinteger('opciones','mostrar_todos',0)<>0);
-    main_config.mostrar_anadidos:=(fich_ini.readinteger('opciones','mostrar_anadidos',0)<>0);
+    main_config.mostrar_funcionan:=(fich_ini.readinteger('opciones','mostrar_todos',0)<>0);
+    form1.checkbox9.Checked:=main_config.mostrar_funcionan;
     main_config.motor_msdos:=fich_ini.ReadInteger('opciones','motor_msdos',1);
     main_config.apple2_joy:=(fich_ini.readinteger('opciones','apple2_joy',0)<>0);
     form1.checkbox19.Checked:=fich_ini.readinteger('opciones','amiga_vertical',0)<>0;
@@ -914,16 +892,15 @@ begin
     main_config.dir_mt32:=fich_ini.ReadString('opciones','dir_mt32',main_config.dir_base+'extras\mt32');
     main_config.dir_zip:=fich_ini.ReadString('opciones','dir_zips',main_config.dir_base+'zip_games\');
     main_config.descargar_extra:=fich_ini.readinteger('opciones','descargar_extras',1)<>0;
+    form1.checkbox10.Checked:=main_config.descargar_extra;
     fich_ini.Free;
   end else begin
     main_config.motor:=MMSDOS;
     form1.radiobutton1.Checked:=true;
-    form1.groupbox8.visible:=false;
+    //form1.groupbox8.visible:=false;
     form1.checkbox15.Checked:=false;
     idioma_sel:=200;
-    main_config.leer_fijos:=false;
-    main_config.mostrar_todos:=false;
-    main_config.mostrar_anadidos:=false;
+    main_config.mostrar_funcionan:=false;
     {$ifdef windows}
     main_config.motor_msdos:=1;
     {$else}
@@ -952,6 +929,7 @@ begin
     form1.checkbox20.Checked:=false;
     form1.checkbox15.Checked:=false;
     main_config.descargar_extra:=true;
+    form1.CheckBox10.Checked:=true;
     main_config.dir_manual:=main_config.dir_base+'extras\manual\';
     main_config.dir_mapas:=main_config.dir_base+'extras\maps\';
     main_config.dir_guias:=main_config.dir_base+'extras\walk\';
@@ -1006,12 +984,8 @@ begin
     form1.radiobutton9.enabled:=false;
     form1.radiobutton2.Checked:=true;
   end;
-  //Meto los juegos
-  pillar_juegos;
-  //Leer los borrados
-  juegos_borrados;
-  //Los ordeno...
-  ordena_juegos;
+  estoy_ejecutando:=false;
+  ejecutar_setup:=false;
   //Lo pongo bonito y lo muestro todo
   form1.stringgrid1.ColWidths[0]:=form1.stringgrid1.Width-30;
   {$ifndef fpc}
@@ -1019,58 +993,10 @@ begin
   {$else}
   form1.stringgrid1.ColWidths[1]:=0;
   {$endif}
-  mostrar_juegos;
   //Selecciono el primero
   form1.stringgrid1.row:=0;
   if main_config.motor_msdos=0 then form1.radiobutton7.Checked:=true
     else form1.RadioButton8.Checked:=true;
-  estoy_ejecutando:=false;
-  ejecutar_setup:=false;
-end;
-
-procedure guardar_juegos_anadidos;
-var
-  games_file:textfile;
-  f:integer;
-begin
-if DirectoryExists(main_config.dir_base) then begin
-  //grabo los juegos
-  {$I-}
-  AssignFile(games_file,main_config.dir_base+'extra_games.info');
-  ReWrite(games_file);
-  for f:=0 to (total_juegos-1) do begin
-    if (not(games_final[f].interno) and (games_final[f].motor<>MDSP)) then begin
-      write(games_file,games_final[f].nombre+';');
-      write(games_file,games_final[f].dir+';');
-      write(games_file,games_final[f].exec+';');
-      write(games_file,games_final[f].params+';');
-      write(games_file,games_final[f].exec_pre+';');
-      write(games_file,games_final[f].exec_post+';');
-      write(games_file,games_final[f].segundo_disco+';');
-      write(games_file,inttostr(games_final[f].ciclos)+';');
-      write(games_file,games_final[f].grafica+';');
-      write(games_file,games_final[f].extra_param+';');
-      write(games_file,games_final[f].mapper+';');
-      write(games_file,inttostr(byte(games_final[f].gus))+';');
-      write(games_file,inttostr(byte(games_final[f].scumm))+';');
-      write(games_file,games_final[f].year+';');
-      write(games_file,games_final[f].company+';');
-      write(games_file,games_final[f].manual+';');
-      write(games_file,games_final[f].map+';');
-      write(games_file,games_final[f].guia+';');
-      write(games_file,games_final[f].image_name+';');
-      write(games_file,inttostr(games_final[f].idioma)+';');
-      write(games_file,inttostr(games_final[f].tipo)+';');
-      write(games_file,games_final[f].cdrom+';');
-      write(games_file,inttostr(games_final[f].memoria)+';');
-      write(games_file,games_final[f].setup+';');
-      write(games_file,inttostr(byte(games_final[f].zip))+';');
-      write(games_file,inttostr(games_final[f].motor));
-    end;
-  end;
-  CloseFile(games_file);
-  {$I+}
-end;
 end;
 
 procedure delete_dir(nombre:string);
@@ -1097,8 +1023,6 @@ end;
 procedure form_principal_close;
 var
   fich_ini:Tinifile;
-  f:integer;
-  games_file:textfile;
   {$IFNDEF WINDOWS}
   process:tprocess;
   {$ENDIF}
@@ -1112,26 +1036,9 @@ deletefile(main_config.dir_base+'extras\win98\win98.img');
 deletefile(main_config.dir_base+'extras\win3\win3.img');
 delete_dir('DELUXE');
 if DirectoryExists(main_config.dir_base) then begin
-  AssignFile(games_file,main_config.dir_base+'show_games.info');
-  rewrite(games_file);
-  for f:=0 to (total_juegos-1) do begin
-    if ((games_final[f].motor<>MDSP) and games_final[f].interno) then begin
-      writeln(games_file,inttostr(byte(games_final[f].mostrar)));
-    end;
-  end;
-  closefile(games_file);
   {$I-}
-  //grabo los juegos
-  guardar_juegos_anadidos;
   //grabo las opciones
   fich_ini:=Tinifile.Create(main_config.dir_base+'gameplay.ini');
-  //Filtros idioma
-  //fich_ini.WriteInteger('filtros','esp',byte(form1.checkbox9.Checked));
-  //fich_ini.WriteInteger('filtros','ing',byte(form1.checkbox12.Checked));
-  //fich_ini.WriteInteger('filtros','ale',byte(form1.checkbox10.Checked));
-  //fich_ini.WriteInteger('filtros','fra',byte(form1.checkbox11.Checked));
-  //fich_ini.WriteInteger('filtros','ita',byte(form1.checkbox13.Checked));
-  //fich_ini.WriteInteger('filtros','gen',byte(form1.checkbox18.Checked));
   //Filtros tipo
   fich_ini.WriteInteger('filtros','ag',byte(form1.checkbox3.Checked));
   fich_ini.WriteInteger('filtros','arcade',byte(form1.checkbox16.Checked));
@@ -1157,9 +1064,7 @@ if DirectoryExists(main_config.dir_base) then begin
   fich_ini.WriteString('opciones','config_apple',main_config.config_apple);
   fich_ini.WriteString('opciones','config_amiga',main_config.config_amiga);
   fich_ini.WriteString('opciones','config_atarise',main_config.config_atarise);
-  fich_ini.WriteInteger('opciones','leer_fijos',byte(main_config.leer_fijos));
-  fich_ini.WriteInteger('opciones','mostrar_todos',byte(main_config.mostrar_todos));
-  fich_ini.WriteInteger('opciones','mostrar_anadidos',byte(main_config.mostrar_anadidos));
+  fich_ini.WriteInteger('opciones','mostrar_todos',byte(main_config.mostrar_funcionan));
   fich_ini.WriteInteger('opciones','apple2_joy',byte(main_config.apple2_joy));
   fich_ini.WriteInteger('opciones','amiga_vertical',byte(form1.checkbox19.Checked));
   fich_ini.WriteInteger('opciones','amiga_horizontal',byte(form1.checkbox20.Checked));
@@ -1183,7 +1088,7 @@ begin
   juego_grafica:=games_final[ngame].grafica;
   if (games_final[ngame].ref[0].nref<>0) then begin
       if form1.ComboBox1.ItemIndex>0 then begin
-        res:=GAME_DATA_REF[games_final[ngame].ref[form1.ComboBox1.ItemIndex-1].nref and $ffff].grafica;
+        res:=games_final_ref[games_final[ngame].ref[form1.ComboBox1.ItemIndex-1].nref and $ffff].grafica;
         if res<>'' then juego_grafica:=res;
       end;
   end;
@@ -1193,7 +1098,7 @@ function juego_mapper(ngame:integer):string;
 begin
   juego_mapper:=games_final[ngame].mapper;
   if (games_final[ngame].ref[0].nref<>0) then begin
-      if form1.ComboBox1.ItemIndex>0 then juego_mapper:=GAME_DATA_REF[games_final[ngame].ref[form1.ComboBox1.ItemIndex-1].nref and $ffff].mapper;
+      if form1.ComboBox1.ItemIndex>0 then juego_mapper:=games_final_ref[games_final[ngame].ref[form1.ComboBox1.ItemIndex-1].nref and $ffff].mapper;
   end;
 end;
 
@@ -1201,7 +1106,15 @@ function juego_mensaje(ngame:integer):string;
 begin
   juego_mensaje:=games_final[ngame].mensaje;
   if (games_final[ngame].ref[0].nref<>0) then begin
-      if form1.ComboBox1.ItemIndex<>0 then juego_mensaje:=GAME_DATA_REF[games_final[ngame].ref[form1.ComboBox1.ItemIndex-1].nref and $ffff].mensaje;
+      if form1.ComboBox1.ItemIndex<>0 then juego_mensaje:=games_final_ref[games_final[ngame].ref[form1.ComboBox1.ItemIndex-1].nref and $ffff].mensaje;
+  end;
+end;
+
+function juego_gunstick(ngame:integer):boolean;
+begin
+  juego_gunstick:=games_final[ngame].gunstick;
+  if (games_final[ngame].ref[0].nref<>0) then begin
+      if form1.ComboBox1.ItemIndex<>0 then juego_gunstick:=false;
   end;
 end;
 
@@ -1212,7 +1125,7 @@ begin
   juego_ciclos:=games_final[ngame].ciclos;
   if (games_final[ngame].ref[0].nref<>0) then begin
       if form1.ComboBox1.ItemIndex<>0 then begin
-        res:=GAME_DATA_REF[games_final[ngame].ref[form1.ComboBox1.ItemIndex-1].nref and $ffff].ciclos;
+        res:=games_final_ref[games_final[ngame].ref[form1.ComboBox1.ItemIndex-1].nref and $ffff].ciclos;
         if res<>0 then juego_ciclos:=res;
       end;
   end;
@@ -1225,7 +1138,7 @@ begin
   juego_exec_pre:=games_final[ngame].exec_pre;
   if (games_final[ngame].ref[0].nref<>0) then begin
       if form1.ComboBox1.ItemIndex>0 then begin
-        res:=GAME_DATA_REF[games_final[ngame].ref[form1.ComboBox1.ItemIndex-1].nref and $ffff].exec_pre;
+        res:=games_final_ref[games_final[ngame].ref[form1.ComboBox1.ItemIndex-1].nref and $ffff].exec_pre;
         if res<>'' then juego_exec_pre:=res;
       end;
   end;
@@ -1243,7 +1156,7 @@ function juego_segundo_disco(ngame:integer):string;
 begin
   juego_segundo_disco:=games_final[ngame].segundo_disco;
   if (games_final[ngame].ref[0].nref<>0) then begin
-      if form1.ComboBox1.ItemIndex>0 then juego_segundo_disco:=GAME_DATA_REF[games_final[ngame].ref[form1.ComboBox1.ItemIndex-1].nref and $ffff].segundo_disco;
+      if form1.ComboBox1.ItemIndex>0 then juego_segundo_disco:=games_final_ref[games_final[ngame].ref[form1.ComboBox1.ItemIndex-1].nref and $ffff].segundo_disco;
   end;
 end;
 
@@ -1260,12 +1173,7 @@ ngame:=numero_juego;
 if ngame=-1 then exit;
 estoy_ejecutando:=true;
 if juego_mal(ngame) then begin
-  if games_final[ngame].interno then begin
-    if not(descargar_juego(ngame)) then exit;
-  end else begin
-    MessageDlg(list_error[7],mtError,[mbOk],0);
-    exit;
-  end;
+  if not(descargar_juego(ngame)) then exit;
 end;
 //DSP Emulator
 if main_config.motor=MDSP then begin
@@ -1500,12 +1408,22 @@ case main_config.motor of
       exec_c_param:='-c "boot c:\'+exec_dir+'\'+temp_exec+exec_sd+'"';
       exec_memoria:='1';
     end else begin
-      exec_c_param:='-c c:\TEMP\start.bat'
+      exec_c_param:='-c c:\'+TEMP_DIR+'\start.bat'
     end;
     //Tengo que quitar la barra del final o DosBox se marea...
     exec_base:=system.copy(main_config.dir_base,1,length(main_config.dir_base)-1);
     //Lo monto todo y ejecuto
-    param_string:='"'+exec_base+'" '+cambiar_path(exec_dosbox_extra_config)+' --conf "'+cambiar_path(main_config.dir_base+TEMP_DIR+'\gameplay.conf"')+' --noprimaryconf '+exec_mapper+' '+exec_roland+' '+exec_video+' '+exec_extra+' '+exec_sound+' '+exec_gus+' '+exec_fullscreen+' '+exec_ciclos+' '+exec_c_param+' '+exec_parametros;
+    if juego_gunstick(ngame) then begin
+      exec_string:=main_config.dir_base+'extras\dosboxgs\dosbox.exe';
+      if ContainsText(temp_exec,'.img') then exec_c_param:='-c "boot c:\'+exec_dir+'\'+temp_exec+exec_sd+'"'
+        else exec_c_param:='-c c:\'+TEMP_DIR+'\start.bat';
+      exec_dosbox_extra_config:='-noconsole -exit -conf '+main_config.dir_base+'extras\dosboxgs\dosbox.conf -conf '+main_config.dir_base+TEMP_DIR+'\gameplay.conf '+exec_c_param;
+      cambiar_ini(MGUNSTICK,'cpu','cycles',inttostr(juego_ciclos(ngame)));
+      if form1.checkbox1.Checked then exec_fullscreen:='true'
+        else exec_fullscreen:='false';
+      cambiar_ini(MGUNSTICK,'sdl','fullscreen',exec_fullscreen);
+      param_string:=exec_base+' '+exec_dosbox_extra_config;
+    end else param_string:='"'+exec_base+'" '+cambiar_path(exec_dosbox_extra_config)+' --conf "'+cambiar_path(main_config.dir_base+TEMP_DIR+'\gameplay.conf"')+' --noprimaryconf '+exec_mapper+' '+exec_roland+' '+exec_video+' '+exec_extra+' '+exec_sound+' '+exec_gus+' '+exec_fullscreen+' '+exec_ciclos+' '+exec_c_param+' '+exec_parametros;
     {$IFDEF WINDOWS}
     ShellExecute(form1.Handle,'open',pchar(exec_string),pchar(param_string),nil,SW_SHOWNORMAL);
     {$ELSE}
@@ -1592,7 +1510,9 @@ case main_config.motor of
       else exec_sound:=' -set nosound=true ';
      if games_final[ngame].cdrom<>'' then cd_rom_dir:=' -c "imgmount e: '+main_config.dir_base+exec_dir+'\'+games_final[ngame].cdrom+'"'
       else cd_rom_dir:='';
-     temps:='-c "imgmount c: '+main_config.dir_base+'extras\win98\win98.img" -c "imgmount d: '+main_config.dir_base+exec_dir+'\'+games_final[ngame].exec+'" '+cd_rom_dir+' -c "boot c:" ';
+     exec_pre:=juego_exec_pre(ngame);
+     if exec_pre<>'' then exec_pre:=' -c "'+exec_pre+'"';
+     temps:='-c "imgmount c: '+main_config.dir_base+'extras\win98\win98.img" -c "imgmount d: '+main_config.dir_base+exec_dir+'\'+games_final[ngame].exec+'" '+cd_rom_dir+exec_pre+' -c "boot c:" ';
      param_string:=temps+exec_dosbox_extra_config+exec_parametros+exec_fullscreen+exec_sound+' '+exec_extra;
      ShellExecute(form1.Handle,'open',pchar(main_config.dir_base+'extras\dosbox_x\dosbox-x.exe'),pchar(param_string),nil,SW_SHOWNORMAL);
   end;
@@ -1644,336 +1564,6 @@ end else begin
 comprobar_existe:=true;
 end;
 
-function save_game_accept:boolean;
-var
-  temps,directorio_final:string;
-  es_zip:boolean;
-begin
-  save_game_accept:=false;
-  //Si es un juego de ScummVM, el directorio/zip no puede estar vacio
-  if form2.pagecontrol1.ActivePageIndex=1 then begin
-    if (form2.labelededit9.Text='') then begin
-      MessageDlg(list_error[5],mtError,[mbOk],0);
-      exit;
-    end;
-  //El resto no pueden estar vacios ninguno de los dos...
-  end else if ((form2.labelededit9.Text='') or (form2.labelededit5.Text='')) then begin
-    MessageDlg(list_error[5],mtError,[mbOk],0);
-    exit;
-  end;
-  games_final[juego_editado].nombre:=form2.labelededit1.Text;
-  temps:=form2.labelededit9.Text;
-  if containstext(lowercase(temps),'.zip') then begin
-    es_zip:=true;
-    temps:=stringreplace(temps,'.zip','',[rfIgnoreCase]);
-  end else es_zip:=false;
-  games_final[juego_editado].dir:=temps;
-  games_final[juego_editado].exec:=form2.labelededit5.Text;
-  games_final[juego_editado].loadfix:=form2.CheckBox3.Checked;
-  games_final[juego_editado].params:=form2.labelededit6.Text;
-  games_final[juego_editado].exec_pre:=form2.labelededit7.Text;
-  games_final[juego_editado].exec_post:=form2.labelededit8.Text;
-  games_final[juego_editado].segundo_disco:=form2.labelededit10.Text;
-  games_final[juego_editado].ciclos:=strtoint(form2.labelededit11.Text);
-  games_final[juego_editado].mostrar:=form2.CheckBox4.Checked;
-  case games_final[juego_editado].motor of
-    MMSDOS:begin
-              if games_final[juego_editado].ciclos=0 then games_final[juego_editado].ciclos:=-1;
-              if games_final[juego_editado].ciclos=12000 then games_final[juego_editado].ciclos:=0;
-              games_final[juego_editado].memoria:=strtoint(form2.labelededit12.Text);
-              case form2.combobox1.ItemIndex of
-                  0:games_final[juego_editado].grafica:='';
-                  1:games_final[juego_editado].grafica:='cga';
-                  2:games_final[juego_editado].grafica:='tandy';
-                  3:games_final[juego_editado].grafica:='pcjr';
-                  4:games_final[juego_editado].grafica:='cga_composite';
-                  5:games_final[juego_editado].grafica:='hercules';
-              end;
-           end;
-    MAPPLE2:begin
-              case form2.combobox6.ItemIndex of
-                  0:games_final[juego_editado].extra_param:='';
-                  1:games_final[juego_editado].extra_param:='e'
-              end;
-           end;
-    MATARI8:begin
-              case form2.combobox3.ItemIndex of
-                  0:games_final[juego_editado].extra_param:='';
-                  1:games_final[juego_editado].extra_param:='osb'
-              end;
-           end;
-    MAMIGA:begin
-              case form2.combobox2.ItemIndex of
-                  0:games_final[juego_editado].grafica:='';
-                  1:games_final[juego_editado].grafica:='aga'
-              end;
-              case form2.combobox7.ItemIndex of
-                  0:games_final[juego_editado].ciclos:=100;
-                  1:games_final[juego_editado].ciclos:=200;
-                  else games_final[juego_editado].ciclos:=0;
-              end;
-           end;
-  end;
-  games_final[juego_editado].extra_param:=form2.labelededit14.Text;
-  games_final[juego_editado].mapper:=form2.labelededit13.Text;
-  games_final[juego_editado].gus:=form2.checkbox1.Checked;
-  games_final[juego_editado].scumm:=form2.checkbox2.Checked;
-  games_final[juego_editado].year:=form2.labelededit2.Text;
-  games_final[juego_editado].company:=form2.labelededit3.Text;
-  games_final[juego_editado].mensaje:=form2.labelededit15.Text;
-  games_final[juego_editado].cdrom:=form2.labelededit19.Text;
-  games_final[juego_editado].setup:=form2.labelededit20.Text;
-  games_final[juego_editado].image_name:=form2.labelededit4.Text;
-  games_final[juego_editado].idioma:=form2.combobox4.ItemIndex;
-  case form2.combobox5.ItemIndex of
-    0:games_final[juego_editado].tipo:=1;
-    1:games_final[juego_editado].tipo:=2;
-    2:games_final[juego_editado].tipo:=4;
-    3:games_final[juego_editado].tipo:=8;
-    4:games_final[juego_editado].tipo:=$10;
-    5:games_final[juego_editado].tipo:=$20;
-    6:games_final[juego_editado].tipo:=$40;
-    7:games_final[juego_editado].tipo:=$80;
-    8:games_final[juego_editado].tipo:=$200;
-  end;
-  //Si está mal no compruebes nada, da igual
-  if not(games_final[juego_editado].interno) then begin
-    if form2.labelededit16.text<>'' then begin
-      if comprobar_existe(form2.labelededit16.text,main_config.dir_manual) then games_final[juego_editado].manual:=form2.labelededit16.Text
-        else begin
-          MessageDlg(list_error[0],mtError,[mbOk],0);
-          exit;
-        end;
-    end else games_final[juego_editado].manual:='';
-    if form2.labelededit17.text<>'' then begin
-      if comprobar_existe(form2.labelededit17.text,main_config.dir_mapas) then games_final[juego_editado].map:=form2.labelededit17.Text
-        else begin
-          MessageDlg(list_error[1],mtError,[mbOk],0);
-          exit;
-        end;
-    end else games_final[juego_editado].map:='';
-    if form2.labelededit18.text<>'' then begin
-      if comprobar_existe(form2.labelededit18.text,main_config.dir_guias) then games_final[juego_editado].guia:=form2.labelededit18.Text
-        else begin
-          MessageDlg(list_error[2],mtError,[mbOk],0);
-          exit;
-        end;
-    end else games_final[juego_editado].guia:='';
-    if es_zip then directorio_final:=main_config.dir_zip+games_final[juego_editado].dir
-      else directorio_final:=main_config.dir_base+games_final[juego_editado].dir;
-    if ((games_final[juego_editado].cdrom<>'') and (not(comprobar_si_existe_fichero(directorio_final,games_final[juego_editado].cdrom,es_zip)))) then begin
-      MessageDlg(list_error[3],mtError,[mbOk],0);
-      exit;
-    end;
-    if ((games_final[juego_editado].setup<>'') and (not(comprobar_si_existe_fichero(directorio_final,games_final[juego_editado].setup,es_zip)))) then begin
-      MessageDlg(list_error[4],mtError,[mbOk],0);
-      exit;
-    end;
-    //Solo ScummVM
-    if form2.pagecontrol1.ActivePageIndex=1 then begin
-      if es_zip then begin
-        if not(comprobar_si_existe_fichero(directorio_final,games_final[juego_editado].exec,true)) then begin
-          MessageDlg(list_error[5],mtError,[mbOk],0);
-          exit;
-        end;
-      end else begin
-        if not(directoryexists(directorio_final)) then begin
-          MessageDlg(list_error[5],mtError,[mbOk],0);
-          exit;
-        end;
-      end;
-      games_final[juego_editado].motor:=1;
-      games_final[juego_editado].exec:='';
-    end else begin //Resto
-      if not(comprobar_si_existe_fichero(directorio_final,games_final[juego_editado].exec,es_zip)) then begin
-        MessageDlg(list_error[5],mtError,[mbOk],0);
-        exit;
-      end;
-    end;
-    games_final[juego_editado].mal:=false;
-  end;
-  games_final[juego_editado].zip:=es_zip;
-  if estoy_anadiendo then begin
-    games_final[juego_editado].interno:=false;
-    total_juegos:=total_juegos+1;
-  end;
-  guardar_juegos_anadidos;
-  save_game_accept:=true;
-end;
-
-procedure save_game_poner_cosas;
-begin
-form2.LabeledEdit6.visible:=false;
-form2.LabeledEdit10.visible:=false;
-form2.LabeledEdit7.visible:=false;
-form2.LabeledEdit8.visible:=false;
-form2.LabeledEdit20.visible:=false;
-form2.LabeledEdit19.visible:=false;
-form2.checkbox3.visible:=false;
-form2.statictext4.visible:=false;
-form2.statictext5.visible:=false;
-form2.combobox2.visible:=false;
-form2.combobox3.visible:=false;
-form2.combobox6.visible:=false;
-form2.statictext6.visible:=false;
-form2.combobox7.visible:=false;
-form2.statictext7.visible:=false;
-case form2.PageControl1.ActivePageIndex of
-  MMSDOS:begin
-            form2.LabeledEdit6.visible:=true;
-            form2.LabeledEdit10.visible:=true;
-            form2.LabeledEdit7.visible:=true;
-            form2.LabeledEdit8.visible:=true;
-            form2.LabeledEdit20.visible:=true;
-            form2.LabeledEdit19.visible:=true;
-            form2.checkbox3.visible:=true;
-            form2.checkbox3.caption:='Loadfix';
-         end;
-  MAPPLE2:begin
-            form2.combobox6.visible:=true;
-            form2.statictext6.visible:=true;
-          end;
-  MATARI8:begin
-            form2.combobox3.visible:=true;
-            form2.statictext5.visible:=true;
-          end;
-  MATARIST:begin
-           end;
-  MAMIGA:begin
-            form2.LabeledEdit6.visible:=true;
-            form2.LabeledEdit10.visible:=true;
-            form2.checkbox3.visible:=true;
-            form2.checkbox3.caption:='Fix Palette';
-            form2.statictext4.visible:=true;
-            form2.combobox2.visible:=true;
-            form2.combobox7.visible:=true;
-            form2.statictext7.visible:=true;
-         end;
-end;
-end;
-
-procedure save_game_show;
-var
-  r:trect;
-  image_string:string;
-begin
-datos_cancel:=games_final[juego_editado];
-form2.PageControl1.ActivePageIndex:=games_final[juego_editado].motor;
-if not(estoy_anadiendo) then begin
-  form2.labelededit1.Text:=games_final[juego_editado].nombre;
-  if games_final[juego_editado].zip then form2.labelededit9.Text:=games_final[juego_editado].dir+'.zip'
-    else form2.labelededit9.Text:=games_final[juego_editado].dir;
-  form2.labelededit5.Text:=games_final[juego_editado].exec;
-  form2.CheckBox3.Checked:=games_final[juego_editado].loadfix;
-  form2.labelededit6.Text:=games_final[juego_editado].params;
-  form2.labelededit7.Text:=games_final[juego_editado].exec_pre;
-  form2.labelededit8.Text:=games_final[juego_editado].exec_post;
-  form2.labelededit10.Text:=games_final[juego_editado].segundo_disco;
-  if games_final[juego_editado].ciclos=-1 then form2.labelededit11.Text:='0'
-    else if games_final[juego_editado].ciclos=0 then form2.labelededit11.Text:='12000'
-      else form2.labelededit11.Text:=inttostr(games_final[juego_editado].ciclos);
-  case games_final[juego_editado].motor of
-    MMSDOS:begin
-            form2.combobox1.ItemIndex:=0;
-            if games_final[juego_editado].grafica='cga' then form2.combobox1.ItemIndex:=1
-              else if games_final[juego_editado].grafica='tandy' then form2.combobox1.ItemIndex:=2
-                else if games_final[juego_editado].grafica='pcjr' then form2.combobox1.ItemIndex:=3
-                  else if games_final[juego_editado].grafica='cga_composite' then form2.combobox1.ItemIndex:=4
-                    else if games_final[juego_editado].grafica='hercules' then form2.combobox1.ItemIndex:=5;
-           end;
-    MAPPLE2:begin
-              form2.combobox6.ItemIndex:=0;
-              if games_final[juego_editado].extra_param='e' then form2.combobox6.ItemIndex:=1;
-            end;
-    MATARI8:begin
-              form2.combobox3.ItemIndex:=0;
-              if games_final[juego_editado].extra_param='osb' then form2.combobox3.ItemIndex:=1;
-            end;
-    MATARIST:;
-    MAMIGA:begin
-              form2.combobox2.ItemIndex:=0;
-              if games_final[juego_editado].grafica='aga' then form2.combobox2.ItemIndex:=1;
-              case games_final[juego_editado].ciclos of
-                100:form2.combobox7.ItemIndex:=0;
-                200:form2.combobox7.ItemIndex:=1;
-                  else form2.combobox7.ItemIndex:=2;
-              end;
-           end;
-  end;
-  form2.labelededit14.Text:=games_final[juego_editado].extra_param;
-  form2.labelededit13.Text:=games_final[juego_editado].mapper;
-  form2.checkbox1.Checked:=games_final[juego_editado].gus;
-  form2.checkbox2.Checked:=games_final[juego_editado].scumm;
-  form2.labelededit2.Text:=games_final[juego_editado].year;
-  form2.labelededit3.Text:=games_final[juego_editado].company;
-  form2.labelededit15.Text:=games_final[juego_editado].mensaje;
-  form2.labelededit16.Text:=games_final[juego_editado].manual;
-  form2.labelededit17.Text:=games_final[juego_editado].map;
-  form2.labelededit18.Text:=games_final[juego_editado].guia;
-  form2.labelededit20.Text:=games_final[juego_editado].setup;
-  form2.labelededit4.Text:=games_final[juego_editado].image_name;
-  form2.labelededit19.Text:=games_final[juego_editado].cdrom;
-  form2.CheckBox4.Checked:=games_final[juego_editado].mostrar;
-  if games_final[juego_editado].memoria=0 then form2.labelededit12.Text:='16'
-    else form2.labelededit12.Text:=inttostr(games_final[juego_editado].memoria);
-  if games_final[juego_editado].idioma>1 then begin
-    if (games_final[juego_editado].idioma mod 2)<>0 then form2.combobox4.ItemIndex:=0
-      else form2.combobox4.ItemIndex:=games_final[juego_editado].idioma;
-  end else form2.combobox4.ItemIndex:=games_final[juego_editado].idioma;
-  if (games_final[juego_editado].tipo and 2)<>0 then form2.combobox5.ItemIndex:=1
-    else if (games_final[juego_editado].tipo and 4)<>0 then form2.combobox5.ItemIndex:=2
-      else if (games_final[juego_editado].tipo and 8)<>0 then form2.combobox5.ItemIndex:=3
-        else if (games_final[juego_editado].tipo and $10)<>0 then form2.combobox5.ItemIndex:=4
-          else if (games_final[juego_editado].tipo and $20)<>0 then form2.combobox5.ItemIndex:=5
-            else if (games_final[juego_editado].tipo and $40)<>0 then form2.combobox5.ItemIndex:=6
-              else if (games_final[juego_editado].tipo and $80)<>0 then form2.combobox5.ItemIndex:=7
-                else if (games_final[juego_editado].tipo and $200)<>0 then form2.combobox5.ItemIndex:=8
-                  else form2.combobox5.ItemIndex:=0;
-  form2.button3.visible:=not(games_final[juego_editado].interno);
-end else begin
-  form2.labelededit1.Text:='';
-  form2.labelededit2.Text:='';
-  form2.labelededit3.Text:='';
-  form2.labelededit4.Text:='';
-  form2.labelededit5.Text:='';
-  form2.labelededit6.Text:='';
-  form2.labelededit7.Text:='';
-  form2.labelededit11.Text:='3000';
-  form2.labelededit12.Text:='1';
-  form2.combobox1.ItemIndex:=0;
-  form2.labelededit8.Text:='';
-  form2.labelededit9.Text:='';
-  form2.checkbox1.Checked:=false;
-  form2.checkbox2.Checked:=false;
-  form2.labelededit10.Text:='';
-  form2.labelededit13.Text:='';
-  form2.labelededit14.Text:='';
-  form2.labelededit15.Text:='';
-  form2.labelededit16.Text:='';
-  form2.labelededit17.Text:='';
-  form2.labelededit20.Text:='';
-  form2.combobox4.ItemIndex:=0;
-  form2.combobox5.ItemIndex:=1;
-  form2.button3.visible:=false;
-  form2.CheckBox4.Checked:=true;
-end;
-image_string:=main_config.dir_imgs+form2.labelededit4.text+'_000.png';
-if FileExists(image_string) then begin
-    form2.Image1.Picture.LoadFromFile(image_string);
-    image_num:=0;
-    form2.timer1.Enabled:=true;
-end else begin
-    r.top:=0;
-    r.Left:=form2.image1.width;
-    r.Right:=0;
-    r.Bottom:=form2.image1.height;
-    form2.image1.Picture:=nil;
-    form2.image1.Canvas.Brush.Color:=0;
-    form2.image1.Canvas.FillRect(r);
-end;
-save_game_poner_cosas;
-end;
-
 procedure config_show;
 begin
   form4.labelededit4.Text:=main_config.config_dosbox;
@@ -1999,10 +1589,6 @@ begin
     3:form4.radiobutton5.Checked:=true;
     4:form4.radiobutton6.Checked:=true;
   end;
-  form4.checkbox1.Checked:=main_config.mostrar_todos;
-  form4.checkbox10.Checked:=main_config.leer_fijos;
-  form4.checkbox2.Checked:=main_config.mostrar_anadidos;
-  form4.checkbox3.Checked:=main_config.descargar_extra;
 end;
 
 end.

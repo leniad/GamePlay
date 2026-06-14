@@ -11,13 +11,11 @@ type
     Label1: TLabel;
     Button1: TButton;
     Button2: TButton;
-    CheckBox1: TCheckBox;
     procedure Button1Click(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
-    procedure FormCreate(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
-    procedure CheckBox1Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
   private
     { Private declarations }
   public
@@ -26,22 +24,26 @@ type
   function descargar_juego(ngame:integer):boolean;
   procedure descargar_juego_sin_confirmar(ngame:integer);
   function descargar_fichero(origen,destino:string;check:boolean):boolean;
+  function descargar_manual(ngame:integer):boolean;
+  function comprobar_version_lista:string;
+
+const
+  USUARIO='user';
+  PASSWORD='password';
+  URL_GAMEPLAY='url1';
+  URL_API='url2';
 
 var
   Form5:TForm5;
 
 implementation
-uses download_game,main,zip,idioma_info;
+uses download_game,main,zip,idioma_info,principal;
 
 var
   FApi:TApiClient;
   game_number:integer;
   juego_descargado:boolean;
-
-const
-  USUARIO='usuario';
-  PASSWORD='password';
-  URL='url';
+  manual_descargar:boolean;
 
 {$R *.dfm}
 
@@ -51,13 +53,27 @@ begin
   form5.Button1Click(nil);
 end;
 
-
 function descargar_juego(ngame:integer):boolean;
 begin
   game_number:=ngame;
   juego_descargado:=false;
+  manual_descargar:=false;
   form5.showmodal;
   descargar_juego:=juego_descargado;
+end;
+
+function descargar_manual(ngame:integer):boolean;
+begin
+  game_number:=ngame;
+  juego_descargado:=false;
+  manual_descargar:=true;
+  form5.showmodal;
+  descargar_manual:=juego_descargado;
+end;
+
+function comprobar_version_lista:string;
+begin
+  comprobar_version_lista:=FApi.GetServerVersion;
 end;
 
 function descargar_fichero(origen,destino:string;check:boolean):boolean;
@@ -105,17 +121,51 @@ begin
   descargar_fichero:=true;
 end;
 
-
 procedure TForm5.Button1Click(Sender:TObject);
 var
   origen,destino:string;
   ZipFile:TZipFile;
 begin
+    //Descargar solo extras
+    if manual_descargar then begin
+        origen:=juego_dir(game_number)+'_extra.zip';
+        destino:=main_config.dir_base+'extras\'+juego_dir(game_number)+'_extra.zip';
+        if descargar_fichero(origen,destino,false) then begin
+          ZipFile:=TZipFile.Create;
+          if Zipfile.IsValid(destino) then begin
+              ZipFile.Open(destino,zmRead);
+              ZipFIle.ExtractAll(main_config.dir_base+'\extras');
+              ZipFile.Close;
+          end;
+          ZipFile.Free;
+        end;
+        {$I-}
+        deletefile(destino);
+        {$I+}
+    end else
     if games_final[game_number].motor=MDSP then begin
       origen:=games_final[game_number].dir+'_dsp.zip';
       destino:=main_config.dir_base+'dsp\roms\'+games_final[game_number].dir+'.zip';
       if not(descargar_fichero(origen,destino,true)) then exit;
     end else begin
+      //Descargarse la lista de juegos
+      if game_number=0 then begin
+        origen:='gameplay_list.zip';
+        destino:=main_config.dir_base+'gameplay_list.zip';
+        if descargar_fichero(origen,destino,false) then begin
+          ZipFile:=TZipFile.Create;
+          if Zipfile.IsValid(destino) then begin
+              ZipFile.Open(destino,zmRead);
+              ZipFIle.ExtractAll(main_config.dir_base);
+              ZipFile.Close;
+          end;
+          ZipFile.Free;
+        end;
+        {$I-}
+        deletefile(destino);
+        {$I+}
+        exit;
+    end;
       origen:=juego_dir(game_number)+'.zip';
       destino:=main_config.dir_zip+juego_dir(game_number)+'.zip';
       if not(descargar_fichero(origen,destino,true)) then exit;
@@ -141,7 +191,6 @@ begin
     ordena_juegos;
     mostrar_juegos;
     juego_descargado:=true;
-    games_final[game_number].mostrar:=true;
     close;
 end;
 
@@ -150,15 +199,10 @@ begin
   close;
 end;
 
-procedure TForm5.CheckBox1Click(Sender: TObject);
-begin
-  main_config.descargar_extra:=checkbox1.Checked;
-end;
-
 procedure TForm5.FormCreate(Sender: TObject);
 begin
   cambiar_idioma_descarga;
-  FApi:=TApiClient.Create(URL);
+  FApi:=TApiClient.Create;
 end;
 
 procedure TForm5.FormDestroy(Sender: TObject);
@@ -174,7 +218,8 @@ begin
   if f>0 then form5.Left:=f;
   f:=(screen.Height-form5.Height) div 2;
   if f>0 then form5.Top:=f;
-  checkbox1.Checked:=main_config.descargar_extra;
+  if manual_descargar then Label1.Caption:=list_descarga[7]
+    else Label1.Caption:=list_descarga[6];
 end;
 
 end.

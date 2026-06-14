@@ -4,8 +4,8 @@ object Form4: TForm4
   BorderIcons = [biMinimize, biMaximize]
   BorderStyle = bsSingle
   Caption = 'Configuraci'#243'n Avanzada'
-  ClientHeight = 520
-  ClientWidth = 869
+  ClientHeight = 503
+  ClientWidth = 863
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -467,7 +467,7 @@ object Form4: TForm4
       Caption = 'Atari ST'
       ImageIndex = 6
       object LabeledEdit22: TLabeledEdit
-        Left = 23
+        Left = 15
         Top = 30
         Width = 514
         Height = 23
@@ -478,7 +478,7 @@ object Form4: TForm4
         Text = ''
       end
       object Button25: TButton
-        Left = 543
+        Left = 535
         Top = 30
         Width = 33
         Height = 25
@@ -499,56 +499,6 @@ object Form4: TForm4
     Margins.Bottom = 5
     Caption = 'GroupBox4'
     TabOrder = 6
-  end
-  object GroupBox6: TGroupBox
-    Left = 648
-    Top = 261
-    Width = 211
-    Height = 116
-    Margins.Left = 5
-    Margins.Top = 5
-    Margins.Right = 5
-    Margins.Bottom = 5
-    TabOrder = 7
-    object CheckBox10: TCheckBox
-      Left = 12
-      Top = 10
-      Width = 189
-      Height = 25
-      Caption = 'Leer valores de los juegos fijos'
-      TabOrder = 0
-      OnClick = CheckBox10Click
-    end
-    object CheckBox2: TCheckBox
-      Left = 12
-      Top = 60
-      Width = 195
-      Height = 25
-      Caption = 'Mostrar solo juegos a'#241'adidos'
-      TabOrder = 1
-      WordWrap = True
-      OnClick = CheckBox2Click
-    end
-    object CheckBox1: TCheckBox
-      Left = 12
-      Top = 35
-      Width = 195
-      Height = 25
-      Caption = 'Mostrar todos los juegos'
-      TabOrder = 2
-      WordWrap = True
-      OnClick = CheckBox1Click
-    end
-    object CheckBox3: TCheckBox
-      Left = 12
-      Top = 85
-      Width = 195
-      Height = 25
-      Caption = 'Descargar Extras'
-      TabOrder = 3
-      WordWrap = True
-      OnClick = CheckBox2Click
-    end
   end
   object OpenDialog1: TOpenDialog
     Left = 828

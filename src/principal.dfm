@@ -4,6 +4,7 @@ object Form1: TForm1
   Anchors = []
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
+  Caption = '8'
   ClientHeight = 655
   ClientWidth = 1050
   Color = clBtnFace
@@ -6878,8 +6879,8 @@ object Form1: TForm1
     OnClick = Image8Click
   end
   object StringGrid1: TStringGrid
-    Left = 231
-    Top = 7
+    Left = 233
+    Top = 8
     Width = 434
     Height = 622
     ColCount = 2
@@ -7183,138 +7184,6 @@ object Form1: TForm1
       Stretch = True
     end
   end
-  object GroupBox8: TGroupBox
-    Left = 684
-    Top = 492
-    Width = 272
-    Height = 150
-    Caption = 'Opciones Avanzadas'
-    TabOrder = 4
-    object Button1: TButton
-      Left = 29
-      Top = 100
-      Width = 100
-      Height = 41
-      Caption = 'A'#241'adir'#13#10'Juego'
-      TabOrder = 0
-      TabStop = False
-      WordWrap = True
-      OnClick = Button1Click
-    end
-    object Button2: TButton
-      Left = 155
-      Top = 100
-      Width = 100
-      Height = 41
-      Caption = 'Editar/Borrar'#13#10'Juego'
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -15
-      Font.Name = 'Segoe UI'
-      Font.Style = []
-      ParentFont = False
-      TabOrder = 1
-      TabStop = False
-      WordWrap = True
-      OnClick = Button2Click
-    end
-    object GroupBox9: TGroupBox
-      Left = 18
-      Top = 21
-      Width = 214
-      Height = 64
-      Margins.Left = 5
-      Margins.Top = 5
-      Margins.Right = 5
-      Margins.Bottom = 5
-      Caption = 'Motor MS-DOS'
-      TabOrder = 2
-      object RadioButton7: TRadioButton
-        Left = 14
-        Top = 20
-        Width = 89
-        Height = 15
-        Caption = 'DosBox'
-        TabOrder = 0
-        OnClick = RadioButton7Click
-      end
-      object RadioButton8: TRadioButton
-        Left = 14
-        Top = 40
-        Width = 89
-        Height = 15
-        Caption = 'DosBox-X'
-        TabOrder = 1
-        OnClick = RadioButton8Click
-      end
-    end
-    object GroupBox10: TGroupBox
-      Left = 18
-      Top = 18
-      Width = 214
-      Height = 73
-      Margins.Left = 5
-      Margins.Top = 5
-      Margins.Right = 5
-      Margins.Bottom = 5
-      Caption = 'Video'
-      TabOrder = 4
-      object CheckBox20: TCheckBox
-        Left = 24
-        Top = 42
-        Width = 146
-        Height = 26
-        Margins.Left = 5
-        Margins.Top = 5
-        Margins.Right = 5
-        Margins.Bottom = 5
-        Caption = 'Centrar Horizontal'
-        TabOrder = 0
-      end
-      object CheckBox19: TCheckBox
-        Left = 24
-        Top = 18
-        Width = 146
-        Height = 26
-        Margins.Left = 5
-        Margins.Top = 5
-        Margins.Right = 5
-        Margins.Bottom = 5
-        Caption = 'Centrar Vertical'
-        TabOrder = 1
-      end
-    end
-    object GroupBox2: TGroupBox
-      Left = 18
-      Top = 20
-      Width = 214
-      Height = 64
-      Margins.Left = 5
-      Margins.Top = 5
-      Margins.Right = 5
-      Margins.Bottom = 5
-      Caption = 'Emular Joystick'
-      TabOrder = 3
-      object RadioButton2: TRadioButton
-        Left = 14
-        Top = 20
-        Width = 89
-        Height = 15
-        Caption = 'Teclado'
-        TabOrder = 0
-        OnClick = RadioButton2Click
-      end
-      object RadioButton9: TRadioButton
-        Left = 14
-        Top = 39
-        Width = 89
-        Height = 18
-        Caption = 'Joystick'
-        TabOrder = 1
-        OnClick = RadioButton9Click
-      end
-    end
-  end
   object ComboBox1: TComboBox
     Left = 684
     Top = 450
@@ -7325,10 +7194,126 @@ object Form1: TForm1
     Margins.Right = 5
     Margins.Bottom = 5
     Style = csDropDownList
-    TabOrder = 5
+    TabOrder = 4
     TabStop = False
     Visible = False
     OnChange = ComboBox1Change
+  end
+  object CheckBox10: TCheckBox
+    Left = 698
+    Top = 509
+    Width = 303
+    Height = 25
+    Caption = 'Descargar Extras'
+    TabOrder = 5
+    WordWrap = True
+    OnClick = CheckBox10Click
+  end
+  object CheckBox9: TCheckBox
+    Left = 698
+    Top = 484
+    Width = 303
+    Height = 25
+    Caption = 'Solo funcionan'
+    TabOrder = 6
+    WordWrap = True
+    OnClick = CheckBox9Click
+  end
+  object GroupBox2: TGroupBox
+    Left = 18
+    Top = 515
+    Width = 190
+    Height = 65
+    Margins.Left = 5
+    Margins.Top = 5
+    Margins.Right = 5
+    Margins.Bottom = 5
+    Caption = 'Emular Joystick'
+    TabOrder = 7
+    object RadioButton2: TRadioButton
+      Left = 14
+      Top = 20
+      Width = 89
+      Height = 15
+      Caption = 'Teclado'
+      TabOrder = 0
+      OnClick = RadioButton2Click
+    end
+    object RadioButton9: TRadioButton
+      Left = 14
+      Top = 39
+      Width = 89
+      Height = 18
+      Caption = 'Joystick'
+      TabOrder = 1
+      OnClick = RadioButton9Click
+    end
+  end
+  object GroupBox10: TGroupBox
+    Left = 18
+    Top = 515
+    Width = 190
+    Height = 65
+    Margins.Left = 5
+    Margins.Top = 5
+    Margins.Right = 5
+    Margins.Bottom = 5
+    Caption = 'Video'
+    TabOrder = 8
+    object CheckBox20: TCheckBox
+      Left = 24
+      Top = 39
+      Width = 146
+      Height = 26
+      Margins.Left = 5
+      Margins.Top = 5
+      Margins.Right = 5
+      Margins.Bottom = 5
+      Caption = 'Centrar Horizontal'
+      TabOrder = 0
+    end
+    object CheckBox19: TCheckBox
+      Left = 24
+      Top = 16
+      Width = 146
+      Height = 26
+      Margins.Left = 5
+      Margins.Top = 5
+      Margins.Right = 5
+      Margins.Bottom = 5
+      Caption = 'Centrar Vertical'
+      TabOrder = 1
+    end
+  end
+  object GroupBox9: TGroupBox
+    Left = 18
+    Top = 515
+    Width = 190
+    Height = 65
+    Margins.Left = 5
+    Margins.Top = 5
+    Margins.Right = 5
+    Margins.Bottom = 5
+    Caption = 'Motor MS-DOS'
+    TabOrder = 9
+    object RadioButton7: TRadioButton
+      Left = 14
+      Top = 20
+      Width = 89
+      Height = 15
+      Caption = 'DosBox'
+      TabOrder = 0
+      OnClick = RadioButton7Click
+    end
+    object RadioButton8: TRadioButton
+      Left = 14
+      Top = 40
+      Width = 89
+      Height = 15
+      Caption = 'DosBox-X'
+      TabOrder = 1
+      OnClick = RadioButton8Click
+    end
   end
   object Timer1: TTimer
     Enabled = False

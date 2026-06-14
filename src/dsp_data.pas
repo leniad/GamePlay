@@ -3,7 +3,15 @@
 {$ifdef fpc}{$mode delphi}{$H+}{$endif}
 
 interface
-uses games_data;
+
+type
+   tipo_games=record
+    nombre:string;
+    dir:string;
+    exec:string;
+    ciclos:integer;
+    extra_param:string;
+  end;
 
 const
   GAME_TOTAL_DSP=448;
