@@ -21,7 +21,9 @@ uses
   dsp_data in 'dsp_data.pas',
   download_game in 'download_game.pas',
   games_download in 'games_download.pas' {Form5},
-  mensajes in 'mensajes.pas' {Form2};
+  mensajes in 'mensajes.pas' {Form2},
+  RAR in 'trar\RAR.pas',
+  RAR_DLL in 'trar\RAR_DLL.pas';
 
 {$R *.res}
 

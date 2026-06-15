@@ -4,7 +4,7 @@ object Form1: TForm1
   Anchors = []
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
-  Caption = '8'
+  Caption = 'GamePlay'
   ClientHeight = 655
   ClientWidth = 1050
   Color = clBtnFace

@@ -96,7 +96,12 @@ begin
   //Descargar fichero
   try
     if not(FApi.DownloadFile(origen,destino,LMsg)) then begin
-      if not(check) then exit;
+      if not(check) then begin
+        {$I-}
+        deletefile(destino);
+        {$I+}
+        exit;
+      end;
       MessageDlg('Error descargando '+lmsg,mtError,[mbOk],0);
       exit;
     end;
@@ -148,7 +153,7 @@ begin
       destino:=main_config.dir_base+'dsp\roms\'+games_final[game_number].dir+'.zip';
       if not(descargar_fichero(origen,destino,true)) then exit;
     end else begin
-      //Descargarse la lista de juegos
+      //Descargarse la lista de juegos y las imagenes
       if game_number=0 then begin
         origen:='gameplay_list.zip';
         destino:=main_config.dir_base+'gameplay_list.zip';
@@ -164,11 +169,26 @@ begin
         {$I-}
         deletefile(destino);
         {$I+}
+        origen:='gameplay_imgs.zip';
+        destino:=main_config.dir_base+'gameplay_imgs.zip';
+        if descargar_fichero(origen,destino,false) then begin
+          ZipFile:=TZipFile.Create;
+          if Zipfile.IsValid(destino) then begin
+              ZipFile.Open(destino,zmRead);
+              ZipFIle.ExtractAll(main_config.dir_imgs);
+              ZipFile.Close;
+          end;
+          ZipFile.Free;
+        end;
+        {$I-}
+        deletefile(destino);
+        {$I+}
         exit;
     end;
-      origen:=juego_dir(game_number)+'.zip';
-      destino:=main_config.dir_zip+juego_dir(game_number)+'.zip';
-      if not(descargar_fichero(origen,destino,true)) then exit;
+      origen:=juego_dir(game_number);
+      destino:=main_config.dir_zip+juego_dir(game_number);
+      if not(descargar_fichero(origen+'.zip',destino+'.zip',false)) then
+        if not(descargar_fichero(origen+'.rar',destino+'.rar',true)) then exit;
       //Descargar extras
       if main_config.descargar_extra then begin
         origen:=juego_dir(game_number)+'_extra.zip';

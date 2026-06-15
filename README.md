@@ -1,6 +1,16 @@
 # GamePlay status #
 ![Main Screen](https://i.ibb.co/8gHhF4sK/gameplay-083-en.png)<br>
 Please read 'Most Wanted' games!<br><br>
+<b>15/06/26 - GamePlay updated to 0.84b
+<pre>
+-General
+    +Added support for RAR files
+    +Game images are now updated automatically when the game list is updated
+-MSDOS
+    +Added games
+        -Mad Dog McCree
+        -MDK
+</pre>
 <b>15/06/26 - GamePlay 0.83c<br>
 If you encountered any library-related issues when running GamePlay, please re-download version 0.83, the issue has been fixed. I apologize for the inconvenience.<br><br>
 <b>14/06/26 - GamePlay updated to 0.83b

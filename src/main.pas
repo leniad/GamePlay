@@ -39,13 +39,13 @@ const
   MDSP=255;
   MAX_GAMES=2000;
   TEMP_DIR='TEMP';
-  VERSION='v0.83β';
+  VERSION='v0.84β';
   BLURFACT=2;
   {$IFDEF IS_DEBUG}
   {$ifndef windows}
   debug_base_dir='/home/leniad/abandon/GamePlayVol1/';
   {$else}
-  debug_base_dir='c:\datos\abandon\GamePlay_083\';
+  debug_base_dir='c:\datos\abandon\GamePlay_084\';
   {$ENDIF}
   {$endif}
   NREFS=2;
@@ -63,12 +63,15 @@ const
   PUZ=$20;
   RPG=$40;
   COCHES=$80;
+  SIN_COMPRIMIR=0;
+  FICHERO_ZIP=1;
+  FICHERO_RAR=2;
 
 type
   tipo_ref=record
     nref:integer;
     mal:boolean;
-    zip:boolean;
+    zip:byte;
   end;
   tipo_final=record
     nombre:string;
@@ -91,7 +94,7 @@ type
     cdrom:string;
     memoria:integer;
     setup:string;
-    zip:boolean;
+    zip:byte;
     year:string;
     company:string;
     manual:string;
@@ -159,7 +162,7 @@ uses {$IFDEF WINDOWS}windows,shellapi,MMSystem{$ELSE}LCLIntf,process{$ENDIF},pri
      inifiles,grids,sysutils,forms,idioma_info,strutils,dsp_data,
      config,dialogs{$ifdef fpc},classes,zipper{$else},zip,uitypes{$endif},
      games_download,system.ioutils,Vcl.Imaging.pngimage,math,types,System.JSON,
-     mensajes,system.generics.Collections;
+     mensajes,system.generics.Collections,rar;
 
 const
  RETURN=chr(10);
@@ -272,6 +275,22 @@ if Zipfile.IsValid(fichero) then begin
   ZipFile.Close;
 end;
 ZipFile.Free;
+end;
+
+procedure descomprime_rar(fichero,donde:string);
+var
+   rar:TRAR;
+begin
+rar:=Trar.Create(nil);
+message_num:=1;
+form2.show;
+form2.Update;
+try
+  rar.extractArchive(fichero,donde);
+finally
+  form2.close;
+  rar.Free;
+end;
 end;
 
 function comprobar_scummvm:boolean;
@@ -536,115 +555,32 @@ form1.StringGrid1Click(nil);
 if form1.Visible then form1.StringGrid1.SetFocus;
 end;
 
-function search_file_zip(nombre_zip,nombre_file:string):boolean;
-var
-  f:integer;
-{$ifndef fpc}
-  ZipFile:TZipFile;
-{$else}
-  ZipFile:TUnZipper;
-  dir,fichero:string;
-{$endif}
-begin
-search_file_zip:=false;
-{$ifndef fpc}
-  if not(FileExists(nombre_zip)) then exit;
-  ZipFile:=TZipFile.Create;
-  ZipFile.Open(nombre_zip,zmRead);
-  for f:=0 to (ZipFile.FileCount-1) do begin
-    if ContainsText(lowercase(cambiar_path(ZipFile.FileNames[f])),lowercase(cambiar_path(nombre_file))) then begin
-      search_file_zip:=true;
-      break;
-    end;
-  end;
-  ZipFile.Close;
-  ZipFile.Free;
-{$else}
-  dir:=extractfilepath(nombre_zip);
-  fichero:=extractfilename(nombre_zip);
-  if not(comprobar_si_existe_fichero(dir,fichero,false)) then exit;
-  ZipFile:=TUnZipper.create;
-  ZipFile.FileName:=dir+fichero;
-  ZipFile.Examine;
-  for f:=0 to (ZipFile.Entries.Count-1) do begin
-    if ContainsText(lowercase(ZipFile.Entries[f].ArchiveFileName),lowercase(nombre_file)) then begin
-      search_file_zip:=true;
-      break;
-    end;
-  end;
-  ZipFile.Free;
-{$endif}
-end;
-
-function comprobar_si_existe_fichero(directorio:string;var nombre:string;es_zip:boolean):boolean;
-{$ifndef windows}
-var
-   search:TSearchRec;
-   res:boolean;
-   temp_dir,temp_nom:string;
-{$endif}
-begin
-if es_zip then begin
-  if nombre='' then begin
-      {$ifdef windows}
-      comprobar_si_existe_fichero:=fileexists(directorio+'.zip');
-      {$else}
-      temp_dir:=ExtractFilePath(directorio+'.zip');
-      temp_nom:=ExtractFileName(directorio+'.zip');
-      res:=false;
-      if findfirst(includetrailingpathdelimiter(temp_dir)+'*',faAnyFile,search)=0 then begin
-      repeat
-        if AnsiCompareText(search.name,temp_nom)=0 then begin
-          res:=true;
-          break;
-        end;
-      until FindNext(search)<>0;
-      FindClose(search)
-      end;
-      comprobar_si_existe_fichero:=res;
-      {$endif}
-  end else comprobar_si_existe_fichero:=search_file_zip(directorio+'.zip',nombre);
-end else begin
-  {$ifdef windows}
-  comprobar_si_existe_fichero:=fileexists(directorio+'\'+nombre);
-  {$else}
-  res:=false;
-  if findfirst(includetrailingpathdelimiter(directorio)+'*',faAnyFile,search)=0 then begin
-    repeat
-       if AnsiCompareText(search.name,nombre)=0 then begin
-         nombre:=search.name;
-         res:=true;
-         break;
-       end;
-    until FindNext(search)<>0;
-    FindClose(search)
-  end;
-  comprobar_si_existe_fichero:=res;
-  {$endif}
-end;
-end;
-
 procedure pillar_juegos;
-function comprobar_si_existe(ngame:integer;dir:string;var es_zip:boolean;pos:integer):boolean;
+function comprobar_si_existe(ngame:integer;dir:string;var tipo_comp:byte;pos:integer):boolean;
 var
   juego:string;
   res:boolean;
 begin
-es_zip:=false;
+tipo_comp:=SIN_COMPRIMIR;
 //Primero compruebo si existe el directorio y el fichero ejecutable
 juego:=juego_exec(ngame,pos);
-res:=not(comprobar_si_existe_fichero(main_config.dir_base+dir,juego,false));
+res:=fileexists(main_config.dir_base+dir+'\'+juego);
 //No existe, pruebo si es un ZIP
-if res then begin
-  res:=not(comprobar_si_existe_fichero(main_config.dir_zip+dir,juego,true));
-  if not(res) then es_zip:=true;
+if not(res) then begin
+  res:=fileexists(main_config.dir_zip+dir+'.zip');
+  if res then begin
+    tipo_comp:=FICHERO_ZIP;
+  end else begin
+      res:=fileexists(main_config.dir_zip+dir+'.rar');
+      if res then tipo_comp:=FICHERO_RAR;
+  end;
 end;
 comprobar_si_existe:=res;
 end;
+
 var
   f,h,tempi:integer;
   temps:string;
-  mal:boolean;
   RootObj:TJSONObject;
   JSONValue:TJSONValue;
   games,games_ref,ref,version:TJSONArray;
@@ -660,7 +596,7 @@ total_atarise:=0;
 total_win98:=0;
 //Primero los fijos...
 if not(fileexists(main_config.dir_base+'games.json')) then begin
-  if MessageDlg(list_descarga[4],mtWarning,[mbOK]+[mbCancel],0)=2 then exit;
+  if MessageDlg(list_descarga[4],mtWarning,[mbYes]+[mbNO],0)=7 then exit;
   descargar_juego_sin_confirmar(0);
   if not(fileexists(main_config.dir_base+'games.json')) then exit;
 end;
@@ -729,12 +665,11 @@ for f:=0 to (games.Count-1) do begin
       tempi:=strtoint(ref.Items[h].value);
       if (tempi<>0) then begin
         games_final[f].ref[h].nref:=tempi;
-        games_final[f].ref[h].mal:=comprobar_si_existe(f,games_final_ref[tempi and $ffff].dir,games_final[f].ref[h].zip,h+1);
+        games_final[f].ref[h].mal:=not(comprobar_si_existe(f,games_final_ref[tempi and $ffff].dir,games_final[f].ref[h].zip,h+1));
       end;
     end;
   end;
-  mal:=comprobar_si_existe(f,games_final[f].dir,games_final[f].zip,0);
-  games_final[f].mal:=mal;
+  games_final[f].mal:=not(comprobar_si_existe(f,games_final[f].dir,games_final[f].zip,0));
   games_final[f].motor:=gameobj.GetValue<byte>('motor');
   games_final[f].year:=gameobj.GetValue<string>('year');
   games_final[f].company:=gameobj.GetValue<string>('company');
@@ -768,12 +703,9 @@ for f:=0 to (GAME_TOTAL_DSP-1) do begin
  games_final[total_juegos].ciclos:=GAME_DATA_DSP[f].ciclos;
  games_final[total_juegos].year:=GAME_DATA_DSP[f].extra_param;
  games_final[total_juegos].motor:=MDSP;
+ games_final[total_juegos].mal:=true;
  temps:=games_final[total_juegos].dir+'.zip';
- if temps<>'.zip' then begin
-    mal:=not(comprobar_si_existe_fichero(dir_dsp+'roms',temps,false));
-    games_final[total_juegos].mal:=mal;
-    games_final[total_juegos].dir:=StringReplace(temps,'.zip','',[]);
- end;
+ if temps<>'.zip' then games_final[total_juegos].mal:=not(fileexists(dir_dsp+'roms\'+temps));
  total_dsp:=total_dsp+1;
  total_juegos:=total_juegos+1;
 end;
@@ -1144,7 +1076,7 @@ begin
   end;
 end;
 
-function juego_es_zip(ngame:integer):boolean;
+function juego_es_zip(ngame:integer):byte;
 begin
   juego_es_zip:=games_final[ngame].zip;
   if (games_final[ngame].ref[0].nref<>0) then begin
@@ -1162,7 +1094,7 @@ end;
 
 var
   trad_dir,cd_rom_dir,exec_dir,exec_base,exec_memoria,exec_parametros,exec_dosbox_extra_config,temp_str,temp_str2,temp_disco,exec_mapper,exec_sd,exec_roland,exec_extra,exec_params,exec_gus,exec_sound,exec_c_param,exec_string,param_string,exec_ciclos,exec_video,exec_fullscreen,exec_pre:string;
-  ngame,nfloppy,tempi:integer;
+  tipo_fichero,ngame,nfloppy,tempi:integer;
   play_file:textfile;
   {$IFNDEF WINDOWS}
   process:tprocess;
@@ -1195,12 +1127,15 @@ if main_config.motor=MDSP then begin
     exit;
 end;
 trad_dir:=juego_dir(ngame);
+tipo_fichero:=juego_es_zip(ngame);
 //Si es un ZIP lo descomprimo!
-if juego_es_zip(ngame) then begin
+if (tipo_fichero<>SIN_COMPRIMIR) then begin
   delete_dir(TEMP_DIR+'\'+trad_dir);
   CreateDir(cambiar_path(main_config.dir_base+TEMP_DIR+'\'+trad_dir));
-  descomprime_zip(main_config.dir_zip+trad_dir+'.zip',main_config.dir_base+TEMP_DIR+'\'+trad_dir);
-  //extract_zip(main_config.dir_zip,trad_dir);
+  case tipo_fichero of
+    FICHERO_ZIP:descomprime_zip(main_config.dir_zip+trad_dir+'.zip',main_config.dir_base+TEMP_DIR+'\'+trad_dir);
+    FICHERO_RAR:descomprime_rar(main_config.dir_zip+trad_dir+'.rar',main_config.dir_base+TEMP_DIR+'\'+trad_dir);
+  end;
   exec_dir:=cambiar_path(TEMP_DIR+'\'+trad_dir);
 end else exec_dir:=trad_dir;
 //Mostrar mensaje de ayuda
@@ -1344,7 +1279,7 @@ case main_config.motor of
     exec_pre:=juego_exec_pre(ngame);
     if exec_pre<>'' then begin
         //Si es un ZIP la carpeta base es TEMP
-        if juego_es_zip(ngame) then begin
+        if (tipo_fichero<>SIN_COMPRIMIR) then begin
             temp_str:=main_config.dir_base+TEMP_DIR+'\'+games_final[ngame].dir;
             temp_str2:='c:\'+TEMP_DIR+'\'+games_final[ngame].dir;
         end else begin
