@@ -1,6 +1,25 @@
 # GamePlay status #
 ![Main Screen](https://i.ibb.co/8gHhF4sK/gameplay-083-en.png)<br>
 Please read 'Most Wanted' games!<br><br>
+<b>17/06/26 - Update game list v3
+<pre>
+-MSDOS
+    +Added games
+        -Master of Orion
+        -Desert Strike - Return to the Gulf
+        -Tronic
+        -Rayman
+        -Nascar Racing
+        -Nascar Racing 2
+        -Baryon
+        -Body Blows
+        -The Flying Tiger
+        -Flying Tiger II
+        -Where Time Stood Still
+        -Wizball
+        -Untouchables
+        -IndyCar Racing
+</pre>
 <b>15/06/26 - GamePlay updated to 0.84b
 <pre>
 -General
