@@ -197,7 +197,7 @@ end;
 
 procedure TForm1.FormShow(Sender: TObject);
 var
-  f:integer;
+  f,h,pos:integer;
 begin
   f:=(screen.Width-form1.Width) div 2;
   if f>0 then form1.Left:=f;
@@ -206,7 +206,16 @@ begin
   //Meto los juegos
   pillar_juegos;
   //Los ordeno...
-  ordena_juegos;
+  for f:=0 to (total_juegos-1) do orden_games[f]:=f;
+  for f:=0 to (total_juegos-2) do begin
+    for h:=0 to (total_juegos-2) do begin
+      if games_final[orden_games[h]].nombre>games_final[orden_games[h+1]].nombre then begin
+        pos:=orden_games[h];
+        orden_games[h]:=orden_games[h+1];
+        orden_games[h+1]:=pos;
+      end;
+    end;
+  end;
   mostrar_juegos;
 end;
 
@@ -500,6 +509,11 @@ begin
   image1.Picture:=nil;
   image1.Canvas.Brush.Color:=clBlack;
   image1.Canvas.FillRect(r);
+  image3.visible:=false;
+  image4.visible:=false;
+  image5.visible:=false;
+  image7.visible:=false;
+  image8.visible:=false;
 end;
 
 begin

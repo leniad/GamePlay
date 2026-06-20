@@ -1,6 +1,15 @@
 # GamePlay status #
-![Main Screen](https://i.ibb.co/8gHhF4sK/gameplay-083-en.png)<br>
+![Main Screen](https://i.ibb.co/9kqMQyyr/gameplay-085-en.png)<br>
 Please read 'Most Wanted' games!<br><br>
+<b>20/06/26 - GamePlay updated to 0.85b
+<pre>
+-General
+    +Fixed the download for the MS-DOS game "Bruce Lee"
+    +Changes are displayed when a new game list is downloaded
+    +Downloading a game no longer causes the entire game list to be reloaded
+-DSP
+    +Console systems that do not require ROMs (NES, Sega Master System, etc.) now launch correctly
+</pre>
 <b>17/06/26 - Update game list v3
 <pre>
 -MSDOS

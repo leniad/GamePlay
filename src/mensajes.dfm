@@ -27,5 +27,6 @@ object Form2: TForm2
     Font.Name = 'Segoe UI'
     Font.Style = []
     ParentFont = False
+    WordWrap = True
   end
 end

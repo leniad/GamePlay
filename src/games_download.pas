@@ -77,6 +77,10 @@ begin
 end;
 
 function descargar_fichero(origen,destino:string;check:boolean):boolean;
+procedure mostrar_mensaje;
+begin
+  MessageDlg('Error downloading. Pease contact leniad2[@]hotmal.com or visit https://github.com/leniad/GamePlay',mtError,[mbOk],0);
+end;
 var
   lmsg:string;
 begin
@@ -84,12 +88,12 @@ begin
   descargar_fichero:=false;
   try
     if not(FApi.Login(USUARIO,PASSWORD,lmsg)) then begin
-      MessageDlg('Error login '+lmsg,mtError,[mbOk],0);
+      mostrar_mensaje;
       exit;
     end;
   except
     on E: Exception do begin
-      MessageDlg('Error incontrolado login',mtError,[mbOk],0);
+      mostrar_mensaje;
       exit;
     end;
   end;
@@ -102,24 +106,24 @@ begin
         {$I+}
         exit;
       end;
-      MessageDlg('Error descargando '+lmsg,mtError,[mbOk],0);
+      mostrar_mensaje;
       exit;
     end;
   except
     on E: Exception do begin
-      MessageDlg('Error incontrolado download',mtError,[mbOk],0);
+      mostrar_mensaje;
       exit;
     end;
   end;
   //Cerrar conexion
   try
     if not(FApi.Logout(LMsg)) then begin
-      MessageDlg('Error logout '+lmsg,mtError,[mbOk],0);
+      mostrar_mensaje;
       exit;
     end;
   except
     on E: Exception do begin
-      MessageDlg('Error incontrolado logout',mtError,[mbOk],0);
+      mostrar_mensaje;
       exit;
     end;
   end;
@@ -131,30 +135,8 @@ var
   origen,destino:string;
   ZipFile:TZipFile;
 begin
-    //Descargar solo extras
-    if manual_descargar then begin
-        origen:=juego_dir(game_number)+'_extra.zip';
-        destino:=main_config.dir_base+'extras\'+juego_dir(game_number)+'_extra.zip';
-        if descargar_fichero(origen,destino,false) then begin
-          ZipFile:=TZipFile.Create;
-          if Zipfile.IsValid(destino) then begin
-              ZipFile.Open(destino,zmRead);
-              ZipFIle.ExtractAll(main_config.dir_base+'\extras');
-              ZipFile.Close;
-          end;
-          ZipFile.Free;
-        end;
-        {$I-}
-        deletefile(destino);
-        {$I+}
-    end else
-    if games_final[game_number].motor=MDSP then begin
-      origen:=games_final[game_number].dir+'_dsp.zip';
-      destino:=main_config.dir_base+'dsp\roms\'+games_final[game_number].dir+'.zip';
-      if not(descargar_fichero(origen,destino,true)) then exit;
-    end else begin
-      //Descargarse la lista de juegos y las imagenes
-      if game_number=0 then begin
+    //Descargarse la lista de juegos y las imagenes
+    if game_number=-1 then begin
         origen:='gameplay_list.zip';
         destino:=main_config.dir_base+'gameplay_list.zip';
         if descargar_fichero(origen,destino,false) then begin
@@ -185,6 +167,28 @@ begin
         {$I+}
         exit;
     end;
+    //Descargar solo extras
+    if manual_descargar then begin
+        origen:=juego_dir(game_number)+'_extra.zip';
+        destino:=main_config.dir_base+'extras\'+juego_dir(game_number)+'_extra.zip';
+        if descargar_fichero(origen,destino,false) then begin
+          ZipFile:=TZipFile.Create;
+          if Zipfile.IsValid(destino) then begin
+              ZipFile.Open(destino,zmRead);
+              ZipFIle.ExtractAll(main_config.dir_base+'\extras');
+              ZipFile.Close;
+          end;
+          ZipFile.Free;
+        end;
+        {$I-}
+        deletefile(destino);
+        {$I+}
+    end else
+    if games_final[game_number].motor=MDSP then begin
+      origen:=games_final[game_number].dir+'_dsp.zip';
+      destino:=main_config.dir_base+'dsp\roms\'+games_final[game_number].dir+'.zip';
+      if not(descargar_fichero(origen,destino,true)) then exit;
+    end else begin
       origen:=juego_dir(game_number);
       destino:=main_config.dir_zip+juego_dir(game_number);
       if not(descargar_fichero(origen+'.zip',destino+'.zip',false)) then
@@ -207,8 +211,7 @@ begin
         {$I+}
       end;
     end;
-    pillar_juegos;
-    ordena_juegos;
+    comprobar_juegos;
     mostrar_juegos;
     juego_descargado:=true;
     close;

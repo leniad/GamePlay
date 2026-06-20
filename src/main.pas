@@ -7,7 +7,6 @@ procedure form_principal_create;
 procedure form_principal_close;
 procedure form_principal_execute;
 procedure pillar_juegos;
-procedure ordena_juegos;
 procedure mostrar_juegos;
 function numero_juego:integer;
 procedure abrir_ficheros_separados(nombre_ficheros,ruta_ficheros:string);
@@ -22,6 +21,7 @@ function juego_setup(ngame:integer):string;
 function comprobar_win98:boolean;
 function comprobar_win3:boolean;
 function comprobar_scummvm:boolean;
+procedure comprobar_juegos;
 {$ifdef fpc}
 function comprobar_si_existe_fichero(directorio:string;var nombre:string;es_zip:boolean):boolean;
 {$endif}
@@ -39,13 +39,13 @@ const
   MDSP=255;
   MAX_GAMES=2000;
   TEMP_DIR='TEMP';
-  VERSION='v0.84β';
+  VERSION='v0.85β';
   BLURFACT=2;
   {$IFDEF IS_DEBUG}
   {$ifndef windows}
   debug_base_dir='/home/leniad/abandon/GamePlayVol1/';
   {$else}
-  debug_base_dir='c:\datos\abandon\GamePlay_084\';
+  debug_base_dir='c:\datos\abandon\GamePlay_085\';
   {$ENDIF}
   {$endif}
   NREFS=2;
@@ -155,7 +155,7 @@ var
   idioma_sel,juego_editado,total_juegos:integer;
   total_scumm,total_apple,total_atari800,total_msdos,total_amiga,total_dsp,total_atarise,total_win98,total_win3:integer;
   ejecutar_setup,estoy_anadiendo,estoy_ejecutando:boolean;
-  dir_dsp:string;
+  dir_dsp,ficheros_clean,dirs_clean:string;
 
 implementation
 uses {$IFDEF WINDOWS}windows,shellapi,MMSystem{$ELSE}LCLIntf,process{$ENDIF},principal,
@@ -262,34 +262,34 @@ end;
 
 procedure descomprime_zip(fichero,donde:string);
 var
-  ZipFile:TZipFile;
+  zipfile:tzipfile;
 begin
-ZipFile:=TZipFile.Create;
-if Zipfile.IsValid(fichero) then begin
+zipfile:=tzipfile.create;
+if zipfile.isvalid(fichero) then begin
   message_num:=1;
   form2.show;
-  form2.Update;
-  ZipFile.Open(fichero,zmRead);
-  ZipFIle.ExtractAll(donde);
+  form2.update;
+  zipfile.open(fichero,zmRead);
+  zipfile.extractall(donde);
   form2.close;
-  ZipFile.Close;
+  zipFile.close;
 end;
-ZipFile.Free;
+zipfile.free;
 end;
 
 procedure descomprime_rar(fichero,donde:string);
 var
    rar:TRAR;
 begin
-rar:=Trar.Create(nil);
+rar:=trar.create(nil);
 message_num:=1;
 form2.show;
-form2.Update;
+form2.update;
 try
   rar.extractArchive(fichero,donde);
 finally
   form2.close;
-  rar.Free;
+  rar.free;
 end;
 end;
 
@@ -433,26 +433,21 @@ end;
 
 procedure abrir_ficheros_separados(nombre_ficheros,ruta_ficheros:string);
 var
-  fichero_cut,fichero_extract:string;
-  posicion:integer;
-  existe,salir:boolean;
+  fichero_cut:tarray<string>;
+  f:integer;
+  existe:boolean;
 begin
-fichero_cut:=nombre_ficheros;
-if fichero_cut='' then exit;
-salir:=false;
-while not(salir) do begin
-  posicion:=pos('$',fichero_cut);
-  if posicion=0 then salir:=true;
-  if posicion<>0 then fichero_extract:=ruta_ficheros+LeftStr(fichero_cut,posicion-1)
-    else fichero_extract:=ruta_ficheros+fichero_cut;
-  fichero_cut:=RightStr(fichero_cut,Length(fichero_cut)-posicion);
-  existe:=true;
-  if not(fileexists(fichero_extract)) then existe:=descargar_manual(numero_juego);
+if nombre_ficheros='' then exit;
+fichero_cut:=nombre_ficheros.Split(['$']);
+for f:=0 to length(fichero_cut)-1 do begin
+  fichero_cut[f]:=ruta_ficheros+fichero_cut[f];
+  if not(fileexists(fichero_cut[f])) then existe:=descargar_manual(numero_juego)
+    else existe:=true;
   if existe then begin
     {$IFDEF WINDOWS}
-    ShellExecute(Application.Handle,'open',pchar(fichero_extract),nil,nil, SW_SHOWNORMAL);
+    ShellExecute(Application.Handle,'open',pchar(fichero_cut[f]),nil,nil, SW_SHOWNORMAL);
     {$ELSE}
-    OpenDocument(fichero_extract);
+    OpenDocument(fichero_cut[f]);
     {$ENDIF}
   end;
 end;
@@ -463,25 +458,6 @@ function numero_juego:integer;
 begin
   if form1.stringgrid1.Cells[1,form1.stringgrid1.row]<>'' then numero_juego:=strtoint(form1.stringgrid1.Cells[1,form1.stringgrid1.row])
     else numero_juego:=-1;
-end;
-
-function sacar_datos(var cadena:string):string;
-var
-  posicion:integer;
-begin
-posicion:=pos(';',cadena);
-if posicion=0 then begin
-  sacar_datos:=cadena;
-  exit;
-end;
-sacar_datos:=LeftStr(cadena,posicion-1);
-cadena:=RightStr(cadena,Length(cadena)-posicion);
-end;
-
-function sacar_numero(cadena:string):integer;
-begin
-if cadena='' then sacar_numero:=0
-  else sacar_numero:=strtoint(cadena);
 end;
 
 procedure mostrar_juegos;
@@ -516,13 +492,13 @@ end;
 end;
 
 begin
-if total_juegos=0 then exit;
-form1.stringgrid1.RowCount:=total_juegos;
 form1.Timer1.Enabled:=false;
-contador:=0;
-totales_bien:=0;
 form1.stringgrid1.Cells[0,0]:='';
 form1.stringgrid1.Cells[1,0]:='-1';
+if total_juegos=0 then exit;
+form1.stringgrid1.RowCount:=total_juegos;
+contador:=0;
+totales_bien:=0;
 for f:=0 to (total_juegos-1) do begin
   //DSP
   if (games_final[orden_games[f]].motor=MDSP) then begin
@@ -555,7 +531,7 @@ form1.StringGrid1Click(nil);
 if form1.Visible then form1.StringGrid1.SetFocus;
 end;
 
-procedure pillar_juegos;
+procedure comprobar_juegos;
 function comprobar_si_existe(ngame:integer;dir:string;var tipo_comp:byte;pos:integer):boolean;
 var
   juego:string;
@@ -581,6 +557,29 @@ end;
 var
   f,h,tempi:integer;
   temps:string;
+begin
+  for f:=0 to total_juegos do begin
+    if games_final[f].motor=MDSP then begin
+      temps:=games_final[f].dir+'.zip';
+      if temps<>'.zip' then games_final[f].mal:=not(fileexists(dir_dsp+'roms\'+temps))
+        else games_final[f].mal:=false;
+    end else begin
+      games_final[f].mal:=not(comprobar_si_existe(f,games_final[f].dir,games_final[f].zip,0));
+      for h:=0 to NREFS do begin
+        tempi:=games_final[f].ref[h].nref;
+        if (tempi<>0) then begin
+          games_final[f].ref[h].mal:=not(comprobar_si_existe(f,games_final_ref[tempi and $ffff].dir,games_final[f].ref[h].zip,h+1));
+        end;
+      end;
+    end;
+  end;
+end;
+
+procedure pillar_juegos;
+var
+  f,h,tempi:integer;
+  temps:string;
+  mostrar_novedades:boolean;
   RootObj:TJSONObject;
   JSONValue:TJSONValue;
   games,games_ref,ref,version:TJSONArray;
@@ -594,28 +593,45 @@ total_amiga:=0;
 total_dsp:=0;
 total_atarise:=0;
 total_win98:=0;
-//Primero los fijos...
+mostrar_novedades:=false;
+//Compruebo que hay lista
 if not(fileexists(main_config.dir_base+'games.json')) then begin
   if MessageDlg(list_descarga[4],mtWarning,[mbYes]+[mbNO],0)=7 then exit;
-  descargar_juego_sin_confirmar(0);
+  descargar_juego_sin_confirmar(-1);
   if not(fileexists(main_config.dir_base+'games.json')) then exit;
-end;
-JSONValue:=TJSONObject.ParseJSONValue(TFile.ReadAllText(main_config.dir_base+'games.json',TEncoding.UTF8));
-RootObj:=JSONValue as TJSONObject;
-version:=RootObj.GetValue<TJSONArray>('version');
-if version.Count=1 then begin
-  gameobj:=version.Items[0] as TJSONObject;
-  temps:=gameobj.GetValue<string>('version');
-  tempi:=strtoint(comprobar_version_lista);
-  if tempi>strtoint(temps) then begin
-    if MessageDlg(list_descarga[5],mtWarning,[mbOK]+[mbCancel],0)=1 then begin
-      descargar_juego_sin_confirmar(0);
+end else begin //Si hay una lista, compruebo que hay una más moderna
+  JSONValue:=TJSONObject.ParseJSONValue(TFile.ReadAllText(main_config.dir_base+'games.json',TEncoding.UTF8));
+  RootObj:=JSONValue as TJSONObject;
+  version:=RootObj.GetValue<TJSONArray>('version');
+  if version.Count=1 then begin
+    gameobj:=version.Items[0] as TJSONObject;
+    temps:=gameobj.GetValue<string>('version');
+    tempi:=strtoint(comprobar_version_lista);
+    if tempi>strtoint(temps) then begin
+      if MessageDlg(list_descarga[5],mtWarning,[mbOK]+[mbCancel],0)=1 then begin
+        descargar_juego_sin_confirmar(-1);
+        mostrar_novedades:=true;
+      end;
     end;
   end;
+  JSONValue.free;
 end;
-JSONValue.free;
 JSONValue:=TJSONObject.ParseJSONValue(TFile.ReadAllText(main_config.dir_base+'games.json',TEncoding.UTF8));
 RootObj:=JSONValue as TJSONObject;
+//Ver si tengo que mostrar las novedades
+version:=RootObj.GetValue<TJSONArray>('version');
+gameobj:=version.Items[0] as TJSONObject;
+if mostrar_novedades then begin
+  temps:=gameobj.GetValue<string>('novedades');
+  temps:=StringReplace(temps,'[RET]',RETURN,[rfReplaceAll]);
+  TaskMessageDlg('NOVEDADES v'+inttostr(tempi),temps,mtCustom,[mbOK],0);
+end;
+//Recupero los ficheros/directioios que hay que limpiar de los juegos, para borrar al salir
+ficheros_clean:='';
+dirs_clean:='';
+if gameobj.TryGetValue<string>('file_clean',ficheros_clean) then
+  dirs_clean:=gameobj.GetValue<string>('dir_clean');
+//Recupero los juegos
 games:=RootObj.GetValue<TJSONArray>('games');
 games_ref:=RootObj.GetValue<TJSONArray>('games_ref');
 setlength(games_final_ref,games_ref.Count+1);
@@ -659,17 +675,8 @@ for f:=0 to (games.Count-1) do begin
   games_final[f].memoria:=gameobj.GetValue<integer>('memoria');
   games_final[f].setup:=gameobj.GetValue<string>('setup');
   //ES IMPORTANTE ESTE ORDEN!!!
-  if gameobj.tryGetValue<TJSONArray>('refs',ref) then begin
-    ref:=gameobj.GetValue<TJSONArray>('refs');
-    for h:=0 to NREFS do begin
-      tempi:=strtoint(ref.Items[h].value);
-      if (tempi<>0) then begin
-        games_final[f].ref[h].nref:=tempi;
-        games_final[f].ref[h].mal:=not(comprobar_si_existe(f,games_final_ref[tempi and $ffff].dir,games_final[f].ref[h].zip,h+1));
-      end;
-    end;
-  end;
-  games_final[f].mal:=not(comprobar_si_existe(f,games_final[f].dir,games_final[f].zip,0));
+  if gameobj.tryGetValue<TJSONArray>('refs',ref) then
+    for h:=0 to NREFS do games_final[f].ref[h].nref:=strtoint(ref.Items[h].value);
   games_final[f].motor:=gameobj.GetValue<byte>('motor');
   games_final[f].year:=gameobj.GetValue<string>('year');
   games_final[f].company:=gameobj.GetValue<string>('company');
@@ -704,26 +711,13 @@ for f:=0 to (GAME_TOTAL_DSP-1) do begin
  games_final[total_juegos].year:=GAME_DATA_DSP[f].extra_param;
  games_final[total_juegos].motor:=MDSP;
  games_final[total_juegos].mal:=true;
- temps:=games_final[total_juegos].dir+'.zip';
- if temps<>'.zip' then games_final[total_juegos].mal:=not(fileexists(dir_dsp+'roms\'+temps));
  total_dsp:=total_dsp+1;
  total_juegos:=total_juegos+1;
 end;
-end;
-
-procedure ordena_juegos;
-var
-  f,h,pos:integer;
-begin
-for f:=0 to (total_juegos-1) do orden_games[f]:=f;
-for f:=0 to (total_juegos-2) do begin
-  for h:=0 to (total_juegos-2) do begin
-    if games_final[orden_games[h]].nombre>games_final[orden_games[h+1]].nombre then begin
-      pos:=orden_games[h];
-      orden_games[h]:=orden_games[h+1];
-      orden_games[h+1]:=pos;
-    end;
-  end;
+comprobar_juegos;
+if total_juegos>MAX_GAMES then begin
+  MessageDlg('Número máximo de juegos excedido! Aumentar CONST',mtError,[mbOK],0);
+  halt(0);
 end;
 end;
 
@@ -958,15 +952,23 @@ var
   {$IFNDEF WINDOWS}
   process:tprocess;
   {$ENDIF}
+  temps:TArray<string>;
+  f:integer;
 begin
 //Borro el directorio temporal
 delete_dir(TEMP_DIR);
-//Borro el directorio que deja el doom!
-delete_dir('DOOMDATA');
-deletefile(main_config.dir_base+'LCACHE00.TMP');
+//Limpieza de varias cosas internas
 deletefile(main_config.dir_base+'extras\win98\win98.img');
 deletefile(main_config.dir_base+'extras\win3\win3.img');
-delete_dir('DELUXE');
+deletefile(main_config.dir_base+'stderr.txt');
+deletefile(main_config.dir_base+'stdout.txt');
+//Limpieza de los juegos
+temps:=ficheros_clean.Split(['$']);
+for f:=0 to length(temps)-1 do
+  deletefile(main_config.dir_base+temps[f]);
+temps:=dirs_clean.Split(['$']);
+for f:=0 to length(temps)-1 do
+  delete_dir(temps[f]);
 if DirectoryExists(main_config.dir_base) then begin
   {$I-}
   //grabo las opciones
@@ -1352,7 +1354,7 @@ case main_config.motor of
       exec_string:=main_config.dir_base+'extras\dosboxgs\dosbox.exe';
       if ContainsText(temp_exec,'.img') then exec_c_param:='-c "boot c:\'+exec_dir+'\'+temp_exec+exec_sd+'"'
         else exec_c_param:='-c c:\'+TEMP_DIR+'\start.bat';
-      exec_dosbox_extra_config:='-noconsole -exit -conf '+main_config.dir_base+'extras\dosboxgs\dosbox.conf -conf '+main_config.dir_base+TEMP_DIR+'\gameplay.conf '+exec_c_param;
+      exec_dosbox_extra_config:='-noconsole -exit -userconf -conf '+main_config.dir_base+'extras\dosboxgs\dosbox.conf -conf '+main_config.dir_base+TEMP_DIR+'\gameplay.conf '+exec_c_param;
       cambiar_ini(MGUNSTICK,'cpu','cycles',inttostr(juego_ciclos(ngame)));
       if form1.checkbox1.Checked then exec_fullscreen:='true'
         else exec_fullscreen:='false';
@@ -1471,32 +1473,6 @@ case main_config.motor of
      ShellExecute(form1.Handle,'open',pchar(main_config.dir_base+'extras\dosbox_x\dosbox-x.exe'),pchar(param_string),nil,SW_SHOWNORMAL);
   end;
 end;
-end;
-
-function comprobar_existe(ruta:string;directorio:string):boolean;
-var
-  salir:boolean;
-  posicion:integer;
-  extract:string;
-begin
-if ruta[length(ruta)]='\' then begin
-  comprobar_existe:=directoryexists(directorio+ruta);
-  exit;
-end else begin
-  salir:=false;
-  while not(salir) do begin
-    posicion:=pos('$',ruta);
-    if posicion=0 then salir:=true;
-    if posicion<>0 then extract:=LeftStr(ruta,posicion-1)
-      else extract:=ruta;
-    ruta:=RightStr(ruta,length(ruta)-posicion);
-    if not(fileexists(directorio+extract)) then begin
-      comprobar_existe:=false;
-      exit;
-    end;
-  end;
-  end;
-comprobar_existe:=true;
 end;
 
 procedure config_show;
