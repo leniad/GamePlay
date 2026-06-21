@@ -11,7 +11,7 @@ Esta es la lista de juegos que me gustaría incluir. Si tienes alguno de ellos y
     - Mot - Spanish<br>
     - Desperado<br>
     - Rococop III crean cracked
--Atari ST<br>
+- Atari ST<br>
     - Mot - Spanish<br>
     - Hard'n'Heavy - Clean cracked or STX
     - Terry's Big Adventure - Clean cracked or STX
