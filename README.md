@@ -1,12 +1,38 @@
 # GamePlay status #
 ![Main Screen](https://i.ibb.co/9kqMQyyr/gameplay-085-en.png)<br>
 Please read 'Most Wanted' games!<br><br>
+<b>21/06/26 - Update game list v4
+<pre>
+-MSDOS
+    +Added games
+        -Transport Tycoon (DeLuxe)
+        -Death Rally
+        -X-Men: Children of the Atom
+        -Dizzy - Prince of the Yolkfolk
+        -Big Red Racing
+        -Chasm: The Rift
+        -Jurassic Park
+        -The Chaos Engine
+ -Atari ST
+     +Added games
+        -Gods
+        -Hard'n'Heavy
+        -Cabal
+        -Terry's Big Adventure
+        -Wings of Death
+        -The New Zealand Story
+        -Ghouls'n Ghosts
+        -Ghost Battle
+        -Golden Axe
+        -Leander
+</pre>
 <b>20/06/26 - GamePlay updated to 0.85b
 <pre>
 -General
-    +Fixed the download for the MS-DOS game "Bruce Lee"
     +Changes are displayed when a new game list is downloaded
     +Downloading a game no longer causes the entire game list to be reloaded
+-MSDOS
+    +Fixed downloading "Bruce Lee"
 -DSP
     +Console systems that do not require ROMs (NES, Sega Master System, etc.) now launch correctly
 </pre>

@@ -118,48 +118,6 @@ Restores the original configuration. (_Panic button_)
 
 ---
 
-# 3. Add / Modify / Delete Games (Advanced Options)
-
-![Modify Games](https://i.ibb.co/whHTg15s/add-082-en.png)
-
-If you enable the "Advanced Options" setting on the main screen, two additional buttons will appear: "Add Games" and "Modify/Delete Games".  
-In this menu, you can add new games to the main list alongside the default ones, or modify already added games.  
-
-By default, you cannot modify the values of games included in the default list. To do so, you must enable the option "Read values from default games" in the "Advanced Configuration" screen. Changes to default games are temporary and will revert after restarting GamePlay.  
-
-However, games added manually can be permanently modified and saved.  
-
-Depending on the selected tab, different options will appear.
-
----
-
-## Configurable Parameters
-
-- **Full Name**: Name displayed in the list
-- **Image Name**: Specifies the preview image filename. The actual filename must end with `_000` and use PNG format, but here you only enter the base name. Example: if the image file is named `rastan_000.png`, entering `rastan` will load the image. Additional rotating images can be added using `_001`, `_002`, etc.
-- **Publication Year and Company**: Optional game information.
-- **ScummVM Compatible**: Check this if the game is supported by ScummVM. The game will appear when the ScummVM engine is selected.
-- **Works Only in ScummVM**: The game only works with the ScummVM engine and will not appear with other emulators. (Example: `Arthur Teacher Trouble`)
-- **Directory/ZIP File**: Specify the directory (if uncompressed) or ZIP filename. If uncompressed, the game directory must be in the same location as GamePlay.
-- **Executable File**: Full executable filename including extension (`.exe`, `.com`, `.bat`, etc.). If it is a disk image with `.img` extension, the "Second Disk Image" option will be enabled to optionally add a second disk image. GamePlay checks whether the file exists either inside the game folder or ZIP file.
-- **Parameters**: Command-line parameters passed to the executable. (Example: `Maniac Mansion`)
-- **Run BEFORE**: MS-DOS commands to execute before launching the game. (Example: `Renegade`)
-- **Run AFTER**: MS-DOS commands to execute after launching the game. (Example: `Doom`)
-- **Setup Program**: If the game requires an installation/setup program before running, specify it here. It will execute when pressing the setup button. (Example: `Lost Vikings`)
-- **CD-ROM**: If the game uses an ISO or CUE image, specify it here and GamePlay will mount it before starting the game. (Example: `Mortal Kombat 3`)
-- **CPU Cycles**: CPU cycle count for the game. Higher values make the emulated CPU faster. `1` runs at maximum speed, `-1` uses automatic mode.
-- **Computer Type**: Select the computer type used to run the game.
-- **RAM Memory**: Amount of RAM assigned to the game.
-- **Enable GUS**: Enable Gravis UltraSound support if the game supports it. (Example: `Doom`)
-- **Keyboard Mapping File**: Specify a custom keyboard mapping file if needed. (Example: `Bruce Lee`)
-- **Info/Help Message**: Optional information displayed when launching the game. (Example: `Gobliins`)
-- **Extra DOSBox Parameters**: Additional DOSBox parameters required for certain games. (Example: `Battle Chess 4000`)
-- **Manuals, Maps, and Guides**: Add documents to open when pressing the corresponding button. Multiple files can be separated using `$`. If there are many files, specify a directory ending with `\` to open the folder directly.
-- **Language**: Select the game's language for filtering purposes. `General` means the game only has one language.
-- **Type**: Select the game type for filtering in the main screen.
-
----
-
-# 4. Playing on Linux or Mac
+# 3. Playing on Linux or Mac
 
 Due to recent changes, the Linux and Mac versions are currently a work in progress.
