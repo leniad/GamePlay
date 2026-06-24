@@ -1,6 +1,12 @@
 # GamePlay status #
-![Main Screen](https://i.ibb.co/9kqMQyyr/gameplay-085-en.png)<br>
+![Main Screen](https://i.ibb.co/DPfqtH8K/gameplay-090-en.png)<br>
 Please read 'Most Wanted' games!<br><br>
+<b>24/06/26 - GamePlay updated to 0.90b
+<pre>
+-General
+    +Added a new Sega Saturn emulator: Ymir. (A very good emulator!)
+    +Small fix for a better screen resolution
+</pre>
 <b>21/06/26 - Update game list v4
 <pre>
 -MSDOS

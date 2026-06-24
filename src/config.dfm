@@ -4,7 +4,7 @@ object Form4: TForm4
   BorderIcons = [biMinimize, biMaximize]
   BorderStyle = bsSingle
   Caption = 'Configuraci'#243'n Avanzada'
-  ClientHeight = 503
+  ClientHeight = 524
   ClientWidth = 863
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET

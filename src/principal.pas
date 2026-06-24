@@ -62,6 +62,7 @@ type
     GroupBox9: TGroupBox;
     RadioButton7: TRadioButton;
     RadioButton8: TRadioButton;
+    RadioButton14: TRadioButton;
     procedure FormCreate(Sender: TObject);
     procedure StringGrid1DblClick(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
@@ -97,6 +98,7 @@ type
     procedure RadioButton13Click(Sender: TObject);
     procedure CheckBox10Click(Sender: TObject);
     procedure CheckBox9Click(Sender: TObject);
+    procedure RadioButton14Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -491,6 +493,29 @@ begin
   stringgrid1.row:=0;
   mostrar_juegos;
   comprobar_win3;
+end;
+
+procedure TForm1.RadioButton14Click(Sender: TObject);
+begin
+  main_config.motor:=MSEGASATURN;
+  combobox1.Visible:=false;
+  checkbox3.Enabled:=true;
+  checkbox16.Enabled:=true;
+  checkbox6.Enabled:=true;
+  checkbox4.Enabled:=true;
+  checkbox5.Enabled:=true;
+  checkbox7.Enabled:=true;
+  checkbox8.Enabled:=true;
+  checkbox17.Enabled:=true;
+  checkbox2.Enabled:=false;
+  checkbox15.Enabled:=false;
+  checkbox10.Enabled:=true;
+  groupbox9.visible:=false;
+  groupbox2.visible:=false;
+  groupbox10.visible:=false;
+  if total_juegos=0 then exit;
+  stringgrid1.row:=0;
+  mostrar_juegos;
 end;
 
 procedure TForm1.StringGrid1Click(Sender: TObject);

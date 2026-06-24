@@ -35,17 +35,18 @@ const
   MATARIST=5;
   MWIN98=6;
   MWIN3=7;
+  MSEGASATURN=8;
   MGUNSTICK=254;
   MDSP=255;
   MAX_GAMES=2000;
   TEMP_DIR='TEMP';
-  VERSION='v0.85β';
+  VERSION='v0.90β';
   BLURFACT=2;
   {$IFDEF IS_DEBUG}
   {$ifndef windows}
   debug_base_dir='/home/leniad/abandon/GamePlayVol1/';
   {$else}
-  debug_base_dir='c:\datos\abandon\GamePlay_085\';
+  debug_base_dir='c:\datos\abandon\GamePlay_090\';
   {$ENDIF}
   {$endif}
   NREFS=2;
@@ -153,7 +154,7 @@ var
   games_final_ref:array of tipo_games_ref;
   main_config:tipo_config;
   idioma_sel,juego_editado,total_juegos:integer;
-  total_scumm,total_apple,total_atari800,total_msdos,total_amiga,total_dsp,total_atarise,total_win98,total_win3:integer;
+  total_scumm,total_apple,total_atari800,total_msdos,total_amiga,total_dsp,total_atarise,total_win98,total_win3,total_segasaturn:integer;
   ejecutar_setup,estoy_anadiendo,estoy_ejecutando:boolean;
   dir_dsp,ficheros_clean,dirs_clean:string;
 
@@ -523,6 +524,7 @@ case main_config.motor of
     MATARIST:temps:=inttostr(total_atarise);
     MWIN98:temps:=inttostr(total_win98);
     MWIN3:temps:=inttostr(total_win3);
+    MSEGASATURN:temps:=inttostr(total_segasaturn);
     MDSP:temps:=inttostr(total_dsp);
 end;
 form1.stringgrid1.RowCount:=contador;
@@ -698,6 +700,7 @@ for f:=0 to (games.Count-1) do begin
       MATARIST:total_atarise:=total_atarise+1;
       MWIN98:total_win98:=total_win98+1;
       MWIN3:total_win3:=total_win3+1;
+      MSEGASATURN:total_segasaturn:=total_segasaturn+1;
   end;
 end;
 total_juegos:=games.Count;
@@ -790,6 +793,7 @@ begin
       MATARIST:form1.radiobutton11.Checked:=true;
       MWIN98:form1.radiobutton12.Checked:=true;
       MWIN3:form1.radiobutton13.Checked:=true;
+      MSEGASATURN:form1.radiobutton14.Checked:=true;
     end;
     form1.checkbox1.Checked:=(fich_ini.readinteger('opciones','pantalla',1)<>0);
     form1.checkbox14.Checked:=(fich_ini.readinteger('opciones','sonido',1)<>0);
@@ -1239,7 +1243,7 @@ case main_config.motor of
     case main_config.motor_msdos of
       0:begin //DosBox
           exec_string:=main_config.dir_base+'extras\dosbox\dosbox.exe';
-          exec_dosbox_extra_config:=' --conf "'+main_config.config_dosbox+'" -set windowresolution=800x600 -set glshader=none -set ne2000=false';
+          exec_dosbox_extra_config:=' --conf "'+main_config.config_dosbox+'" -set windowresolution=900x676 -set glshader=none -set ne2000=false';
           {$ifdef windows}
           temp_str:='['+games_final[ngame].nombre+']';
           {$else}
@@ -1251,7 +1255,7 @@ case main_config.motor of
         end;
       1:begin //DosBox-X
           exec_string:=main_config.dir_base+'extras\dosbox_x\dosbox-x.exe';
-          exec_dosbox_extra_config:=' --conf "'+main_config.config_dosbox_x+'" -set output=direct3d -set windowresolution='{$IFDEF IS_DEBUG}+'original'{$ELSE}+'800x600'{$ENDIF};
+          exec_dosbox_extra_config:=' --conf "'+main_config.config_dosbox_x+'" -set output=direct3d -set windowresolution=900x676'; //'{$IFDEF IS_DEBUG}+'original'{$ELSE}+'800x600'{$ENDIF};
           exec_parametros:='-set titlebar="'+games_final[ngame].nombre+'" -set showmenu=true -set "quit warning"=false -set autolock=true -set showbasic=false -set fastbioslogo=true -set "disable graphical splash"=true -set startbanner=false -set memsize='+exec_memoria+' -set mididevice=mt32 -set gustype=max -set ultradir=C:\extras\ULTRASND -set disney=true -set mouse_emulation=always';
           exec_roland:='-set mt32.romdir="'+main_config.dir_mt32+'"';
           exec_ciclos:='-set cycles=';
@@ -1471,6 +1475,13 @@ case main_config.motor of
      temps:='-c "imgmount c: '+main_config.dir_base+'extras\win3\win3.img" -c "mount d: '+main_config.dir_base+exec_dir+'" '+cd_rom_dir+' -c "c:\windows\win d:\'+games_final[ngame].exec+'" ';
      param_string:=temps+exec_dosbox_extra_config+exec_parametros+exec_fullscreen+exec_sound+' '+exec_extra;
      ShellExecute(form1.Handle,'open',pchar(main_config.dir_base+'extras\dosbox_x\dosbox-x.exe'),pchar(param_string),nil,SW_SHOWNORMAL);
+  end;
+  MSEGASATURN:begin
+    if form1.checkbox1.Checked then exec_fullscreen:=' --fullscreen '
+      else exec_fullscreen:='';
+    temps:='--disc "'+main_config.dir_base+exec_dir+'\'+games_final[ngame].exec+'"';
+    param_string:=exec_fullscreen+temps;
+    ShellExecute(form1.Handle,'open',pchar(main_config.dir_base+'extras\ymir\ymir-sdl3.exe'),pchar(param_string),nil,SW_SHOWNORMAL);
   end;
 end;
 end;

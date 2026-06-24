@@ -6905,7 +6905,7 @@ object Form1: TForm1
     TabOrder = 1
     object CheckBox1: TCheckBox
       Left = 16
-      Top = 225
+      Top = 245
       Width = 213
       Height = 19
       TabStop = False
@@ -6915,7 +6915,7 @@ object Form1: TForm1
     end
     object CheckBox2: TCheckBox
       Left = 16
-      Top = 265
+      Top = 285
       Width = 212
       Height = 19
       TabStop = False
@@ -6927,7 +6927,7 @@ object Form1: TForm1
     end
     object CheckBox14: TCheckBox
       Left = 16
-      Top = 245
+      Top = 265
       Width = 97
       Height = 19
       TabStop = False
@@ -6941,7 +6941,7 @@ object Form1: TForm1
       Left = 16
       Top = 17
       Width = 177
-      Height = 202
+      Height = 222
       Caption = 'Sistema'
       TabOrder = 3
       object RadioButton1: TRadioButton
@@ -7025,10 +7025,19 @@ object Form1: TForm1
         TabOrder = 8
         OnClick = RadioButton13Click
       end
+      object RadioButton14: TRadioButton
+        Left = 16
+        Top = 200
+        Width = 129
+        Height = 20
+        Caption = 'Sega Saturn'
+        TabOrder = 9
+        OnClick = RadioButton14Click
+      end
     end
     object CheckBox15: TCheckBox
       Left = 16
-      Top = 285
+      Top = 305
       Width = 212
       Height = 19
       TabStop = False
@@ -7221,7 +7230,7 @@ object Form1: TForm1
   end
   object GroupBox2: TGroupBox
     Left = 18
-    Top = 515
+    Top = 535
     Width = 190
     Height = 65
     Margins.Left = 5
@@ -7251,7 +7260,7 @@ object Form1: TForm1
   end
   object GroupBox10: TGroupBox
     Left = 18
-    Top = 515
+    Top = 535
     Width = 190
     Height = 65
     Margins.Left = 5
@@ -7287,7 +7296,7 @@ object Form1: TForm1
   end
   object GroupBox9: TGroupBox
     Left = 18
-    Top = 515
+    Top = 535
     Width = 190
     Height = 65
     Margins.Left = 5
