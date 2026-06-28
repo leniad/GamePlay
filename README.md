@@ -1,6 +1,14 @@
 # GamePlay status #
-![Main Screen](https://i.ibb.co/DPfqtH8K/gameplay-090-en.png)<br>
+![Main Screen](https://i.ibb.co/kgC9PdZW/gameplay-091-en.png)<br>
 Please read 'Most Wanted' games!<br><br>
+<b>28/06/26 - GamePlay updated to 0.91b
+<pre>
+-General
+    +Added a new Super Nintendo emulator: Ares
+    +Added a new Nintendo 64 emulator: RMG
+    +Fixed launching games by pressing ENTER after navigating the game list with the keyboard
+    +Added a message while extracting images after downloading a new game list
+</pre>
 <b>24/06/26 - GamePlay updated to 0.90b
 <pre>
 -General

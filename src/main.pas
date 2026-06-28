@@ -21,6 +21,7 @@ function juego_setup(ngame:integer):string;
 function comprobar_win98:boolean;
 function comprobar_win3:boolean;
 function comprobar_scummvm:boolean;
+function comprobar_n64:boolean;
 procedure comprobar_juegos;
 {$ifdef fpc}
 function comprobar_si_existe_fichero(directorio:string;var nombre:string;es_zip:boolean):boolean;
@@ -36,17 +37,19 @@ const
   MWIN98=6;
   MWIN3=7;
   MSEGASATURN=8;
+  MSNES=9;
+  MN64=10;
   MGUNSTICK=254;
   MDSP=255;
   MAX_GAMES=2000;
   TEMP_DIR='TEMP';
-  VERSION='v0.90β';
+  VERSION='v0.91β';
   BLURFACT=2;
   {$IFDEF IS_DEBUG}
   {$ifndef windows}
   debug_base_dir='/home/leniad/abandon/GamePlayVol1/';
   {$else}
-  debug_base_dir='c:\datos\abandon\GamePlay_090\';
+  debug_base_dir='c:\datos\abandon\GamePlay_091\';
   {$ENDIF}
   {$endif}
   NREFS=2;
@@ -154,7 +157,7 @@ var
   games_final_ref:array of tipo_games_ref;
   main_config:tipo_config;
   idioma_sel,juego_editado,total_juegos:integer;
-  total_scumm,total_apple,total_atari800,total_msdos,total_amiga,total_dsp,total_atarise,total_win98,total_win3,total_segasaturn:integer;
+  total_scumm,total_apple,total_atari800,total_msdos,total_amiga,total_dsp,total_atarise,total_win98,total_win3,total_segasaturn,total_snes,total_n64:integer;
   ejecutar_setup,estoy_anadiendo,estoy_ejecutando:boolean;
   dir_dsp,ficheros_clean,dirs_clean:string;
 
@@ -163,7 +166,7 @@ uses {$IFDEF WINDOWS}windows,shellapi,MMSystem{$ELSE}LCLIntf,process{$ENDIF},pri
      inifiles,grids,sysutils,forms,idioma_info,strutils,dsp_data,
      config,dialogs{$ifdef fpc},classes,zipper{$else},zip,uitypes{$endif},
      games_download,system.ioutils,Vcl.Imaging.pngimage,math,types,System.JSON,
-     mensajes,system.generics.Collections,rar;
+     mensajes,system.generics.Collections,rar,system.classes;
 
 const
  RETURN=chr(10);
@@ -326,6 +329,18 @@ begin
       exit;
   end;
   comprobar_win3:=true;
+end;
+
+function comprobar_n64:boolean;
+begin
+  comprobar_n64:=false;
+  if not(fileexists(main_config.dir_base+'extras\rmg\rmg.exe')) then begin
+      if MessageDlg(list_descarga[8],mtWarning,[mbOK]+[mbCancel],0)=2 then exit;
+      comprobar_n64:=descargar_fichero('rmg.zip',main_config.dir_base+TEMP_DIR+'\rmg.zip',true);
+      descomprime_zip(main_config.dir_base+TEMP_DIR+'\rmg.zip',main_config.dir_base+'extras\rmg');
+      exit;
+  end;
+  comprobar_n64:=true;
 end;
 
 function juego_mal(ngame:integer):boolean;
@@ -525,6 +540,8 @@ case main_config.motor of
     MWIN98:temps:=inttostr(total_win98);
     MWIN3:temps:=inttostr(total_win3);
     MSEGASATURN:temps:=inttostr(total_segasaturn);
+    MSNES:temps:=inttostr(total_snes);
+    MN64:temps:=inttostr(total_n64);
     MDSP:temps:=inttostr(total_dsp);
 end;
 form1.stringgrid1.RowCount:=contador;
@@ -595,6 +612,10 @@ total_amiga:=0;
 total_dsp:=0;
 total_atarise:=0;
 total_win98:=0;
+total_win3:=0;
+total_segasaturn:=0;
+total_snes:=0;
+total_n64:=0;
 mostrar_novedades:=false;
 //Compruebo que hay lista
 if not(fileexists(main_config.dir_base+'games.json')) then begin
@@ -701,6 +722,8 @@ for f:=0 to (games.Count-1) do begin
       MWIN98:total_win98:=total_win98+1;
       MWIN3:total_win3:=total_win3+1;
       MSEGASATURN:total_segasaturn:=total_segasaturn+1;
+      MSNES:total_snes:=total_snes+1;
+      MN64:total_n64:=total_n64+1;
   end;
 end;
 total_juegos:=games.Count;
@@ -745,6 +768,25 @@ begin
     fich_ini.Free;
   end;
   {$I+}
+end;
+
+procedure cambiar_config_bsnes(buscar,poner:string);
+var
+  sl:TStringList;
+  f:integer;
+  fichero:string;
+begin
+  sl:=TStringList.Create;
+  fichero:=main_config.dir_base+'extras\ares\settings.bml';
+  try
+    sl.LoadFromFile(fichero);
+    for f:= 0 to (sl.count-1) do
+      if ContainsText(sl[f],buscar) then
+        sl[f]:=poner;
+    SL.SaveToFile(fichero);
+  finally
+    sl.free;
+  end;
 end;
 
 procedure form_principal_create;
@@ -794,6 +836,8 @@ begin
       MWIN98:form1.radiobutton12.Checked:=true;
       MWIN3:form1.radiobutton13.Checked:=true;
       MSEGASATURN:form1.radiobutton14.Checked:=true;
+      MSNES:form1.radiobutton15.Checked:=true;
+      MN64:form1.radiobutton16.Checked:=true;
     end;
     form1.checkbox1.Checked:=(fich_ini.readinteger('opciones','pantalla',1)<>0);
     form1.checkbox14.Checked:=(fich_ini.readinteger('opciones','sonido',1)<>0);
@@ -905,6 +949,8 @@ begin
   cambiar_ini(MDSP,'dir','spectrum_rom_48',dir_dsp+'roms\spectrum.zip');
   cambiar_ini(MDSP,'dir','spectrum_rom_128',dir_dsp+'roms\spec128.zip');
   cambiar_ini(MDSP,'dir','spectrum_rom_plus3',dir_dsp+'roms\plus3.zip');
+  //Modifico el fichero de configuracion de bsnes
+  cambiar_config_bsnes(' Saves:','  Saves: '+main_config.dir_base+'extras\nvram\');
   //Compruebo si hay joystick, y si en apple2 esta marcado
   if joysticks>0 then begin
     form1.radiobutton9.enabled:=true;
@@ -1482,6 +1528,25 @@ case main_config.motor of
     temps:='--disc "'+main_config.dir_base+exec_dir+'\'+games_final[ngame].exec+'"';
     param_string:=exec_fullscreen+temps;
     ShellExecute(form1.Handle,'open',pchar(main_config.dir_base+'extras\ymir\ymir-sdl3.exe'),pchar(param_string),nil,SW_SHOWNORMAL);
+  end;
+  MSNES:begin
+    if form1.checkbox1.Checked then exec_fullscreen:=' --fullscreen '
+      else exec_fullscreen:='';
+    if form1.checkbox14.Checked then cambiar_config_bsnes('  Mute:','  Mute: false')
+      else cambiar_config_bsnes('  Mute:','  Mute: true');
+    temp_exec:=juego_exec(ngame,form1.ComboBox1.ItemIndex);
+    temps:='"'+main_config.dir_base+exec_dir+'\'+temp_exec+'"';
+    param_string:=exec_fullscreen+temps;
+    ShellExecute(form1.Handle,'open',pchar(main_config.dir_base+'extras\ares\ares.exe'),pchar(param_string),nil,SW_SHOWNORMAL);
+  end;
+  MN64:begin
+    if not(comprobar_n64) then exit;
+    if form1.checkbox1.Checked then exec_fullscreen:=' --fullscreen '
+      else exec_fullscreen:='';
+    temp_exec:=juego_exec(ngame,form1.ComboBox1.ItemIndex);
+    temps:='"'+main_config.dir_base+exec_dir+'\'+temp_exec+'"';
+    param_string:=exec_fullscreen+temps;
+    ShellExecute(form1.Handle,'open',pchar(main_config.dir_base+'extras\rmg\rmg.exe'),pchar(param_string),pchar(exec_extra),SW_SHOWNORMAL);
   end;
 end;
 end;

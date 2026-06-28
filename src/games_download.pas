@@ -37,7 +37,7 @@ var
   Form5:TForm5;
 
 implementation
-uses download_game,main,zip,idioma_info,principal;
+uses download_game,main,zip,idioma_info,principal,mensajes;
 
 var
   FApi:TApiClient;
@@ -140,6 +140,9 @@ begin
         origen:='gameplay_list.zip';
         destino:=main_config.dir_base+'gameplay_list.zip';
         if descargar_fichero(origen,destino,false) then begin
+          message_num:=1;
+          form2.show;
+          form2.update;
           ZipFile:=TZipFile.Create;
           if Zipfile.IsValid(destino) then begin
               ZipFile.Open(destino,zmRead);
@@ -151,9 +154,13 @@ begin
         {$I-}
         deletefile(destino);
         {$I+}
+        form2.close;
         origen:='gameplay_imgs.zip';
         destino:=main_config.dir_base+'gameplay_imgs.zip';
         if descargar_fichero(origen,destino,false) then begin
+          message_num:=1;
+          form2.show;
+          form2.update;
           ZipFile:=TZipFile.Create;
           if Zipfile.IsValid(destino) then begin
               ZipFile.Open(destino,zmRead);
@@ -165,6 +172,7 @@ begin
         {$I-}
         deletefile(destino);
         {$I+}
+        form2.close;
         exit;
     end;
     //Descargar solo extras

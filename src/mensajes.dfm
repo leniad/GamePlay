@@ -3,8 +3,8 @@ object Form2: TForm2
   Top = 0
   BorderIcons = []
   BorderStyle = bsSingle
-  ClientHeight = 60
-  ClientWidth = 227
+  ClientHeight = 71
+  ClientWidth = 246
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText

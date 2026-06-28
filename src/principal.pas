@@ -63,6 +63,8 @@ type
     RadioButton7: TRadioButton;
     RadioButton8: TRadioButton;
     RadioButton14: TRadioButton;
+    RadioButton15: TRadioButton;
+    RadioButton16: TRadioButton;
     procedure FormCreate(Sender: TObject);
     procedure StringGrid1DblClick(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
@@ -99,6 +101,8 @@ type
     procedure CheckBox10Click(Sender: TObject);
     procedure CheckBox9Click(Sender: TObject);
     procedure RadioButton14Click(Sender: TObject);
+    procedure RadioButton15Click(Sender: TObject);
+    procedure RadioButton16Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -518,6 +522,53 @@ begin
   mostrar_juegos;
 end;
 
+procedure TForm1.RadioButton15Click(Sender: TObject);
+begin
+  main_config.motor:=MSNES;
+  combobox1.Visible:=false;
+  checkbox3.Enabled:=true;
+  checkbox16.Enabled:=true;
+  checkbox6.Enabled:=true;
+  checkbox4.Enabled:=true;
+  checkbox5.Enabled:=true;
+  checkbox7.Enabled:=true;
+  checkbox8.Enabled:=true;
+  checkbox17.Enabled:=true;
+  checkbox2.Enabled:=false;
+  checkbox15.Enabled:=false;
+  checkbox10.Enabled:=true;
+  groupbox9.visible:=false;
+  groupbox2.visible:=false;
+  groupbox10.visible:=false;
+  if total_juegos=0 then exit;
+  stringgrid1.row:=0;
+  mostrar_juegos;
+end;
+
+procedure TForm1.RadioButton16Click(Sender: TObject);
+begin
+  main_config.motor:=MN64;
+  combobox1.Visible:=false;
+  checkbox3.Enabled:=true;
+  checkbox16.Enabled:=true;
+  checkbox6.Enabled:=true;
+  checkbox4.Enabled:=true;
+  checkbox5.Enabled:=true;
+  checkbox7.Enabled:=true;
+  checkbox8.Enabled:=true;
+  checkbox17.Enabled:=true;
+  checkbox2.Enabled:=false;
+  checkbox15.Enabled:=false;
+  checkbox10.Enabled:=true;
+  groupbox9.visible:=false;
+  groupbox2.visible:=false;
+  groupbox10.visible:=false;
+  if total_juegos=0 then exit;
+  stringgrid1.row:=0;
+  mostrar_juegos;
+  comprobar_n64;
+end;
+
 procedure TForm1.StringGrid1Click(Sender: TObject);
 var
   image_string:string;
@@ -550,7 +601,7 @@ begin
   end;
   if (old_game<>ngame) then begin
     image7.visible:=false;
-    if ((main_config.motor=MMSDOS) or (main_config.motor=MSCUMM) or ((main_config.motor=MWIN98))) then begin
+    if ((main_config.motor=MMSDOS) or (main_config.motor=MSCUMM) or (main_config.motor=MWIN98) or (main_config.motor=MSNES)) then begin
         combobox1.Visible:=false;
         if (games_final[ngame].ref[0].nref<>0) then begin
           combobox1.Items.Clear;
@@ -559,7 +610,7 @@ begin
           cantidad:=0;
           for f:=0 to NREFS do begin
             if (games_final[ngame].ref[f].nref<>0) then begin
-              if (((main_config.motor=MSCUMM) and ((games_final[ngame].ref[f].nref and NO_SCUMM)=0)) or (main_config.motor=MMSDOS) or (main_config.motor=MWIN98)) then begin
+              if (((main_config.motor=MSCUMM) and ((games_final[ngame].ref[f].nref and NO_SCUMM)=0)) or (main_config.motor=MMSDOS) or (main_config.motor=MWIN98) or (main_config.motor=MSNES)) then begin
                 combobox1.Items.Add(games_final_ref[games_final[ngame].ref[f].nref and $ffff].nombre);
                 cantidad:=cantidad+1;
                 if (games_final[ngame].ref[f].nref and $ff0000)<>0 then
@@ -638,7 +689,9 @@ begin
 case key of
   13:if not(estoy_ejecutando) then StringGrid1DblClick(nil)
         else estoy_ejecutando:=false;
+  38,40:estoy_ejecutando:=false;
   48..57,65..90:begin
+            estoy_ejecutando:=false;
             typed:=typed+lowercase(char(key));
             timer2.Enabled:=false;
             timer2.Enabled:=true;

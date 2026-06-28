@@ -122,12 +122,12 @@
         <VerInfo_Locale>1033</VerInfo_Locale>
         <Icon_MainIcon>gfx\gameplay_Icon_b.ico</Icon_MainIcon>
         <VerInfo_MajorVer>0</VerInfo_MajorVer>
-        <VerInfo_MinorVer>90</VerInfo_MinorVer>
-        <VerInfo_Keys>CompanyName=Leniad;FileDescription=$(MSBuildProjectName);FileVersion=0.90.0.103;InternalName=GamePlay;LegalCopyright=Leniad;LegalTrademarks=;OriginalFilename=;ProgramID=com.embarcadero.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=0.80.0;Comments=</VerInfo_Keys>
+        <VerInfo_MinorVer>91</VerInfo_MinorVer>
+        <VerInfo_Keys>CompanyName=Leniad;FileDescription=$(MSBuildProjectName);FileVersion=0.91.0.108;InternalName=GamePlay;LegalCopyright=Leniad;LegalTrademarks=;OriginalFilename=;ProgramID=com.embarcadero.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=0.90.0;Comments=</VerInfo_Keys>
         <UWP_DelphiLogo44>gfx\gameplay_Icon.png</UWP_DelphiLogo44>
         <UWP_DelphiLogo150>gfx\gameplay_Icon.png</UWP_DelphiLogo150>
         <VerInfo_AutoIncVersion>true</VerInfo_AutoIncVersion>
-        <VerInfo_Build>103</VerInfo_Build>
+        <VerInfo_Build>108</VerInfo_Build>
         <DCC_DebugInformation>0</DCC_DebugInformation>
         <DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>
         <DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
@@ -137,8 +137,8 @@
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <VerInfo_Locale>1033</VerInfo_Locale>
         <VerInfo_MajorVer>0</VerInfo_MajorVer>
-        <VerInfo_MinorVer>90</VerInfo_MinorVer>
-        <VerInfo_Keys>CompanyName=;FileDescription=$(MSBuildProjectName);FileVersion=0.90.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProgramID=com.embarcadero.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=0.80.0;Comments=</VerInfo_Keys>
+        <VerInfo_MinorVer>91</VerInfo_MinorVer>
+        <VerInfo_Keys>CompanyName=;FileDescription=$(MSBuildProjectName);FileVersion=0.91.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProgramID=com.embarcadero.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=0.90.0;Comments=</VerInfo_Keys>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
         <DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>

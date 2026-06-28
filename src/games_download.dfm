@@ -5,7 +5,7 @@ object Form5: TForm5
   BorderStyle = bsSingle
   Caption = 'Descargar Juego'
   ClientHeight = 151
-  ClientWidth = 518
+  ClientWidth = 506
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
