@@ -3,7 +3,7 @@
 **Gameplay** está dividido en varias secciones.
 Si sólo quieres jugar, **inicialmente no hay que configurar nada**.
 
-![Pantalla Principal](https://i.ibb.co/PZf64DSB/gameplay-082-es.png)
+![Pantalla Principal](https://i.ibb.co/Lh02mW4T/gameplay-092-en.png)
 
 ---
 ## 1. Pantalla principal
@@ -22,6 +22,10 @@ Puedes elegir entre:
 - **Atari 800**: Juegos para la serie de ordenadores Atari 800
 - **Atari ST**: Juegos para la serie de ordenadores Atari ST
 - **Amiga**: Juegos para el ordenador Amiga
+- **Sega Saturn**: Juegos para la consola Sega Saturn
+- **SNES**: Juegos para la consola Super Nintendo
+- **N64**: Juegos para la consola Nintendo64
+
 
 > El emulador se configura automáticamente, no necesitas hacer nada.
 
@@ -59,12 +63,10 @@ Si hay muchos ficheros, puede que se abra una carpeta con el contenido.<br>
 ### 1.9 Seleccionar versión o idioma
 Hay algunos juegos que tienen diferentes versiones o un idioma diferente, GamePlay selecciona automáticamente la mejor versión y el idioma, pero en este desplegable, puedes seleccionar otra versión
 
-### 1.10 Configuración Avanzada
-Acceso al menú avanzado, donde puedes cambiar:
-- Directorios principales
-- Idioma
-- Ficheros de configuración por emulador
-- Valores por defecto
+### 1.10 Opciones
+- Mostrar sólo los juegos disponibles: La lista de juegos sólo mostrará aquellos a los que se puede jugar
+- Descargar contenido extra con el juego: Cuando te descargues un juegos se descargará tambien el contenido extra (guías, mapas y manuales)
+- Comprobar la lista de juegos al iniciar: Cuando arranca GamePlay buscará cambios en la lista de juegos
 
 ---
 ## 2. Configuración Avanzada

@@ -59,7 +59,7 @@ Coordinates=560,350,92,36
 Coordinates=257,10,57,58
 
 []
-Coordinates=168,10,79,58
+Coordinates=741,1,114,58
 Visible=True
 
 [Timer2]
@@ -73,9 +73,6 @@ Coordinates=138,174,57,58
 
 [Image4]
 Coordinates=252,1,57,58
-
-[CheckBox15]
-Coordinates=741,1,114,58
 
 [Image3]
 Coordinates=567,405,57,58

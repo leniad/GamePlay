@@ -3721,8 +3721,8 @@ object Form1: TForm1
     Caption = 'Total: ---/---'
   end
   object Image2: TImage
-    Left = 989
-    Top = 517
+    Left = 1004
+    Top = 515
     Width = 38
     Height = 40
     Cursor = crHandPoint
@@ -7053,16 +7053,6 @@ object Form1: TForm1
         OnClick = RadioButton16Click
       end
     end
-    object CheckBox15: TCheckBox
-      Left = 16
-      Top = 345
-      Width = 212
-      Height = 19
-      TabStop = False
-      Caption = 'Opciones Avanzadas'
-      TabOrder = 4
-      OnClick = CheckBox15Click
-    end
   end
   object GroupBox3: TGroupBox
     Left = 8
@@ -7228,7 +7218,7 @@ object Form1: TForm1
   end
   object CheckBox10: TCheckBox
     Left = 698
-    Top = 509
+    Top = 502
     Width = 303
     Height = 25
     Caption = 'Descargar Extras'
@@ -7238,7 +7228,7 @@ object Form1: TForm1
   end
   object CheckBox9: TCheckBox
     Left = 698
-    Top = 484
+    Top = 480
     Width = 303
     Height = 25
     Caption = 'Solo funcionan'
@@ -7247,8 +7237,8 @@ object Form1: TForm1
     OnClick = CheckBox9Click
   end
   object GroupBox2: TGroupBox
-    Left = 18
-    Top = 575
+    Left = 698
+    Top = 571
     Width = 190
     Height = 65
     Margins.Left = 5
@@ -7277,8 +7267,8 @@ object Form1: TForm1
     end
   end
   object GroupBox10: TGroupBox
-    Left = 18
-    Top = 575
+    Left = 698
+    Top = 571
     Width = 190
     Height = 65
     Margins.Left = 5
@@ -7313,8 +7303,8 @@ object Form1: TForm1
     end
   end
   object GroupBox9: TGroupBox
-    Left = 18
-    Top = 575
+    Left = 698
+    Top = 571
     Width = 190
     Height = 65
     Margins.Left = 5
@@ -7341,6 +7331,26 @@ object Form1: TForm1
       TabOrder = 1
       OnClick = RadioButton8Click
     end
+  end
+  object CheckBox11: TCheckBox
+    Left = 698
+    Top = 524
+    Width = 303
+    Height = 25
+    Caption = 'Comprobar actualizaciones'
+    TabOrder = 10
+    WordWrap = True
+    OnClick = CheckBox10Click
+  end
+  object CheckBox15: TCheckBox
+    Left = 698
+    Top = 549
+    Width = 212
+    Height = 19
+    TabStop = False
+    Caption = 'Opciones Avanzadas'
+    TabOrder = 11
+    OnClick = CheckBox15Click
   end
   object Timer1: TTimer
     Enabled = False

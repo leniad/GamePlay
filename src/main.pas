@@ -43,13 +43,13 @@ const
   MDSP=255;
   MAX_GAMES=2000;
   TEMP_DIR='TEMP';
-  VERSION='v0.91β';
+  VERSION='v0.92β';
   BLURFACT=2;
   {$IFDEF IS_DEBUG}
   {$ifndef windows}
   debug_base_dir='/home/leniad/abandon/GamePlayVol1/';
   {$else}
-  debug_base_dir='c:\datos\abandon\GamePlay_091\';
+  debug_base_dir='c:\datos\abandon\GamePlay_092\';
   {$ENDIF}
   {$endif}
   NREFS=2;
@@ -623,21 +623,23 @@ if not(fileexists(main_config.dir_base+'games.json')) then begin
   descargar_juego_sin_confirmar(-1);
   if not(fileexists(main_config.dir_base+'games.json')) then exit;
 end else begin //Si hay una lista, compruebo que hay una más moderna
-  JSONValue:=TJSONObject.ParseJSONValue(TFile.ReadAllText(main_config.dir_base+'games.json',TEncoding.UTF8));
-  RootObj:=JSONValue as TJSONObject;
-  version:=RootObj.GetValue<TJSONArray>('version');
-  if version.Count=1 then begin
-    gameobj:=version.Items[0] as TJSONObject;
-    temps:=gameobj.GetValue<string>('version');
-    tempi:=strtoint(comprobar_version_lista);
-    if tempi>strtoint(temps) then begin
-      if MessageDlg(list_descarga[5],mtWarning,[mbOK]+[mbCancel],0)=1 then begin
-        descargar_juego_sin_confirmar(-1);
-        mostrar_novedades:=true;
+  if form1.CheckBox11.Checked then begin
+    JSONValue:=TJSONObject.ParseJSONValue(TFile.ReadAllText(main_config.dir_base+'games.json',TEncoding.UTF8));
+    RootObj:=JSONValue as TJSONObject;
+    version:=RootObj.GetValue<TJSONArray>('version');
+    if version.Count=1 then begin
+      gameobj:=version.Items[0] as TJSONObject;
+      temps:=gameobj.GetValue<string>('version');
+      tempi:=strtoint(comprobar_version_lista);
+      if tempi>strtoint(temps) then begin
+        if MessageDlg(list_descarga[5],mtWarning,[mbOK]+[mbCancel],0)=1 then begin
+          descargar_juego_sin_confirmar(-1);
+          mostrar_novedades:=true;
+        end;
       end;
     end;
+    JSONValue.free;
   end;
-  JSONValue.free;
 end;
 JSONValue:=TJSONObject.ParseJSONValue(TFile.ReadAllText(main_config.dir_base+'games.json',TEncoding.UTF8));
 RootObj:=JSONValue as TJSONObject;
@@ -776,16 +778,16 @@ var
   f:integer;
   fichero:string;
 begin
-  sl:=TStringList.Create;
-  fichero:=main_config.dir_base+'extras\ares\settings.bml';
-  try
-    sl.LoadFromFile(fichero);
-    for f:= 0 to (sl.count-1) do
-      if ContainsText(sl[f],buscar) then
-        sl[f]:=poner;
-    SL.SaveToFile(fichero);
-  finally
-    sl.free;
+  if fileexists(main_config.dir_base+'extras\config\ares.bml') then begin
+    sl:=TStringList.Create;
+    fichero:=main_config.dir_base+'extras\config\ares.bml';
+    try
+      sl.LoadFromFile(fichero);
+      for f:= 0 to (sl.count-1) do if ContainsText(sl[f],buscar) then sl[f]:=poner;
+      SL.SaveToFile(fichero);
+    finally
+      sl.free;
+    end;
   end;
 end;
 
@@ -855,6 +857,7 @@ begin
     main_config.config_atarise:=fich_ini.ReadString('opciones','config_atarise',main_config.dir_base+'extras\config\hatari.cfg');
     main_config.mostrar_funcionan:=(fich_ini.readinteger('opciones','mostrar_todos',0)<>0);
     form1.checkbox9.Checked:=main_config.mostrar_funcionan;
+    form1.checkbox11.Checked:=(fich_ini.readinteger('opciones','actualiza_juegos',1)<>0);
     main_config.motor_msdos:=fich_ini.ReadInteger('opciones','motor_msdos',1);
     main_config.apple2_joy:=(fich_ini.readinteger('opciones','apple2_joy',0)<>0);
     form1.checkbox19.Checked:=fich_ini.readinteger('opciones','amiga_vertical',0)<>0;
@@ -875,6 +878,7 @@ begin
     form1.checkbox15.Checked:=false;
     idioma_sel:=200;
     main_config.mostrar_funcionan:=false;
+    form1.CheckBox11.Checked:=true;
     {$ifdef windows}
     main_config.motor_msdos:=1;
     {$else}
@@ -1049,6 +1053,7 @@ if DirectoryExists(main_config.dir_base) then begin
   fich_ini.WriteString('opciones','config_amiga',main_config.config_amiga);
   fich_ini.WriteString('opciones','config_atarise',main_config.config_atarise);
   fich_ini.WriteInteger('opciones','mostrar_todos',byte(main_config.mostrar_funcionan));
+  fich_ini.WriteInteger('opciones','actualiza_juegos',byte(form1.checkbox11.Checked));
   fich_ini.WriteInteger('opciones','apple2_joy',byte(main_config.apple2_joy));
   fich_ini.WriteInteger('opciones','amiga_vertical',byte(form1.checkbox19.Checked));
   fich_ini.WriteInteger('opciones','amiga_horizontal',byte(form1.checkbox20.Checked));
@@ -1535,7 +1540,7 @@ case main_config.motor of
     if form1.checkbox14.Checked then cambiar_config_bsnes('  Mute:','  Mute: false')
       else cambiar_config_bsnes('  Mute:','  Mute: true');
     temp_exec:=juego_exec(ngame,form1.ComboBox1.ItemIndex);
-    temps:='"'+main_config.dir_base+exec_dir+'\'+temp_exec+'"';
+    temps:='"'+main_config.dir_base+exec_dir+'\'+temp_exec+'" --settings-file '+main_config.dir_base+'extras\config\ares.bml';
     param_string:=exec_fullscreen+temps;
     ShellExecute(form1.Handle,'open',pchar(main_config.dir_base+'extras\ares\ares.exe'),pchar(param_string),nil,SW_SHOWNORMAL);
   end;
@@ -1546,7 +1551,7 @@ case main_config.motor of
     temp_exec:=juego_exec(ngame,form1.ComboBox1.ItemIndex);
     temps:='"'+main_config.dir_base+exec_dir+'\'+temp_exec+'"';
     param_string:=exec_fullscreen+temps;
-    ShellExecute(form1.Handle,'open',pchar(main_config.dir_base+'extras\rmg\rmg.exe'),pchar(param_string),pchar(exec_extra),SW_SHOWNORMAL);
+    ShellExecute(form1.Handle,'open',pchar(main_config.dir_base+'extras\rmg\rmg.exe'),pchar(param_string),nil,SW_SHOWNORMAL);
   end;
 end;
 end;

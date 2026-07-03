@@ -3,7 +3,7 @@
 **GamePlay** is divided into several sections.  
 If you just want to play, **there is no need to configure anything initially**.
 
-![Main Screen](https://i.ibb.co/V0jXJtKb/gameplay-082-en.png)
+![Main Screen](https://i.ibb.co/Lh02mW4T/gameplay-092-en.png)
 
 ---
 
@@ -22,7 +22,9 @@ You can choose between:
 - **Apple II**: Games for the Apple II computer series
 - **Atari 800**: Games for the Atari 800 computer series
 - **Atari ST**: Games for the Atari ST computer series
-- **Amiga**: Games for the Amiga computer
+- **Sega Saturn**: Games for the Sega Saturn console
+- **SNES**: Games for the Super Nintendo console
+- **N64**: Games for the Nintendo64 console
 
 > The emulator is configured automatically, you do not need to do anything.
 
@@ -76,12 +78,10 @@ Some games have different versions or languages. GamePlay automatically selects 
 
 ---
 
-## 1.10 Advanced Configuration
-Access to the advanced menu, where you can change:
-- Main directories
-- Language
-- Emulator configuration files
-- Default values
+## 1.10 Options
+- Show only the available games: The list will show only the games you can play
+- Download extra content with the game: Download extra content (maps, guides and manual) when download a game
+- Check game list at startup: When GamePlay starts, choose whether to check for updates to the game list
 
 ---
 

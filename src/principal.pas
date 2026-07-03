@@ -35,7 +35,6 @@ type
     Image5: TImage;
     Image6: TImage;
     Timer2: TTimer;
-    CheckBox15: TCheckBox;
     Image7: TImage;
     RadioButton10: TRadioButton;
     RadioButton11: TRadioButton;
@@ -65,6 +64,8 @@ type
     RadioButton14: TRadioButton;
     RadioButton15: TRadioButton;
     RadioButton16: TRadioButton;
+    CheckBox11: TCheckBox;
+    CheckBox15: TCheckBox;
     procedure FormCreate(Sender: TObject);
     procedure StringGrid1DblClick(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);

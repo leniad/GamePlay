@@ -1,6 +1,23 @@
 # GamePlay status #
-![Main Screen](https://i.ibb.co/kgC9PdZW/gameplay-091-en.png)<br>
+![Main Screen](https://i.ibb.co/Lh02mW4T/gameplay-092-en.png)<br>
 Please read 'Most Wanted' games!<br><br>
+<b>02/07/26 - GamePlay updated to 0.92b
+<pre>
+-General
+    +Added an option to enable or disable checking for a new game list. If the server
+    is offline, this avoids unnecessary waiting during startup
+    +Fixed: The application now starts correctly with the current game list if the
+    file server is unavailable
+-Apple II
+    -Updated AppleWin to 1.32
+-Atari 800
+    -Update Altirra to 4.50 test13
+-Amiga
+    +Added 512 KB of Slow RAM. 'Bubble Bobble' works again
+-Ares (SNES Emulator)
+    +Now uses my own configuration file, fixing several issues that could cause
+    the emulator to crash
+</pre>
 <b>28/06/26 - GamePlay updated to 0.91b
 <pre>
 -General

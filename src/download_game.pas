@@ -216,7 +216,14 @@ begin
   version:='';
   LHttp:=THTTPClient.Create;
   try
+    try
     LResp:=LHttp.Get(URL_API+'/api/version');
+    except
+      on E: Exception do begin
+        result:='0';
+        exit;
+      end;
+    end;
     LRaw:=LResp.ContentAsString(TEncoding.UTF8);
     if LResp.StatusCode<>200 then begin
       result:='0';
