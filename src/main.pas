@@ -43,13 +43,13 @@ const
   MDSP=255;
   MAX_GAMES=2000;
   TEMP_DIR='TEMP';
-  VERSION='v0.92β';
+  VERSION='v0.93β';
   BLURFACT=2;
   {$IFDEF IS_DEBUG}
   {$ifndef windows}
   debug_base_dir='/home/leniad/abandon/GamePlayVol1/';
   {$else}
-  debug_base_dir='c:\datos\abandon\GamePlay_092\';
+  debug_base_dir='c:\datos\abandon\GamePlay_093\';
   {$ENDIF}
   {$endif}
   NREFS=2;
@@ -139,6 +139,7 @@ type
      config_atarise:string;
      mostrar_funcionan:boolean;
      motor_msdos:byte;
+     escala:integer;
      dir_base:string;
      dir_manual:string;
      dir_mapas:string;
@@ -619,7 +620,20 @@ total_n64:=0;
 mostrar_novedades:=false;
 //Compruebo que hay lista
 if not(fileexists(main_config.dir_base+'games.json')) then begin
-  if MessageDlg(list_descarga[4],mtWarning,[mbYes]+[mbNO],0)=7 then exit;
+  if MessageDlg(list_descarga[4],mtWarning,[mbYes]+[mbNO],0)=7 then begin
+    form1.image3.Visible:=false;
+    form1.image4.Visible:=false;
+    form1.image5.Visible:=false;
+    form1.image7.Visible:=false;
+    form1.image8.Visible:=false;
+    form1.checkbox9.Visible:=false;
+    form1.checkbox10.Visible:=false;
+    form1.checkbox11.Visible:=false;
+    form1.checkbox15.Visible:=false;
+    form1.groupbox1.enabled:=false;
+    form1.groupbox3.enabled:=false;
+    exit;
+  end;
   descargar_juego_sin_confirmar(-1);
   if not(fileexists(main_config.dir_base+'games.json')) then exit;
 end else begin //Si hay una lista, compruebo que hay una más moderna
@@ -761,7 +775,8 @@ begin
     MAMIGA:fichero:=main_config.config_amiga;
     MATARIST:fichero:=main_config.config_atarise;
     MDSP:fichero:=main_config.config_dsp;
-    MGUNSTICK:fichero:=main_config.dir_base+'extras\dosboxgs\dosbox.conf'
+    MGUNSTICK:fichero:=main_config.dir_base+'extras\dosboxgs\dosbox.conf';
+    MN64:fichero:=main_config.dir_base+'extras\rmg\Config\GLideN64.ini';
   end;
   {$I-}
   if fileexists(fichero) then begin
@@ -869,6 +884,7 @@ begin
     main_config.dir_mt32:=fich_ini.ReadString('opciones','dir_mt32',main_config.dir_base+'extras\mt32');
     main_config.dir_zip:=fich_ini.ReadString('opciones','dir_zips',main_config.dir_base+'zip_games\');
     main_config.descargar_extra:=fich_ini.readinteger('opciones','descargar_extras',1)<>0;
+    main_config.escala:=fich_ini.readinteger('opciones','escala',120);
     form1.checkbox10.Checked:=main_config.descargar_extra;
     fich_ini.Free;
   end else begin
@@ -915,6 +931,7 @@ begin
     main_config.dir_zip:=main_config.dir_base+'zip_games\';
     //OJO!!! No quiere la barra final!!!!
     main_config.dir_mt32:=main_config.dir_base+'extras\mt32';
+    main_config.escala:=120;
   end;
   {$ifndef windows}
   main_config.dir_manual:=cambiar_path(main_config.dir_manual);
@@ -1043,6 +1060,7 @@ if DirectoryExists(main_config.dir_base) then begin
   fich_ini.WriteInteger('opciones','ayuda',byte(form1.checkbox2.Checked));
   fich_ini.WriteInteger('opciones','avanzado',byte(form1.checkbox15.Checked));
   fich_ini.WriteInteger('opciones','idioma',idioma_sel);
+  fich_ini.WriteInteger('opciones','escala',main_config.escala);
   fich_ini.WriteString('opciones','config_dosbox',main_config.config_dosbox);
   fich_ini.WriteString('opciones','config_dosbox_x',main_config.config_dosbox_x);
   fich_ini.WriteInteger('opciones','motor_msdos',main_config.motor_msdos);
@@ -1546,6 +1564,8 @@ case main_config.motor of
   end;
   MN64:begin
     if not(comprobar_n64) then exit;
+    if games_final[ngame].grafica<>'' then cambiar_ini(MN64,'User','frameBufferEmulation\copyDepthToRDRAM',games_final[ngame].grafica)
+      else cambiar_ini(MN64,'User','frameBufferEmulation\copyDepthToRDRAM','2');
     if form1.checkbox1.Checked then exec_fullscreen:=' --fullscreen '
       else exec_fullscreen:='';
     temp_exec:=juego_exec(ngame,form1.ComboBox1.ItemIndex);
@@ -1580,6 +1600,13 @@ begin
     2:form4.radiobutton4.Checked:=true;
     3:form4.radiobutton5.Checked:=true;
     4:form4.radiobutton6.Checked:=true;
+  end;
+  case main_config.escala of
+    96:form4.TrackBar1.Position:=0;
+    120:form4.TrackBar1.Position:=1;
+    144:form4.TrackBar1.Position:=2;
+    192:form4.TrackBar1.Position:=3;
+    288:form4.TrackBar1.Position:=4;
   end;
 end;
 

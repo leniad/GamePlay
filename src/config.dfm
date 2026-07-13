@@ -13,10 +13,89 @@ object Form4: TForm4
   Font.Name = 'Segoe UI'
   Font.Style = []
   Position = poDesigned
-  Scaled = False
   OnCreate = FormCreate
   OnShow = FormShow
   TextHeight = 15
+  object Label1: TLabel
+    Left = 634
+    Top = 323
+    Width = 28
+    Height = 15
+    Margins.Left = 5
+    Margins.Top = 5
+    Margins.Right = 5
+    Margins.Bottom = 5
+    Caption = '100%'
+  end
+  object Label2: TLabel
+    Left = 681
+    Top = 323
+    Width = 28
+    Height = 15
+    Margins.Left = 5
+    Margins.Top = 5
+    Margins.Right = 5
+    Margins.Bottom = 5
+    Caption = '125%'
+  end
+  object Label3: TLabel
+    Left = 727
+    Top = 323
+    Width = 28
+    Height = 15
+    Margins.Left = 5
+    Margins.Top = 5
+    Margins.Right = 5
+    Margins.Bottom = 5
+    Caption = '150%'
+  end
+  object Label4: TLabel
+    Left = 776
+    Top = 323
+    Width = 28
+    Height = 15
+    Margins.Left = 5
+    Margins.Top = 5
+    Margins.Right = 5
+    Margins.Bottom = 5
+    Caption = '200%'
+  end
+  object Label5: TLabel
+    Left = 825
+    Top = 323
+    Width = 28
+    Height = 15
+    Margins.Left = 5
+    Margins.Top = 5
+    Margins.Right = 5
+    Margins.Bottom = 5
+    Caption = '300%'
+  end
+  object Label6: TLabel
+    Left = 728
+    Top = 277
+    Width = 27
+    Height = 15
+    Margins.Left = 5
+    Margins.Top = 5
+    Margins.Right = 5
+    Margins.Bottom = 5
+    Caption = 'Scale'
+  end
+  object TrackBar1: TTrackBar
+    Left = 633
+    Top = 288
+    Width = 220
+    Height = 38
+    Margins.Left = 5
+    Margins.Top = 5
+    Margins.Right = 5
+    Margins.Bottom = 5
+    Max = 4
+    TabOrder = 6
+    TabStop = False
+    ThumbLength = 30
+  end
   object Button1: TButton
     Left = 200
     Top = 457
@@ -487,18 +566,6 @@ object Form4: TForm4
         OnClick = Button25Click
       end
     end
-  end
-  object GroupBox4: TGroupBox
-    Left = 1176
-    Top = 348
-    Width = 278
-    Height = 158
-    Margins.Left = 5
-    Margins.Top = 5
-    Margins.Right = 5
-    Margins.Bottom = 5
-    Caption = 'GroupBox4'
-    TabOrder = 6
   end
   object OpenDialog1: TOpenDialog
     Left = 828

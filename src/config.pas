@@ -42,7 +42,6 @@ type
     TabSheet6: TTabSheet;
     LabeledEdit12: TLabeledEdit;
     Button15: TButton;
-    GroupBox4: TGroupBox;
     Button20: TButton;
     LabeledEdit17: TLabeledEdit;
     Button21: TButton;
@@ -58,6 +57,13 @@ type
     TabSheet7: TTabSheet;
     LabeledEdit22: TLabeledEdit;
     Button25: TButton;
+    TrackBar1: TTrackBar;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
     procedure Button1Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure Button2Click(Sender: TObject);
@@ -93,7 +99,7 @@ var
   Form4: TForm4;
 
 implementation
-uses principal,idioma_info,main;
+uses principal,idioma_info,main,acercade;
 
 {$R *.dfm}
 
@@ -156,6 +162,8 @@ begin
 end;
 
 procedure TForm4.Button1Click(Sender: TObject);
+var
+  f:integer;
 begin
   main_config.config_dosbox:=labelededit4.Text;
   main_config.config_dosbox_x:=labelededit5.Text;
@@ -172,6 +180,19 @@ begin
   main_config.dir_zip:=labelededit9.Text;
   main_config.dir_imgs:=labelededit10.Text;
   main_config.dir_mt32:=labelededit11.Text;
+  case trackbar1.Position of
+    0:main_config.escala:=96;
+    1:main_config.escala:=120;
+    2:main_config.escala:=144;
+    3:main_config.escala:=192;
+    4:main_config.escala:=288;
+  end;
+  form1.ScaleForPPI(main_config.escala);
+  f:=(screen.Width-form1.Width) div 2;
+  if f>0 then form1.Left:=f;
+  f:=(screen.Height-form1.Height) div 2;
+  if f>0 then form1.Top:=f;
+  form4.ScaleForPPI(main_config.escala);
   form4.close;
 end;
 
@@ -261,9 +282,10 @@ procedure TForm4.FormShow(Sender: TObject);
 var
   f:integer;
 begin
-  f:=((form1.Width-form4.Width) div 2)+form1.left;
+  form4.ScaleForPPI(main_config.escala);
+  f:=(screen.Width-form4.Width) div 2;
   if f>0 then form4.Left:=f;
-  f:=((form1.Height-form4.Height) div 2)+form1.top;
+  f:=(screen.Height-form4.Height) div 2;
   if f>0 then form4.Top:=f;
   config_show;
 end;

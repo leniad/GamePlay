@@ -1,6 +1,15 @@
 # GamePlay status #
-![Main Screen](https://i.ibb.co/Lh02mW4T/gameplay-092-en.png)<br>
+![Main Screen](https://i.ibb.co/vxVXvTjg/gameplay-093-en.png)<br>
 Please read 'Most Wanted' games!<br><br>
+<b>13/07/26 - GamePlay updated to 0.93b
+<pre>
+-General
+    +Added a window scaling option (100%, 125%, 150%, 200%, and 300%) (Thanks to Carlo Quiñones)
+    +Various visual improvements
+    +Updated Dosbox-X to latest version
+-Nintendo 64
+    +Added several internal options to improve graphics in games
+</pre>
 <b>02/07/26 - GamePlay updated to 0.92b
 <pre>
 -General

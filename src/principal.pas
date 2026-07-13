@@ -206,6 +206,7 @@ procedure TForm1.FormShow(Sender: TObject);
 var
   f,h,pos:integer;
 begin
+  form1.ScaleForPPI(main_config.escala);
   f:=(screen.Width-form1.Width) div 2;
   if f>0 then form1.Left:=f;
   f:=(screen.Height-form1.Height) div 2;
@@ -586,11 +587,6 @@ begin
   image1.Picture:=nil;
   image1.Canvas.Brush.Color:=clBlack;
   image1.Canvas.FillRect(r);
-  image3.visible:=false;
-  image4.visible:=false;
-  image5.visible:=false;
-  image7.visible:=false;
-  image8.visible:=false;
 end;
 
 begin
@@ -602,7 +598,7 @@ begin
   end;
   if (old_game<>ngame) then begin
     image7.visible:=false;
-    if ((main_config.motor=MMSDOS) or (main_config.motor=MSCUMM) or (main_config.motor=MWIN98) or (main_config.motor=MSNES)) then begin
+    if ((main_config.motor=MMSDOS) or (main_config.motor=MSCUMM) or (main_config.motor=MWIN98) or (main_config.motor=MSNES) or (main_config.motor=MN64)) then begin
         combobox1.Visible:=false;
         if (games_final[ngame].ref[0].nref<>0) then begin
           combobox1.Items.Clear;
@@ -611,7 +607,7 @@ begin
           cantidad:=0;
           for f:=0 to NREFS do begin
             if (games_final[ngame].ref[f].nref<>0) then begin
-              if (((main_config.motor=MSCUMM) and ((games_final[ngame].ref[f].nref and NO_SCUMM)=0)) or (main_config.motor=MMSDOS) or (main_config.motor=MWIN98) or (main_config.motor=MSNES)) then begin
+              if (((main_config.motor=MSCUMM) and ((games_final[ngame].ref[f].nref and NO_SCUMM)=0)) or (main_config.motor=MMSDOS) or (main_config.motor=MWIN98) or (main_config.motor=MSNES) or (main_config.motor=MN64)) then begin
                 combobox1.Items.Add(games_final_ref[games_final[ngame].ref[f].nref and $ffff].nombre);
                 cantidad:=cantidad+1;
                 if (games_final[ngame].ref[f].nref and $ff0000)<>0 then

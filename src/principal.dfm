@@ -3708,7 +3708,6 @@ object Form1: TForm1
     A41B4E0EDDF041C9F2F7C88EFF1F339E99826FBE82470000000049454E44AE42
     6082}
   Position = poDesigned
-  Scaled = False
   OnClose = FormClose
   OnCreate = FormCreate
   OnShow = FormShow
