@@ -1,6 +1,44 @@
 # GamePlay status #
 ![Main Screen](https://i.ibb.co/vxVXvTjg/gameplay-093-en.png)<br>
 Please read 'Most Wanted' games!<br><br>
+<b>02/08/26 - Update game list v9
+<pre>
+Thanks to Carlo Q. for sending me new games!
+-MSDOS
+    +Added games
+        -Fire and Forget
+        -Fire & Forget II - The death convoy
+        -Infiltrator
+        -Infiltrator II
+        -It Came from the Deset
+        -The Last Ninja
+        -Last Ninja 2 - Back with a Vengeance
+        -HeroQuest
+        -Cool Spot
+        -Gremlins
+        -Gremlins II - The new batch
+        -Gremlins II - The new batch (Hi Tech)
+        -Ghostbusters
+        -Ghostbusters II
+        -Bushido - The Way of the Warrior
+        -The Bugs Bunny Hare-Brained Adventure
+        -Speed Racer - In the Challenge of RaceX
+        -Tom & Jerry
+        -Tom & Jerry: Yankee Doodle's CAT-astrophe
+        -Total Carnage
+        -Super Pac-Man
+        -Unreal
+        -Earth Worm Jim
+        -Earth Worm Jim 2
+ -Super Nintendo
+     +Added games
+        -Star Fox 2
+        -Nosferatu
+        -Final Fight 2
+        -Final Fight 3
+        -Super Bomberman 2
+        -Super Bomberman 3
+</pre>
 <b>13/07/26 - GamePlay updated to 0.93b
 <pre>
 -General
