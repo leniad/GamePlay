@@ -1,6 +1,57 @@
 # GamePlay status #
 ![Main Screen](https://i.ibb.co/vxVXvTjg/gameplay-093-en.png)<br>
 Please read 'Most Wanted' games!<br><br>
+<b>11/08/26 - Update game list v10
+<pre>
+-MSDOS
+    +Enhanced games
+        -Street Rod (All cars version)
+        -Cool Croc Twins (Clean crack)
+    +Added games
+        -Tiger Road
+        -Emilio Butragueño ¡Futbol!
+        -Death Sword (Barbarian)
+        -The Great Escape
+        -Iznogoud
+        -Jackal
+        -Prohibition
+        -Saboteur II
+        -Trantor - The Last Stormtrooper
+        -Trojan
+        -Cabal
+        -California Games
+        -Contra
+        -Frank Bruno's Boxing
+        -Human Killing Machine
+        -Pharaoh's Revenge
+        -Savage
+        -Skate or Die!
+        -Solomon's Key
+        -Simbad and the Throne of the Falcon
+        -Willow
+        -Barbarian II
+        -Blasteroids
+        -Vixen
+        -Heavy Barrel
+        -Die Hard
+        -Knight Force
+        -Perico Delgado Maillot Amarillo
+        -Pipe Dream
+        -Rath-tha
+        -Tintin on the Moon
+        -Thunder Blade
+        -California Games II
+        -Calos Sainz - Campeonato del Mundo de Rallies
+        -Castlevania
+        -Joe Blade
+        -Joe Blade II
+        -Trog
+        -Mighty Bomb Jack
+        -NBA Jam Tournament Edition
+ -Windows 98
+     +Added games
+        -NBA Jam Extreme
+</pre>
 <b>02/08/26 - Update game list v9
 <pre>
 Thanks to Carlo Q. for sending me new games!
