@@ -1,6 +1,16 @@
 # GamePlay status #
-![Main Screen](https://i.ibb.co/vxVXvTjg/gameplay-093-en.png)<br>
+![Main Screen](https://i.ibb.co/kskwGG0p/gameplay-094-en.png)<br>
 Please read 'Most Wanted' games!<br><br>
+<b>15/08/26 - GamePlay updated to 0.94b
+<pre>
+-General
+    +Fixed window scaling
+    +Added a help button that displays the emulator's default key bindings
+    +Added a disc icon next to the name for games that come from the CD version
+    +Various visual improvements
+    +Updated Dosbox-X to latest version
+-MS-DOS: Fixed game setup for BAT files
+</pre>
 <b>11/08/26 - Update game list v10
 <pre>
 -MSDOS

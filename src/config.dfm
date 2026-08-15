@@ -1,11 +1,12 @@
 object Form4: TForm4
   Left = 662
   Top = 376
+  AutoSize = True
   BorderIcons = [biMinimize, biMaximize]
   BorderStyle = bsSingle
   Caption = 'Configuraci'#243'n Avanzada'
-  ClientHeight = 524
-  ClientWidth = 863
+  ClientHeight = 496
+  ClientWidth = 828
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -17,8 +18,8 @@ object Form4: TForm4
   OnShow = FormShow
   TextHeight = 15
   object Label1: TLabel
-    Left = 634
-    Top = 323
+    Left = 609
+    Top = 313
     Width = 28
     Height = 15
     Margins.Left = 5
@@ -28,8 +29,8 @@ object Form4: TForm4
     Caption = '100%'
   end
   object Label2: TLabel
-    Left = 681
-    Top = 323
+    Left = 656
+    Top = 313
     Width = 28
     Height = 15
     Margins.Left = 5
@@ -39,8 +40,8 @@ object Form4: TForm4
     Caption = '125%'
   end
   object Label3: TLabel
-    Left = 727
-    Top = 323
+    Left = 702
+    Top = 313
     Width = 28
     Height = 15
     Margins.Left = 5
@@ -50,8 +51,8 @@ object Form4: TForm4
     Caption = '150%'
   end
   object Label4: TLabel
-    Left = 776
-    Top = 323
+    Left = 751
+    Top = 313
     Width = 28
     Height = 15
     Margins.Left = 5
@@ -61,8 +62,8 @@ object Form4: TForm4
     Caption = '200%'
   end
   object Label5: TLabel
-    Left = 825
-    Top = 323
+    Left = 800
+    Top = 313
     Width = 28
     Height = 15
     Margins.Left = 5
@@ -72,8 +73,8 @@ object Form4: TForm4
     Caption = '300%'
   end
   object Label6: TLabel
-    Left = 728
-    Top = 277
+    Left = 703
+    Top = 267
     Width = 27
     Height = 15
     Margins.Left = 5
@@ -83,8 +84,8 @@ object Form4: TForm4
     Caption = 'Scale'
   end
   object TrackBar1: TTrackBar
-    Left = 633
-    Top = 288
+    Left = 608
+    Top = 278
     Width = 220
     Height = 38
     Margins.Left = 5
@@ -97,8 +98,8 @@ object Form4: TForm4
     ThumbLength = 30
   end
   object Button1: TButton
-    Left = 200
-    Top = 457
+    Left = 175
+    Top = 447
     Width = 121
     Height = 49
     Caption = 'ACEPTAR'
@@ -106,8 +107,8 @@ object Form4: TForm4
     OnClick = Button1Click
   end
   object Button7: TButton
-    Left = 548
-    Top = 457
+    Left = 523
+    Top = 447
     Width = 121
     Height = 49
     Caption = 'CANCELAR'
@@ -115,8 +116,8 @@ object Form4: TForm4
     OnClick = Button7Click
   end
   object GroupBox3: TGroupBox
-    Left = 25
-    Top = 164
+    Left = 0
+    Top = 154
     Width = 600
     Height = 261
     Caption = 'Directorios Base'
@@ -262,8 +263,8 @@ object Form4: TForm4
     end
   end
   object Button14: TButton
-    Left = 688
-    Top = 53
+    Left = 663
+    Top = 43
     Width = 121
     Height = 49
     BiDiMode = bdLeftToRight
@@ -274,8 +275,8 @@ object Form4: TForm4
     OnClick = Button14Click
   end
   object GroupBox5: TGroupBox
-    Left = 665
-    Top = 143
+    Left = 640
+    Top = 133
     Width = 168
     Height = 94
     Margins.Left = 5
@@ -340,8 +341,8 @@ object Form4: TForm4
     end
   end
   object PageControl1: TPageControl
-    Left = 25
-    Top = 10
+    Left = 0
+    Top = 0
     Width = 600
     Height = 135
     Margins.Left = 5

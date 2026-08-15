@@ -66,6 +66,10 @@ type
     RadioButton16: TRadioButton;
     CheckBox11: TCheckBox;
     CheckBox15: TCheckBox;
+    Image9: TImage;
+    ImageList1: TImageList;
+    Label6: TLabel;
+    Timer3: TTimer;
     procedure FormCreate(Sender: TObject);
     procedure StringGrid1DblClick(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
@@ -104,6 +108,8 @@ type
     procedure RadioButton14Click(Sender: TObject);
     procedure RadioButton15Click(Sender: TObject);
     procedure RadioButton16Click(Sender: TObject);
+    procedure Image9Click(Sender: TObject);
+    procedure Timer3Timer(Sender: TObject);
   private
     { Private declarations }
   public
@@ -113,6 +119,7 @@ type
 var
   Form1:TForm1;
   old_game:integer;
+  mensaje_pos:integer=1;
 
 implementation
 {$R *.dfm}
@@ -225,6 +232,7 @@ begin
     end;
   end;
   mostrar_juegos;
+  timer3.Enabled:=true;
 end;
 
 procedure TForm1.Image2Click(Sender: TObject);
@@ -270,6 +278,48 @@ begin
   if ngame<>-1 then descargar_juego_sin_confirmar(ngame);
 end;
 
+procedure TForm1.Image9Click(Sender: TObject);
+var
+  temps,temps2:string;
+begin
+case main_config.motor of
+  MDSP:begin
+          temps:='Default keys';
+          temps2:=' - UP: Cursor up[RET] - DOWN: Cursor down[RET] - LEFT: Cursor left[RET] - RIGHT: Cursor right[RET] - Button 1: left control[RET] - Button 2: left alt[RET] - Button 3: left shift[RET] - Start 1: 1[RET] - Start 2: 2[RET] - Coin 1: 5[RET] - Coin 2: 6';
+        end;
+  MATARI8:begin
+          temps:='Default keys';
+          temps2:=' - UP: Cursor up[RET] - DOWN: Cursor down[RET] - LEFT: Cursor left[RET] - RIGHT: Cursor right[RET] - Button: left control[RET] - F2: Start';
+        end;
+  MAPPLE2:begin
+          temps:='Default joystick keys';
+          temps2:=' - UP: Cursor up[RET] - DOWN: Cursor down[RET] - LEFT: Cursor left[RET] - RIGHT: Cursor right[RET] - Button: left alt';
+        end;
+  MATARIST:begin
+          temps:='Default keys';
+          temps2:=' - UP: Cursor up[RET] - DOWN: Cursor down[RET] - LEFT: Cursor left[RET] - RIGHT: Cursor right[RET] - Button: left control';
+        end;
+  MAMIGA:begin
+          temps:='Default joystick keys';
+          temps2:=' - UP: Cursor up[RET] - DOWN: Cursor down[RET] - LEFT: Cursor left[RET] - RIGHT: Cursor right[RET] - Button 1: left control[RET] - Button 2: left alt';
+        end;
+  MSEGASATURN:begin
+          temps:='Default keys';
+          temps2:=' - UP: Cursor up[RET] - DOWN: Cursor down[RET] - LEFT: Cursor left[RET] - RIGHT: Cursor right[RET] - Button A: A[RET] - Button B: S[RET] - Button C: Z[RET] - Button X: X[RET] - Button Y: C[RET] - Button L: Q[RET] - Button R: W[RET] - Start: 5';
+        end;
+  MSNES:begin
+          temps:='Default keys';
+          temps2:=' - UP: Cursor up[RET] - DOWN: Cursor down[RET] - LEFT: Cursor left[RET] - RIGHT: Cursor right[RET] - Button A: Z[RET] - Button B: S[RET] - Button X: X[RET] - Button Y: A[RET] - Select: 1[RET] - Start: 5';
+        end;
+  MN64:begin
+          temps:='Default keys';
+          temps2:=' - Analog UP: Cursor up[RET] - Analog DOWN: Cursor down[RET] - Analog LEFT: Cursor left[RET] - Analog RIGHT: Cursor right[RET] - Button A: Left Control[RET] - Button B: Left Shift[RET] - Button C Up: A[RET] - Button C Down: S[RET] - Button C Left: Z[RET] - Button C Right: X[RET] - Z: 1[RET] - Start: 5';
+        end;
+end;
+temps2:=StringReplace(temps2,'[RET]',RETURN,[rfReplaceAll]);
+TaskMessageDlg(temps,temps2,mtCustom,[mbOK],0);
+end;
+
 procedure TForm1.RadioButton1Click(Sender: TObject);
 begin
   main_config.motor:=MMSDOS;
@@ -287,6 +337,7 @@ begin
   groupbox9.visible:=form1.checkbox15.Checked;
   groupbox2.visible:=false;
   groupbox10.visible:=false;
+  image9.Visible:=false;
   if total_juegos=0 then exit;
   stringgrid1.Row:=0;
   mostrar_juegos;
@@ -315,6 +366,7 @@ begin
   groupbox9.visible:=false;
   groupbox2.visible:=false;
   groupbox10.visible:=false;
+  image9.Visible:=false;
   if total_juegos=0 then exit;
   stringgrid1.Row:=0;
   mostrar_juegos;
@@ -339,6 +391,7 @@ begin
   groupbox9.visible:=false;
   groupbox2.visible:=false;
   groupbox10.visible:=false;
+  image9.Visible:=true;
   if total_juegos=0 then exit;
   stringgrid1.Row:=0;
   mostrar_juegos;
@@ -362,6 +415,7 @@ begin
   groupbox9.visible:=false;
   groupbox2.visible:=checkbox15.Checked;
   groupbox10.visible:=false;
+  image9.Visible:=true;
   if total_juegos=0 then exit;
   stringgrid1.Row:=0;
   mostrar_juegos;
@@ -385,6 +439,7 @@ begin
   groupbox9.visible:=false;
   groupbox2.visible:=false;
   groupbox10.visible:=false;
+  image9.Visible:=true;
   if total_juegos=0 then exit;
   stringgrid1.Row:=0;
   mostrar_juegos;
@@ -424,6 +479,7 @@ begin
   checkbox10.Enabled:=true;
   groupbox9.visible:=false;
   groupbox2.visible:=false;
+  image9.Visible:=true;
   groupbox10.visible:=checkbox15.Checked;
   if total_juegos=0 then exit;
   stringgrid1.Row:=0;
@@ -448,6 +504,7 @@ begin
   groupbox9.visible:=false;
   groupbox2.visible:=false;
   groupbox10.visible:=false;
+  image9.Visible:=true;
   if total_juegos=0 then exit;
   stringgrid1.row:=0;
   mostrar_juegos;
@@ -471,6 +528,7 @@ begin
   groupbox9.visible:=false;
   groupbox2.visible:=false;
   groupbox10.visible:=false;
+  image9.Visible:=false;
   if total_juegos=0 then exit;
   stringgrid1.row:=0;
   mostrar_juegos;
@@ -495,6 +553,7 @@ begin
   groupbox9.visible:=false;
   groupbox2.visible:=false;
   groupbox10.visible:=false;
+  image9.Visible:=false;
   if total_juegos=0 then exit;
   stringgrid1.row:=0;
   mostrar_juegos;
@@ -519,6 +578,7 @@ begin
   groupbox9.visible:=false;
   groupbox2.visible:=false;
   groupbox10.visible:=false;
+  image9.Visible:=true;
   if total_juegos=0 then exit;
   stringgrid1.row:=0;
   mostrar_juegos;
@@ -542,6 +602,7 @@ begin
   groupbox9.visible:=false;
   groupbox2.visible:=false;
   groupbox10.visible:=false;
+  image9.Visible:=true;
   if total_juegos=0 then exit;
   stringgrid1.row:=0;
   mostrar_juegos;
@@ -565,6 +626,7 @@ begin
   groupbox9.visible:=false;
   groupbox2.visible:=false;
   groupbox10.visible:=false;
+  image9.Visible:=true;
   if total_juegos=0 then exit;
   stringgrid1.row:=0;
   mostrar_juegos;
@@ -594,6 +656,11 @@ begin
   ngame:=numero_juego;
   if ((total_juegos=0) or (ngame=-1)) then begin
       poner_en_blanco;
+      form1.image3.Visible:=false;
+      form1.image4.Visible:=false;
+      form1.image5.Visible:=false;
+      form1.image7.Visible:=false;
+      form1.image8.Visible:=false;
       exit;
   end;
   if (old_game<>ngame) then begin
@@ -660,9 +727,12 @@ const
   ScummColor=$ffe8e8;
 var
   ngame:integer;
+  texto:string;
 begin
-  ngame:=numero_juego;
+  if form1.stringgrid1.Cells[1,arow]<>'' then ngame:=strtoint(form1.stringgrid1.Cells[1,arow])
+    else ngame:=-1;
   if ngame=-1 then exit;
+  texto:=stringgrid1.Cells[aCol,aRow];
   if ((state=[gdSelected,gdFocused]) or (state=[gdSelected])) then begin
     image8.Visible:=false;
     with TStringGrid(Sender),Canvas do begin
@@ -673,9 +743,12 @@ begin
       end else if (games_final[ngame].motor=MSCUMM) then Brush.Color:=ScummColor
           else Brush.Color:=SelectedColor;
       FillRect(Rect);
-      TextRect(Rect,Rect.Left+2,Rect.Top+2,Cells[aCol,aRow]);
     end;
   end;
+  if games_final[ngame].cdrom<>'' then begin
+      imagelist1.draw(stringgrid1.canvas,rect.left+2,rect.top+(rect.height-imagelist1.height) div 2,0);
+      stringgrid1.canvas.textout(rect.Left+imagelist1.width+4,rect.top+(rect.height-stringgrid1.canvas.textheight(texto)) div 2,texto);
+  end else stringgrid1.canvas.TextRect(Rect,Rect.Left+2,Rect.Top+2,texto);
 end;
 
 procedure TForm1.StringGrid1KeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
@@ -734,6 +807,28 @@ procedure TForm1.Timer2Timer(Sender: TObject);
 begin
   timer2.Enabled:=false;
   typed:='';
+end;
+
+procedure TForm1.Timer3Timer(Sender: TObject);
+const
+  mensaje_es='                           ¿Has encontrado un juego que no funciona?¿Alguna configuración mejor?¿Algún manual?¿Algún juego que falte?¿Otra versión?¿Otro idioma?Ponte en contacto leniad2@hotmail.com   ';
+  mensaje_in='                           Have you found a game that doesn''t work? A better configuration? A manual? A missing game? Another version? Another language?             Get in touch leniad2@hotmail.com   ';
+  mensaje_do='                Hast du ein Spiel gefunden,das nicht funktioniert?Eine bessere Konfiguration?Ein Handbuch?Fehlt ein Spiel?Eine andere Version?Eine andere Sprache?Kontaktiere mich leniad2@hotmail.com';
+  mensaje_fr='                        Avez-vous trouvé un jeu qui ne fonctionne pas? Une meilleure configuration? Un manuel? Un jeu manquant? Une autre version? Une autre langue? Contactez-moi leniad2@hotmail.com';
+  mensaje_it='                                   Hai trovato un gioco che non funziona? Ena configurazione migliore? Un manuale? Manca un gioco? Un''altra versione? Un''altra lingua? Contattami leniad2@hotmail.com';
+var
+  mensaje:string;
+begin
+  case idioma_ind of
+    0:mensaje:=mensaje_es;
+    2:mensaje:=mensaje_do;
+    3:mensaje:=mensaje_fr;
+    4:mensaje:=mensaje_it;
+    else mensaje:=mensaje_in;
+  end;
+  label6.Caption:=system.copy(mensaje,mensaje_pos,20);
+  mensaje_pos:=mensaje_pos+1;
+  if mensaje_pos=180 then timer3.Enabled:=false;
 end;
 
 end.

@@ -43,13 +43,13 @@ const
   MDSP=255;
   MAX_GAMES=2000;
   TEMP_DIR='TEMP';
-  VERSION='v0.93β';
+  VERSION='v0.94β';
   BLURFACT=2;
   {$IFDEF IS_DEBUG}
   {$ifndef windows}
   debug_base_dir='/home/leniad/abandon/GamePlayVol1/';
   {$else}
-  debug_base_dir='c:\datos\abandon\GamePlay_093\';
+  debug_base_dir='c:\datos\abandon\GamePlay_094\';
   {$ENDIF}
   {$endif}
   NREFS=2;
@@ -70,6 +70,8 @@ const
   SIN_COMPRIMIR=0;
   FICHERO_ZIP=1;
   FICHERO_RAR=2;
+
+  RETURN=chr(10);
 
 type
   tipo_ref=record
@@ -168,9 +170,6 @@ uses {$IFDEF WINDOWS}windows,shellapi,MMSystem{$ELSE}LCLIntf,process{$ENDIF},pri
      config,dialogs{$ifdef fpc},classes,zipper{$else},zip,uitypes{$endif},
      games_download,system.ioutils,Vcl.Imaging.pngimage,math,types,System.JSON,
      mensajes,system.generics.Collections,rar,system.classes;
-
-const
- RETURN=chr(10);
 
 procedure PNGBlurEnImage(image:TImage;image_string:string);
 type
@@ -546,6 +545,7 @@ case main_config.motor of
     MDSP:temps:=inttostr(total_dsp);
 end;
 form1.stringgrid1.RowCount:=contador;
+form1.StringGrid1.Refresh;
 form1.Label5.Caption:='TOTAL: '+inttostr(totales_bien)+'/'+temps;
 form1.StringGrid1Click(nil);
 if form1.Visible then form1.StringGrid1.SetFocus;
@@ -663,7 +663,7 @@ gameobj:=version.Items[0] as TJSONObject;
 if mostrar_novedades then begin
   temps:=gameobj.GetValue<string>('novedades');
   temps:=StringReplace(temps,'[RET]',RETURN,[rfReplaceAll]);
-  TaskMessageDlg('NOVEDADES v'+inttostr(tempi),temps,mtCustom,[mbOK],0);
+  TaskMessageDlg('WHAT''S NEW in Gamelist v'+inttostr(tempi),temps,mtCustom,[mbOK],0);
 end;
 //Recupero los ficheros/directioios que hay que limpiar de los juegos, para borrar al salir
 ficheros_clean:='';
@@ -1367,7 +1367,9 @@ case main_config.motor of
         WriteLn(play_file,exec_pre);
     end;
     //Añadir, si existe, un fichero de setup que hay que ejecutar
-    if ejecutar_setup then WriteLn(play_file,juego_setup(ngame));
+    temps:=juego_setup(ngame);
+    if ejecutar_setup then if ContainsText(temps,'.bat') then WriteLn(play_file,'call '+temps)
+      else WriteLn(play_file,temps);
     //Añadir el ejecutable
     temp_exec:=juego_exec(ngame,form1.ComboBox1.ItemIndex);
     if games_final[ngame].params<>'[MULTI]' then exec_params:=games_final[ngame].params;
