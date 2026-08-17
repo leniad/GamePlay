@@ -1,6 +1,13 @@
 # GamePlay status #
 ![Main Screen](https://i.ibb.co/kskwGG0p/gameplay-094-en.png)<br>
 Please read 'Most Wanted' games!<br><br>
+<b>17/08/26 - GamePlay updated to 0.95b<br>
+Download this version! The previous one triggered a false positive in several antivirus programs.
+<pre>
+-General
+    +Some cosmetic changes
+    +When a game is about to be launched, if it is detected that the game has been updated on the server, you can download the new version
+</pre>
 <b>15/08/26 - GamePlay updated to 0.94b
 <pre>
 -General

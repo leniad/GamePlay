@@ -5,8 +5,8 @@ object Form4: TForm4
   BorderIcons = [biMinimize, biMaximize]
   BorderStyle = bsSingle
   Caption = 'Configuraci'#243'n Avanzada'
-  ClientHeight = 496
-  ClientWidth = 828
+  ClientHeight = 513
+  ClientWidth = 834
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -287,54 +287,54 @@ object Form4: TForm4
     TabOrder = 4
     object RadioButton1: TRadioButton
       Left = 10
-      Top = 27
+      Top = 20
       Width = 89
-      Height = 15
+      Height = 20
       Caption = 'Auto'
       TabOrder = 0
       OnClick = RadioButton1Click
     end
     object RadioButton2: TRadioButton
       Left = 10
-      Top = 48
+      Top = 41
       Width = 72
-      Height = 15
+      Height = 20
       Caption = 'Espa'#241'ol'
       TabOrder = 1
       OnClick = RadioButton2Click
     end
     object RadioButton3: TRadioButton
       Left = 10
-      Top = 69
+      Top = 62
       Width = 69
-      Height = 15
+      Height = 20
       Caption = 'English'
       TabOrder = 2
       OnClick = RadioButton3Click
     end
     object RadioButton4: TRadioButton
       Left = 80
-      Top = 27
+      Top = 20
       Width = 67
-      Height = 15
+      Height = 20
       Caption = 'Deutsch'
       TabOrder = 3
       OnClick = RadioButton4Click
     end
     object RadioButton5: TRadioButton
       Left = 80
-      Top = 48
+      Top = 41
       Width = 68
-      Height = 15
+      Height = 20
       Caption = 'Fran'#231'ais'
       TabOrder = 4
       OnClick = RadioButton5Click
     end
     object RadioButton6: TRadioButton
       Left = 80
-      Top = 69
+      Top = 62
       Width = 68
-      Height = 15
+      Height = 20
       Caption = 'Italiano'
       TabOrder = 5
       OnClick = RadioButton6Click

@@ -21,10 +21,8 @@ type
   public
     { Public declarations }
   end;
-  function descargar_juego(ngame:integer):boolean;
-  procedure descargar_juego_sin_confirmar(ngame:integer);
+  function descargar_juego(ngame,descarga:integer):boolean;
   function descargar_fichero(origen,destino:string;check:boolean):boolean;
-  function descargar_manual(ngame:integer):boolean;
   function comprobar_version_lista:string;
 
 const
@@ -32,6 +30,10 @@ const
   PASSWORD='password';
   URL_GAMEPLAY='url1';
   URL_API='url2';
+  DESC_SINCONFIRMAR=0;
+  DESC_NORMAL=1;
+  DESC_MANUAL=2;
+  DESC_UPDATE=3;
 
 var
   Form5:TForm5;
@@ -43,32 +45,20 @@ var
   FApi:TApiClient;
   game_number:integer;
   juego_descargado:boolean;
-  manual_descargar:boolean;
+  tipo_descarga:integer;
 
 {$R *.dfm}
 
-procedure descargar_juego_sin_confirmar(ngame:integer);
-begin
-  game_number:=ngame;
-  form5.Button1Click(nil);
-end;
-
-function descargar_juego(ngame:integer):boolean;
+function descargar_juego(ngame,descarga:integer):boolean;
 begin
   game_number:=ngame;
   juego_descargado:=false;
-  manual_descargar:=false;
-  form5.showmodal;
+  tipo_descarga:=descarga;
+  case descarga of
+    DESC_SINCONFIRMAR:form5.Button1Click(nil); //Descarga sin confirmar
+    DESC_NORMAL,DESC_MANUAL,DESC_UPDATE:form5.showmodal; //Descarga normal o manuales, guias, etc, o update
+  end;
   descargar_juego:=juego_descargado;
-end;
-
-function descargar_manual(ngame:integer):boolean;
-begin
-  game_number:=ngame;
-  juego_descargado:=false;
-  manual_descargar:=true;
-  form5.showmodal;
-  descargar_manual:=juego_descargado;
 end;
 
 function comprobar_version_lista:string;
@@ -133,92 +123,66 @@ end;
 procedure TForm5.Button1Click(Sender:TObject);
 var
   origen,destino:string;
+
+procedure unzip_all(directorio:string);
+var
   ZipFile:TZipFile;
+begin
+  ZipFile:=TZipFile.Create;
+  if Zipfile.IsValid(destino) then begin
+    ZipFile.Open(destino,zmRead);
+    ZipFIle.ExtractAll(directorio);
+    ZipFile.Close;
+  end;
+  ZipFile.Free;
+  {$I-}
+  deletefile(destino);
+  {$I+}
+end;
+
+procedure descargar_extras;
+begin
+  origen:=juego_dir(game_number)+'_extra.zip';
+  destino:=main_config.dir_base+'extras\'+juego_dir(game_number)+'_extra.zip';
+  if descargar_fichero(origen,destino,false) then unzip_all(main_config.dir_base+'\extras');
+end;
+
 begin
     //Descargarse la lista de juegos y las imagenes
     if game_number=-1 then begin
         origen:='gameplay_list.zip';
         destino:=main_config.dir_base+'gameplay_list.zip';
+        message_num:=1;
         if descargar_fichero(origen,destino,false) then begin
-          message_num:=1;
           form2.show;
           form2.update;
-          ZipFile:=TZipFile.Create;
-          if Zipfile.IsValid(destino) then begin
-              ZipFile.Open(destino,zmRead);
-              ZipFIle.ExtractAll(main_config.dir_base);
-              ZipFile.Close;
-          end;
-          ZipFile.Free;
+          unzip_all(main_config.dir_base);
+          form2.close;
         end;
-        {$I-}
-        deletefile(destino);
-        {$I+}
-        form2.close;
         origen:='gameplay_imgs.zip';
         destino:=main_config.dir_base+'gameplay_imgs.zip';
         if descargar_fichero(origen,destino,false) then begin
-          message_num:=1;
           form2.show;
           form2.update;
-          ZipFile:=TZipFile.Create;
-          if Zipfile.IsValid(destino) then begin
-              ZipFile.Open(destino,zmRead);
-              ZipFIle.ExtractAll(main_config.dir_imgs);
-              ZipFile.Close;
-          end;
-          ZipFile.Free;
+          unzip_all(main_config.dir_imgs);
+          form2.close;
         end;
-        {$I-}
-        deletefile(destino);
-        {$I+}
-        form2.close;
         exit;
     end;
     //Descargar solo extras
-    if manual_descargar then begin
-        origen:=juego_dir(game_number)+'_extra.zip';
-        destino:=main_config.dir_base+'extras\'+juego_dir(game_number)+'_extra.zip';
-        if descargar_fichero(origen,destino,false) then begin
-          ZipFile:=TZipFile.Create;
-          if Zipfile.IsValid(destino) then begin
-              ZipFile.Open(destino,zmRead);
-              ZipFIle.ExtractAll(main_config.dir_base+'\extras');
-              ZipFile.Close;
-          end;
-          ZipFile.Free;
-        end;
-        {$I-}
-        deletefile(destino);
-        {$I+}
-    end else
-    if games_final[game_number].motor=MDSP then begin
-      origen:=games_final[game_number].dir+'_dsp.zip';
-      destino:=main_config.dir_base+'dsp\roms\'+games_final[game_number].dir+'.zip';
-      if not(descargar_fichero(origen,destino,true)) then exit;
-    end else begin
-      origen:=juego_dir(game_number);
-      destino:=main_config.dir_zip+juego_dir(game_number);
-      if not(descargar_fichero(origen+'.zip',destino+'.zip',false)) then
-        if not(descargar_fichero(origen+'.rar',destino+'.rar',true)) then exit;
-      //Descargar extras
-      if main_config.descargar_extra then begin
-        origen:=juego_dir(game_number)+'_extra.zip';
-        destino:=main_config.dir_base+'extras\'+juego_dir(game_number)+'_extra.zip';
-        if descargar_fichero(origen,destino,false) then begin
-          ZipFile:=TZipFile.Create;
-          if Zipfile.IsValid(destino) then begin
-              ZipFile.Open(destino,zmRead);
-              ZipFIle.ExtractAll(main_config.dir_base+'\extras');
-              ZipFile.Close;
-          end;
-          ZipFile.Free;
-        end;
-        {$I-}
-        deletefile(destino);
-        {$I+}
-      end;
-    end;
+    if (tipo_descarga=DESC_MANUAL) then descargar_extras
+      else if games_final[game_number].motor=MDSP then begin
+                origen:=games_final[game_number].dir+'_dsp.zip';
+                destino:=main_config.dir_base+'dsp\roms\'+games_final[game_number].dir+'.zip';
+                if not(descargar_fichero(origen,destino,true)) then exit;
+              end else begin
+                origen:=juego_dir(game_number);
+                destino:=main_config.dir_zip+juego_dir(game_number);
+                if not(descargar_fichero(origen+'.zip',destino+'.zip',false)) then
+                  if not(descargar_fichero(origen+'.rar',destino+'.rar',true)) then exit;
+                //Descargar extras
+                if main_config.descargar_extra then descargar_extras;
+              end;
     comprobar_juegos;
     mostrar_juegos;
     juego_descargado:=true;
@@ -249,8 +213,11 @@ begin
   if f>0 then form5.Left:=f;
   f:=(screen.Height-form5.Height) div 2;
   if f>0 then form5.Top:=f;
-  if manual_descargar then Label1.Caption:=list_descarga[7]
-    else Label1.Caption:=list_descarga[6];
+  case tipo_descarga of
+    DESC_NORMAL:Label1.Caption:=list_descarga[6];
+    DESC_MANUAL:Label1.Caption:=list_descarga[7];
+    DESC_UPDATE:Label1.Caption:=list_descarga[9];
+  end;
 end;
 
 end.

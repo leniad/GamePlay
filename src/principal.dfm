@@ -7166,7 +7166,7 @@ object Form1: TForm1
       Left = 16
       Top = 295
       Width = 213
-      Height = 19
+      Height = 20
       TabStop = False
       Caption = 'Pantalla completa'
       TabOrder = 0
@@ -7176,7 +7176,7 @@ object Form1: TForm1
       Left = 16
       Top = 337
       Width = 212
-      Height = 19
+      Height = 20
       TabStop = False
       Caption = 'Mensaje info/ayuda'
       Checked = True
@@ -7188,7 +7188,7 @@ object Form1: TForm1
       Left = 16
       Top = 316
       Width = 97
-      Height = 19
+      Height = 20
       TabStop = False
       Caption = 'Sonido'
       Checked = True
@@ -7207,7 +7207,7 @@ object Form1: TForm1
         Left = 16
         Top = 19
         Width = 153
-        Height = 17
+        Height = 20
         Caption = 'MS-DOS'
         TabOrder = 0
         OnClick = RadioButton1Click
@@ -7216,7 +7216,7 @@ object Form1: TForm1
         Left = 16
         Top = 82
         Width = 153
-        Height = 17
+        Height = 20
         Caption = 'ScummVM'
         TabOrder = 1
         OnClick = RadioButton3Click
@@ -7225,7 +7225,7 @@ object Form1: TForm1
         Left = 16
         Top = 103
         Width = 153
-        Height = 17
+        Height = 20
         Caption = 'DSP Emulator'
         TabOrder = 2
         OnClick = RadioButton4Click
@@ -7234,7 +7234,7 @@ object Form1: TForm1
         Left = 16
         Top = 124
         Width = 92
-        Height = 19
+        Height = 20
         Caption = 'Apple ]['
         TabOrder = 3
         OnClick = RadioButton5Click
@@ -7243,7 +7243,7 @@ object Form1: TForm1
         Left = 16
         Top = 145
         Width = 97
-        Height = 17
+        Height = 20
         Caption = 'Atari 800'
         TabOrder = 4
         OnClick = RadioButton6Click
@@ -7261,7 +7261,7 @@ object Form1: TForm1
         Left = 16
         Top = 166
         Width = 97
-        Height = 17
+        Height = 20
         Caption = 'Atari ST'
         TabOrder = 6
         OnClick = RadioButton11Click
@@ -7270,7 +7270,7 @@ object Form1: TForm1
         Left = 16
         Top = 61
         Width = 153
-        Height = 17
+        Height = 20
         Caption = 'Windows 98'
         TabOrder = 7
         OnClick = RadioButton12Click
@@ -7279,7 +7279,7 @@ object Form1: TForm1
         Left = 16
         Top = 40
         Width = 153
-        Height = 17
+        Height = 20
         Caption = 'Windows 3.1'
         TabOrder = 8
         OnClick = RadioButton13Click
@@ -7324,7 +7324,7 @@ object Form1: TForm1
       Left = 24
       Top = 23
       Width = 182
-      Height = 19
+      Height = 20
       TabStop = False
       Caption = 'Aventura Gr'#225'fica'
       Checked = True
@@ -7336,7 +7336,7 @@ object Form1: TForm1
       Left = 24
       Top = 44
       Width = 121
-      Height = 19
+      Height = 20
       TabStop = False
       Caption = 'Arcade'
       Checked = True
@@ -7348,7 +7348,7 @@ object Form1: TForm1
       Left = 24
       Top = 65
       Width = 113
-      Height = 19
+      Height = 20
       TabStop = False
       Caption = '3D'
       Checked = True
@@ -7360,7 +7360,7 @@ object Form1: TForm1
       Left = 24
       Top = 86
       Width = 113
-      Height = 19
+      Height = 20
       TabStop = False
       Caption = 'Simulador'
       Checked = True
@@ -7372,7 +7372,7 @@ object Form1: TForm1
       Left = 24
       Top = 107
       Width = 113
-      Height = 19
+      Height = 20
       TabStop = False
       Caption = 'Deportes'
       Checked = True
@@ -7384,7 +7384,7 @@ object Form1: TForm1
       Left = 24
       Top = 128
       Width = 89
-      Height = 19
+      Height = 20
       TabStop = False
       Caption = 'Puzzles'
       Checked = True
@@ -7396,7 +7396,7 @@ object Form1: TForm1
       Left = 24
       Top = 149
       Width = 89
-      Height = 19
+      Height = 20
       TabStop = False
       Caption = 'RPG'
       Checked = True
@@ -7408,7 +7408,7 @@ object Form1: TForm1
       Left = 24
       Top = 170
       Width = 89
-      Height = 19
+      Height = 20
       TabStop = False
       Caption = 'Carreras'
       Checked = True
@@ -7479,7 +7479,7 @@ object Form1: TForm1
     Left = 690
     Top = 501
     Width = 303
-    Height = 25
+    Height = 20
     Caption = 'Descargar Extras'
     TabOrder = 5
     WordWrap = True
@@ -7489,7 +7489,7 @@ object Form1: TForm1
     Left = 690
     Top = 480
     Width = 303
-    Height = 25
+    Height = 20
     Caption = 'Solo funcionan'
     TabOrder = 6
     WordWrap = True
@@ -7510,7 +7510,7 @@ object Form1: TForm1
       Left = 14
       Top = 20
       Width = 89
-      Height = 15
+      Height = 20
       Caption = 'Teclado'
       TabOrder = 0
       OnClick = RadioButton2Click
@@ -7519,7 +7519,7 @@ object Form1: TForm1
       Left = 14
       Top = 39
       Width = 89
-      Height = 18
+      Height = 20
       Caption = 'Joystick'
       TabOrder = 1
       OnClick = RadioButton9Click
@@ -7540,7 +7540,7 @@ object Form1: TForm1
       Left = 24
       Top = 39
       Width = 146
-      Height = 26
+      Height = 20
       Margins.Left = 5
       Margins.Top = 5
       Margins.Right = 5
@@ -7552,7 +7552,7 @@ object Form1: TForm1
       Left = 24
       Top = 16
       Width = 146
-      Height = 26
+      Height = 20
       Margins.Left = 5
       Margins.Top = 5
       Margins.Right = 5
@@ -7576,7 +7576,7 @@ object Form1: TForm1
       Left = 14
       Top = 20
       Width = 89
-      Height = 15
+      Height = 20
       Caption = 'DosBox'
       TabOrder = 0
       OnClick = RadioButton7Click
@@ -7585,7 +7585,7 @@ object Form1: TForm1
       Left = 14
       Top = 40
       Width = 89
-      Height = 15
+      Height = 20
       Caption = 'DosBox-X'
       TabOrder = 1
       OnClick = RadioButton8Click
@@ -7595,7 +7595,7 @@ object Form1: TForm1
     Left = 690
     Top = 522
     Width = 303
-    Height = 25
+    Height = 20
     Caption = 'Comprobar actualizaciones'
     TabOrder = 10
     WordWrap = True
@@ -7605,7 +7605,7 @@ object Form1: TForm1
     Left = 690
     Top = 544
     Width = 212
-    Height = 19
+    Height = 20
     TabStop = False
     Caption = 'Opciones Avanzadas'
     TabOrder = 11

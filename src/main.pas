@@ -43,13 +43,13 @@ const
   MDSP=255;
   MAX_GAMES=2000;
   TEMP_DIR='TEMP';
-  VERSION='v0.94β';
+  VERSION='v0.95β';
   BLURFACT=2;
   {$IFDEF IS_DEBUG}
   {$ifndef windows}
   debug_base_dir='/home/leniad/abandon/GamePlayVol1/';
   {$else}
-  debug_base_dir='c:\datos\abandon\GamePlay_094\';
+  debug_base_dir='c:\datos\abandon\GamePlay_095\';
   {$ENDIF}
   {$endif}
   NREFS=2;
@@ -112,6 +112,7 @@ type
     mal:boolean;
     ref:array[0..NREFS] of tipo_ref;
     motor:byte;
+    crc32:cardinal;
   end;
   type
   tipo_games_ref=record
@@ -129,6 +130,7 @@ type
     setup:string;
     image_alt:string;
     mensaje:string;
+    crc32:cardinal;
   end;
   tipo_config=record
      config_dosbox:string;
@@ -457,7 +459,7 @@ if nombre_ficheros='' then exit;
 fichero_cut:=nombre_ficheros.Split(['$']);
 for f:=0 to length(fichero_cut)-1 do begin
   fichero_cut[f]:=ruta_ficheros+fichero_cut[f];
-  if not(fileexists(fichero_cut[f])) then existe:=descargar_manual(numero_juego)
+  if not(fileexists(fichero_cut[f])) then existe:=descargar_juego(numero_juego,DESC_MANUAL)
     else existe:=true;
   if existe then begin
     {$IFDEF WINDOWS}
@@ -634,7 +636,7 @@ if not(fileexists(main_config.dir_base+'games.json')) then begin
     form1.groupbox3.enabled:=false;
     exit;
   end;
-  descargar_juego_sin_confirmar(-1);
+  descargar_juego(-1,DESC_SINCONFIRMAR);
   if not(fileexists(main_config.dir_base+'games.json')) then exit;
 end else begin //Si hay una lista, compruebo que hay una más moderna
   if form1.CheckBox11.Checked then begin
@@ -647,7 +649,7 @@ end else begin //Si hay una lista, compruebo que hay una más moderna
       tempi:=strtoint(comprobar_version_lista);
       if tempi>strtoint(temps) then begin
         if MessageDlg(list_descarga[5],mtWarning,[mbOK]+[mbCancel],0)=1 then begin
-          descargar_juego_sin_confirmar(-1);
+          descargar_juego(-1,DESC_SINCONFIRMAR);
           mostrar_novedades:=true;
         end;
       end;
@@ -690,6 +692,8 @@ for f:=0 to (games_ref.Count-1) do begin
   games_final_ref[f+1].setup:=gameobj.GetValue<string>('setup');
   games_final_ref[f+1].image_alt:=gameobj.GetValue<string>('image_alt');
   games_final_ref[f+1].mensaje:=gameobj.GetValue<string>('mensaje');
+  if not(gameobj.tryGetValue<cardinal>('crc32',games_final_ref[f+1].crc32)) then
+    games_final_ref[f+1].crc32:=0;
 end;
 for f:=0 to (games.Count-1) do begin
   gameobj:=games.Items[f] as TJSONObject;
@@ -725,6 +729,8 @@ for f:=0 to (games.Count-1) do begin
   games_final[f].image_name:=gameobj.GetValue<string>('image_name');
   games_final[f].tipo:=gameobj.GetValue<integer>('tipo');
   games_final[f].mensaje:=gameobj.GetValue<string>('mensaje');
+  if not(gameobj.tryGetValue<cardinal>('crc32',games_final[f].crc32)) then
+    games_final[f].crc32:=0;
   case games_final[f].motor of
       MMSDOS:begin
                 total_msdos:=total_msdos+1;
@@ -1167,6 +1173,44 @@ begin
   end;
 end;
 
+function juego_crc32(ngame:integer):cardinal;
+begin
+  juego_crc32:=games_final[ngame].crc32;
+  if (games_final[ngame].ref[0].nref<>0) then begin
+      if form1.ComboBox1.ItemIndex>0 then juego_crc32:=games_final_ref[games_final[ngame].ref[form1.ComboBox1.ItemIndex-1].nref and $ffff].crc32;
+  end;
+end;
+
+
+function CRC32File(nombre:string):cardinal;
+const
+  Polynomial=$EDB88320;
+var
+  fichero:TFileStream;
+  Buffer:array[0..8191] of Byte;
+  BytesRead: Integer;
+  I, J: Integer;
+  CRC: Cardinal;
+begin
+  CRC:=$FFFFFFFF;
+  fichero:=TFileStream.Create(nombre, fmOpenRead or fmShareDenyWrite);
+  try
+    repeat
+      BytesRead:=fichero.Read(Buffer,SizeOf(Buffer));
+      for I:=0 to (BytesRead-1) do begin
+        CRC:=CRC xor Buffer[I];
+        for j:=0 to 7 do begin
+          if (CRC and 1)<>0 then CRC:=(CRC shr 1) xor Polynomial
+            else CRC:=CRC shr 1;
+        end;
+      end;
+    until BytesRead=0;
+  finally
+    fichero.Free;
+  end;
+  Result:=not(CRC);
+end;
+
 var
   trad_dir,cd_rom_dir,exec_dir,exec_base,exec_memoria,exec_parametros,exec_dosbox_extra_config,temp_str,temp_str2,temp_disco,exec_mapper,exec_sd,exec_roland,exec_extra,exec_params,exec_gus,exec_sound,exec_c_param,exec_string,param_string,exec_ciclos,exec_video,exec_fullscreen,exec_pre:string;
   tipo_fichero,ngame,nfloppy,tempi:integer;
@@ -1175,12 +1219,13 @@ var
   process:tprocess;
   {$ENDIF}
   temps,temp_exec:string;
+  tempc:cardinal;
 begin
 ngame:=numero_juego;
 if ngame=-1 then exit;
 estoy_ejecutando:=true;
 if juego_mal(ngame) then begin
-  if not(descargar_juego(ngame)) then exit;
+  if not(descargar_juego(ngame,DESC_NORMAL)) then exit;
 end;
 //DSP Emulator
 if main_config.motor=MDSP then begin
@@ -1205,11 +1250,20 @@ trad_dir:=juego_dir(ngame);
 tipo_fichero:=juego_es_zip(ngame);
 //Si es un ZIP lo descomprimo!
 if (tipo_fichero<>SIN_COMPRIMIR) then begin
+  case tipo_fichero of
+    FICHERO_ZIP:temps:=main_config.dir_zip+trad_dir+'.zip';
+    FICHERO_RAR:temps:=main_config.dir_zip+trad_dir+'.rar';
+  end;
+  //Compruebo que el fichero ZIP no se ha actualizado
+  tempc:=juego_crc32(ngame);
+  if tempc<>0 then
+    if tempc<>CRC32File(temps) then
+      if not(descargar_juego(ngame,DESC_UPDATE)) then exit;
   delete_dir(TEMP_DIR+'\'+trad_dir);
   CreateDir(cambiar_path(main_config.dir_base+TEMP_DIR+'\'+trad_dir));
   case tipo_fichero of
-    FICHERO_ZIP:descomprime_zip(main_config.dir_zip+trad_dir+'.zip',main_config.dir_base+TEMP_DIR+'\'+trad_dir);
-    FICHERO_RAR:descomprime_rar(main_config.dir_zip+trad_dir+'.rar',main_config.dir_base+TEMP_DIR+'\'+trad_dir);
+    FICHERO_ZIP:descomprime_zip(temps,main_config.dir_base+TEMP_DIR+'\'+trad_dir);
+    FICHERO_RAR:descomprime_rar(temps,main_config.dir_base+TEMP_DIR+'\'+trad_dir);
   end;
   exec_dir:=cambiar_path(TEMP_DIR+'\'+trad_dir);
 end else exec_dir:=trad_dir;

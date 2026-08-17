@@ -275,7 +275,7 @@ var
   ngame:integer;
 begin
   ngame:=numero_juego;
-  if ngame<>-1 then descargar_juego_sin_confirmar(ngame);
+  if ngame<>-1 then descargar_juego(ngame,DESC_SINCONFIRMAR);
 end;
 
 procedure TForm1.Image9Click(Sender: TObject);
