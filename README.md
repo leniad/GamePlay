@@ -1,12 +1,37 @@
 # GamePlay status #
 ![Main Screen](https://i.ibb.co/kskwGG0p/gameplay-094-en.png)<br>
 Please read 'Most Wanted' games!<br><br>
+<b>18/08/26 - Update game list v11
+<pre>
+-MSDOS
+    +Enhanced games
+        -Lethal Weapon (Cracked)
+        -Leisure Suit Larry 3 (Cracked)
+        -King's Quest 4 AGI (Cracked)
+        -Stunts (Clean cracked)
+        -Joe & Mac Caveman Ninja (New version, cracked)
+        -Contra (Clean cracked)
+        -Nicky II (clean cracked)
+    +Added games
+        -Gold Rush
+        -Mystic Towers
+        -Silpheed - Super Dogfighter
+        -Sleep Walker
+        -Ultimate Body Blows
+        -Bruce Lee Lives - The Fall of Hong Kong Palace
+        -The Humans
+        -Fury of the Furries
+        -Humans 2 - the Jurassic Levels
+        -Oxyd
+        -Oxyd Magnum!
+</pre>
 <b>17/08/26 - GamePlay updated to 0.95b<br>
 Download this version! The previous one triggered a false positive in several antivirus programs.
 <pre>
 -General
     +Some cosmetic changes
-    +When a game is about to be launched, if it is detected that the game has been updated on the server, you can download the new version
+    +When a game is about to be launched, if it is detected that the game has been 
+    updated on the server, you can download the new version
 </pre>
 <b>15/08/26 - GamePlay updated to 0.94b
 <pre>
